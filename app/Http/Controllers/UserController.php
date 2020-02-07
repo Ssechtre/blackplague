@@ -202,10 +202,5 @@ class UserController extends Controller
         //
     }
     
-    // VUE
-    public function vue(){
-        $users = User::all();
-        return view('vue.index', compact('users'));
-    }
 
 }

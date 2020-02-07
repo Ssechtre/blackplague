@@ -21,274 +21,267 @@ class Controller extends BaseController
 {
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-	// public $controller = '';
+	public $controller = '';
 
-	// public $query = null;
+	public $query = null;
 
-	// public $error_messages = [];
+	public $error_messages = [];
 
-	// public $query_fields = ['*'];
+	public $query_fields = ['*'];
 
-	// public $primary_key = null;
+	public $primary_key = 'id';
 
-	// public $response = [
-	// 	'success' => false,
-	// 	'data' => null,
-	// 	'errors' => []
-	// ];
+	public $response = [
+		'success' => false,
+		'data' => null,
+		'errors' => []
+	];
 
-	// public $fields = [
-	// 	'textareas' => [], 
-	// 	'dropdowns' => [], 
-	// 	'checkboxes' => [], 
-	// 	'dates' => [], 
-	// 	'text_replace' => [],
-	// 	'excludes' => [],
-	// 	'hiddens' => [],
-	// 	'times' => [],
-	// ];
+	public $fields = [
+		'textareas' => [], 
+		'dropdowns' => [], 
+		'checkboxes' => [], 
+		'dates' => [], 
+		'text_replace' => [],
+		'excludes' => [],
+		'hiddens' => [],
+		'times' => [],
+	];
 
-	// public $column_values = [];
+	public $column_values = [];
 
-	// public function getController() {
-	// 	$regex = preg_match('/([a-z\_]+)\./', \Request::route()->getName(), $matches);
+	public function getController() {
+		$regex = preg_match('/([a-z\_]+)\./', \Request::route()->getName(), $matches);
 
-	// 	if ($regex) {
+		if ($regex) {
 
-	// 		$this->controller = $matches[1];
-	// 		return view()->share('controller', $this->controller);
+			$this->controller = $matches[1];
+			return view()->share('controller', $this->controller);
 
-	// 	}
-	// }
+		}
+	}
 
-	// public function index()
-	// {
-	// 	$this->getController();
+	public function index()
+	{
+		$this->getController();
 
-	// 	$controller = $this->controller;
+		$controller = $this->controller;
 
-	// 	$namespace_model = self::getModel($this->controller);
+		$namespace_model = self::getModel($this->controller);
 
-	// 	$model = new $namespace_model;
+		$model = new $namespace_model;
 
-	// 	$this->query = $namespace_model::orderBy('created_at', 'DESC')->get($this->query_fields);
+		$this->query = $namespace_model::orderBy('created_at', 'DESC')->get($this->query_fields);
 
-	// 	$this->columns = \Schema::getColumnListing(strtolower($controller));
+		$this->columns = \Schema::getColumnListing(strtolower($controller));
 
-	// 	if ($this->query_fields[0] != '*') {
+		if ($this->query_fields[0] != '*') {
 
-	// 		$this->columns = array_intersect($this->query_fields, $this->columns);
+			$this->columns = array_intersect($this->query_fields, $this->columns);
 
-	// 	}
+		}
 
-	// 	$this->primary_key = $model->getPrimaryKey();
+		if ($this->query) {
 
-	// 	if ($this->query) {
+			return view('default/index')
+			->with('data', $this->query)
+			->with('columns', $this->columns)
+			->with('column_values', $this->column_values)
+			->with('primary_key', $this->primary_key)
+			->with('fields', $this->fields)
+			->with('excludes', isset($this->excludes) ? $this->excludes : []);
 
-	// 		return view('admin/default/index')
-	// 		->with('data', $this->query)
-	// 		->with('columns', $this->columns)
-	// 		->with('column_values', $this->column_values)
-	// 		->with('primary_key', $this->primary_key)
-	// 		->with('fields', $this->fields)
-	// 		->with('excludes', isset($this->excludes) ? $this->excludes : []);
+		}else{
 
-	// 	}else{
+			Session::flash('message', 'An error occured');
+			Session::flash('alert-class', 'alert-success'); 
 
-	// 		Session::flash('message', 'An error occured');
-	// 		Session::flash('alert-class', 'alert-success'); 
+			return back();
+		}
 
-	// 		return back();
-	// 	}
+	}
 
-	// }
+	public function create()
+	{	
+		$this->getController();
 
-	// public function create()
-	// {	
-	// 	$this->getController();
+		$controller = $this->controller;
 
-	// 	$controller = $this->controller;
+		$namespace_model = self::getModel($this->controller);
 
-	// 	$namespace_model = self::getModel($this->controller);
+		$model = new $namespace_model;
 
-	// 	$model = new $namespace_model;
+		$fillables = $model::$fillables;
 
-	// 	$fillables = $model->getFillables();
+		return view('default/create')
+		->with('fillables', $fillables)
+		->with('fields', $this->fields);
+	}
 
-	// 	return view('admin/default/create')
-	// 	->with('fillables', $fillables)
-	// 	->with('fields', $this->fields);
-	// }
+	public function store(Request $request)
+	{
+		$this->getController();
 
-	// public function store(Request $request)
-	// {
-	// 	$this->getController();
+		$controller = $this->controller;
 
-	// 	$controller = $this->controller;
+		$namespace_model = self::getModel($this->controller);
 
-	// 	$namespace_model = self::getModel($this->controller);
-	// 	$rules = $namespace_model::$rules;
+		$rules = isset($namespace_model::$rules) ? $namespace_model::$rules : [];
 
-	// 	$data = Input::all();
+		$data = $request->all();
 
-	// 	if (isset($data['password'])) {
-	// 		$data['password'] = Hash::make($data['password']);
-	// 	}
+		if (isset($data['password'])) {
+			$data['password'] = Hash::make($data['password']);
+		}
 
-	// 	$validate = Validator::make($data, $rules, $this->error_messages);
+		$validate = Validator::make($data, $rules, $this->error_messages);
 
-	// 	if ($validate->fails()) {
-	// 		return redirect($controller.'/create')->withInput()->with('errors', $validate->messages());
 
-	// 	}else{
-	// 		if ($namespace_model::create($data)) {
+		if ($validate->fails()) {
 
-	// 			Session::flash('message', 'New item successfuly added!'); 
-	// 			Session::flash('alert-class', 'alert-success'); 
-	// 			return redirect($controller);
-	// 		}
-	// 	}
+			return back()->withErrors($validate)->withInput($request->all);
 
-	// }
+		}else{
+			if ($namespace_model::create($data)) {
+				return redirect($controller)->with($this->_response(true, "New item successfuly added"));
+			}
+		}
 
-	// public function edit($id)
-	// {
-	// 	$this->getController();
+	}
 
-	// 	$controller = $this->controller;
+	public function edit($id)
+	{
+		$this->getController();
 
-	// 	$namespace_model = self::getModel($this->controller);
+		$controller = $this->controller;
 
-	// 	$this->query = $namespace_model::find($id);
+		$namespace_model = self::getModel($this->controller);
 
-	// 	if ($this->query) {
-	// 		$model = new $namespace_model;
+		$this->query = $namespace_model::find($id);
 
-	// 		$fillables = $model->getFillables();
-	// 		$this->primary_key = $model->getPrimaryKey();
+		if ($this->query) {
+			$model = new $namespace_model;
 
-	// 		return view('admin/default/edit')
-	// 		->with('data', $this->query)
-	// 		->with('fillables', $fillables)
-	// 		->with('fields', $this->fields)
-	// 		->with('primary_key', $this->primary_key);
+			$fillables = $model::$fillables;
 
-	// 	}else{
+			return view('default/edit')
+			->with('data', $this->query)
+			->with('fillables', $fillables)
+			->with('fields', $this->fields)
+			->with('primary_key', $this->primary_key);
 
-	// 		Session::flash('message', 'An error occured: Data is missing');
-	// 		Session::flash('alert-class', 'alert-danger'); 
-	// 		return redirect($controller);
+		}else{
+			return redirect($controller)->with($this->_response(false, "An error occured: Data is missing'"));
+		}
 
-	// 	}
+	}
 
-	// }
+	public function show($id) {
 
-	// public function show($id) {
+		$this->getController();
 
-	// 	$this->getController();
+		$controller = $this->controller;
 
-	// 	$controller = $this->controller;
+		$namespace_model = self::getModel($this->controller);
 
-	// 	$namespace_model = self::getModel($this->controller);
+		$this->query = $namespace_model::find($id);
 
-	// 	$this->query = $namespace_model::find($id);
+		return $this->query;
+	}
 
-	// 	return $this->query;
-	// }
+	public function update(Request $request, $id)
+	{
+		$this->getController();
 
-	// public function update(Request $request, $id)
-	// {
-	// 	$this->getController();
+		$controller = $this->controller;
 
-	// 	$controller = $this->controller;
+		$namespace_model = self::getModel($this->controller);
 
-	// 	$namespace_model = self::getModel($this->controller);
+		$this->query = $namespace_model::find($id);
 
-	// 	$this->query = $namespace_model::find($id);
+		$data = $request->all();
 
-	// 	$data = Input::all();
-	// 	if (isset($data['password'])) {
-	// 		$data['password'] = Hash::make($data['password']);
+		if (isset($data['password'])) {
+			$data['password'] = Hash::make($data['password']);
+			$rules['username'] = 'required|min:5|unique:users,username,'.$id;
+		}
 
-	// 		$rules['username'] = 'required|min:5|unique:users,username,'.$id;
-	// 	}
+		$this->query->fill($data);
 
-	// 	$this->query->fill($data);
+		if ($this->query) {
 
-	// 	if ($this->query) {
-	// 		$rules = $namespace_model::$rules;
+			$rules = $namespace_model::$rules;
 
-	// 		$validate = Validator::make(Input::all(), $rules);
+			$validate = Validator::make($data, $rules);
 
-	// 		if ($validate->fails()) {
-	// 			return redirect($controller.'/'.$id.'/edit')->with('errors', $validate->messages())->withInput();
-	// 		}else{
-	// 			if ($this->query->save()) {
+			if ($validate->fails()) {
+				return back()->withErrors($validate)->withInput($request->all);
+			}else{
+				if ($this->query->save()) {
+					return back()->with($this->_response(true, str_replace('App\\', '', $namespace_model)."updated successfully"));
+				}
+			}
 
-	// 				Session::flash('message', ucfirst(trim( str_replace('App\\', '', $namespace_model) ,'s')).' updated!');
+		}else{
+			return back()->with($this->_response(false, "An error occured"));
+		}
 
+	}
 
-	// 				Session::flash('alert-class', 'alert-success'); 
-	// 				return back();
-	// 			}
-	// 		}
+	public function destroy($id){
 
-	// 	}else{
+		$this->getController();
 
-	// 		Session::flash('message', 'An error occured: Data is missing');
-	// 		Session::flash('alert-class', 'alert-danger'); 
-	// 		return back();
+		$controller = $this->controller;
 
-	// 	}
+		$namespace_model = self::getModel($this->controller);
+		$namespace_model::destroy($id);
 
-	// }
+		if (count($namespace_model::destroy($id))) {
+			Session::flash('message', 'Item successfully deleted!');
+			Session::flash('alert-class', 'alert-success'); 
+		}else{
+			Session::flash('message', 'An error occured');
+			Session::flash('alert-class', 'alert-danger'); 
+		}
 
-	// public function destroy($id){
+		return back();
 
-	// 	$this->getController();
+	}
 
-	// 	$controller = $this->controller;
+	// Breaks controller name into pieces.
+	// Example: teacher_question_table becomes TeacherQuestionTable
+	public static function getModelName($controller){
 
-	// 	$namespace_model = self::getModel($this->controller);
-	// 	$namespace_model::destroy($id);
+		$new_controller = '';
 
-	// 	if (count($namespace_model::destroy($id))) {
-	// 		Session::flash('message', 'Item successfully deleted!');
-	// 		Session::flash('alert-class', 'alert-success'); 
-	// 	}else{
-	// 		Session::flash('message', 'An error occured');
-	// 		Session::flash('alert-class', 'alert-danger'); 
-	// 	}
+		if (substr($controller, -2) == 'es') {
+			$controller = substr($controller, 0, strlen($controller)-2);
+		}else{
+			$controller = substr($controller, 0, strlen($controller)-1);
+		}
 
-	// 	return back();
+		$parts = explode('_', $controller);
+		foreach ($parts as $key => $value) {
+			$new_controller .= ucfirst($value);
+		}
 
-	// }
 
-	// // Breaks controller name into pieces.
-	// // Example: teacher_question_table becomes TeacherQuestionTable
-	// public static function getModelName($controller){
 
-	// 	$new_controller = '';
+		return $new_controller;
+	}
 
-	// 	if (substr($controller, -2) == 'es') {
-	// 		$controller = substr($controller, 0, strlen($controller)-2);
-	// 	}else{
-	// 		$controller = substr($controller, 0, strlen($controller)-1);
-	// 	}
+	public static function getModel($controller){
 
-	// 	$parts = explode('_', $controller);
-	// 	foreach ($parts as $key => $value) {
-	// 		$new_controller .= ucfirst($value);
-	// 	}
+		return 'App\\' . self::getModelName($controller);
 
+	}
 
-
-	// 	return $new_controller;
-	// }
-
-	// public static function getModel($controller){
-
-	// 	return 'App\\' . self::getModelName($controller);
-
-	// }
+	public function _response($success, $msg, $data = []) {
+		return [
+			'success' => $success,
+			'message' => $msg,
+			'data'    => $data
+		];
+	}
 }

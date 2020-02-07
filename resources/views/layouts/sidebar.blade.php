@@ -13,40 +13,40 @@
 	<div class="sidebar-wrapper">
 		<ul class="nav">
 			<li class="nav-item active">
-				<a class="nav-link" href="{{ route('home') }}">
+				<a class="nav-link" href="">
 				  <i class="material-icons">dashboard</i>
 				  <p>Dashboard</p>
 				</a>
 			</li>
 			@if(Auth::check() && Auth::user()->user_type == 'Admin')
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('user.index') }}">
+				<a class="nav-link" href="">
 				  <i class="material-icons">person</i>
 				  <p>User</p>
 				</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('customer.index') }}">
+				<a class="nav-link" href="">
 				  <i class="material-icons">person</i>
 				  <p>Customer</p>
 				</a>
 			</li>
 			@endif
 			{{-- <li class="nav-item ">
-				<a class="nav-link" href="{{ route('product.index') }}">
+				<a class="nav-link" href="">
 				  <i class="material-icons">content_paste</i>
 				  <p>Sales</p>
 				</a>
 			</li> --}}
 			<li class="nav-item ">
-				<a class="nav-link" href="{{ route('product.index') }}">
+				<a class="nav-link" href="{{ url('products') }}">
 				  <i class="material-icons">content_paste</i>
-				  <p>Product</p>
+				  <p>Products</p>
 				</a>
 			</li>
 			@if(Auth::check() && Auth::user()->user_type == 'Admin')
 			<li class="nav-item ">
-				<a class="nav-link" href="{{ route('code.index') }}">
+				<a class="nav-link" href="">
 				  <i class="material-icons">library_books</i>
 				  <p>Codes</p>
 				</a>
@@ -74,12 +74,6 @@
 				<a class="nav-link" href="./rtl.html">
 				  <i class="material-icons">language</i>
 				  <p>RTL Support</p>
-				</a>
-			</li>
-			<li class="nav-item ">
-				<a class="nav-link" href="{{ route('vue.index') }}">
-				  <i class="material-icons">language</i>
-				  <p>Vue JS</p>
 				</a>
 			</li>
 			<li class="nav-item active-pro ">

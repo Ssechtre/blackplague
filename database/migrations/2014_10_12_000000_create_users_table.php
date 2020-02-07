@@ -21,8 +21,16 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('user_type');
             $table->string('branch');
+            $table->string('phone');
+            $table->text('address')->nullable();
+            $table->string('govt_id_type')->nullable();
+            $table->string('govt_id_number')->nullable();
+            $table->integer('points')->default(0)->nullable();
+            $table->unsignedBigInteger('code_id')->nullable();
+            $table->foreign('code_id')->references('id')->on('codes')->nullable();
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

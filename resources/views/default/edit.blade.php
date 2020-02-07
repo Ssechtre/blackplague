@@ -10,13 +10,14 @@
 			<div class="card">
 				<div class="card-header card-header-primary">
                   <h4 class="card-title ">Edit</h4>
-                  <p class="card-category"> Here is a subtitle for this table</p>
+                  <p class="card-category">Edit valuable information here</p>
                 </div>
-                <div class="card-body">
-                	<form method="post" action="{{ url($controller.'/'.$data->primary_key) }}" method="PUT">
+                <div class="card-body mt-4">
+                	<form method="POST" action="{{ url($controller.'/'.$data->id) }}">
 						<?php foreach($fillables as $key => $value): ?>
-							<div class="form-group">
-								
+							@method('PUT')
+							@csrf
+							<div class="form-group">								
 								<?php if(!in_array($value, $fields['excludes'])): ?>
 									<label class="control-label">
 									<?= (array_key_exists($value, $fields['text_replace'])) ? $fields['text_replace'][$value] : str_replace('_', ' ', ucfirst($value)) ?>
@@ -45,7 +46,8 @@
 						<?php endforeach; ?>
 			
 						<div class="form-group">
-							<button class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</button>
+							<a class="btn btn-info" href="{{ url($controller) }}"><i class="fa fa-arrow-left"></i> Go back</a>
+							<button class="btn btn-success pull-right"><i class="fa fa-save"></i> Save</button>
 						</div>
 					</form>
                 </div>

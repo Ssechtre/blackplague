@@ -18,7 +18,8 @@ class CreateCustomerNetworksTable extends Migration
             $table->unsignedBigInteger('user_pid');
             $table->foreign('user_pid')->references('id')->on('users');
             $table->unsignedInteger('user_cid');
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

@@ -13,6 +13,11 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
         <title>{{ env("APP_NAME") }} - @yield('title')</title>
         <link href="{{ asset('css/material-dashboard/material-dashboard.css?v=2.1.1') }}" rel="stylesheet">
+        <style type="text/css">
+            .alert ul {
+                margin-bottom: 0;
+            }
+        </style>
     </head>
     <body>
 
@@ -27,15 +32,30 @@
                 @show
 
                 <div class="content">
-                    @if (session()->has('message') && session()->get('success') == true) 
-                        <div class="alert alert-success" role="alert">
-                            {{ session()->get('message') }}
-                        </div>
-                    @elseif(session()->has('message') && !session()->get('success'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session()->get('message') }}
-                        </div>
-                    @endif
+
+                    <div class="col-sm-12">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        @if (session()->has('message') && session()->get('success') == true) 
+                            <div class="alert alert-success" role="alert">
+                                {{ session()->get('message') }}
+                            </div>
+                        @elseif(session()->has('message') && !session()->get('success'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ session()->get('message') }}
+                            </div>
+                        @endif
+                    </div>
+         
+                    
                     @yield('content')
                 </div>
 
