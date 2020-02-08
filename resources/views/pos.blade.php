@@ -3,7 +3,7 @@
 @section('title', 'About' )
 
 @section('content')
-	<pos-component></pos-component>
+	<pos-component users-route="{{ route('users.index') }}" products-route="{{ route('products.index') }}"></pos-component>
 @endsection
 
 

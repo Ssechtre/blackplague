@@ -2082,10 +2082,214 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/POSComponent.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /var/www/html/blackplague/resources/js/components/POSComponent.vue: Can not use keyword 'await' outside an async function (116:39)\n\n\u001b[0m \u001b[90m 114 | \u001b[39m        }\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 115 | \u001b[39m        addProduct\u001b[33m:\u001b[39m \u001b[36mfunction\u001b[39m(product) {\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 116 | \u001b[39m            \u001b[36mconst\u001b[39m { value\u001b[33m:\u001b[39m quanity } \u001b[33m=\u001b[39m await \u001b[33mSwal\u001b[39m\u001b[33m.\u001b[39mfire({\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 117 | \u001b[39m              title\u001b[33m:\u001b[39m \u001b[32m'Quanity'\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 118 | \u001b[39m              input\u001b[33m:\u001b[39m \u001b[32m'number'\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 119 | \u001b[39m              inputPlaceholder\u001b[33m:\u001b[39m \u001b[32m'Enter quanity'\u001b[39m\u001b[0m\n    at Parser.raise (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:7012:17)\n    at Parser.checkReservedWord (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10405:14)\n    at Parser.parseIdentifierName (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10367:12)\n    at Parser.parseIdentifier (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10339:23)\n    at Parser.parseExprAtom (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9514:27)\n    at Parser.parseExprSubscripts (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9237:23)\n    at Parser.parseMaybeUnary (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9217:21)\n    at Parser.parseExprOps (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9083:23)\n    at Parser.parseMaybeConditional (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9056:23)\n    at Parser.parseMaybeAssign (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9015:21)\n    at Parser.parseVar (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:11341:26)\n    at Parser.parseVarStatement (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:11160:10)\n    at Parser.parseStatementContent (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10757:21)\n    at Parser.parseStatement (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10690:17)\n    at Parser.parseBlockOrModuleBlockBody (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:11266:25)\n    at Parser.parseBlockBody (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:11253:10)\n    at Parser.parseBlock (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:11237:10)\n    at Parser.parseFunctionBody (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10256:24)\n    at Parser.parseFunctionBodyAndFinish (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10226:10)\n    at /var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:11398:12\n    at Parser.withTopicForbiddingContext (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10565:14)\n    at Parser.parseFunction (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:11397:10)\n    at Parser.parseFunctionExpression (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9697:17)\n    at Parser.parseExprAtom (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9610:21)\n    at Parser.parseExprSubscripts (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9237:23)\n    at Parser.parseMaybeUnary (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9217:21)\n    at Parser.parseExprOps (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9083:23)\n    at Parser.parseMaybeConditional (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9056:23)\n    at Parser.parseMaybeAssign (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9015:21)\n    at Parser.parseObjectProperty (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10113:101)\n    at Parser.parseObjPropValue (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10138:101)\n    at Parser.parseObjectMember (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:10062:10)\n    at Parser.parseObj (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9982:25)\n    at Parser.parseExprAtom (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9604:28)\n    at Parser.parseExprSubscripts (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9237:23)\n    at Parser.parseMaybeUnary (/var/www/html/blackplague/node_modules/@babel/parser/lib/index.js:9217:21)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['usersRoute', 'productsRoute'],
+  mounted: function mounted() {
+    console.log('Component mounted.');
+  },
+  created: function created() {
+    this.getProducts();
+  },
+  data: function data() {
+    return {
+      products: [],
+      purchases: [],
+      search_name: null,
+      total: 0,
+      pos_routes: {
+        users: this.usersRoute,
+        products: this.productsRoute
+      }
+    };
+  },
+  computed: {
+    getTotal: function getTotal() {
+      var total = [];
+      Object.entries(this.purchases).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            key = _ref2[0],
+            val = _ref2[1];
+
+        total.push(val.price * val.purchased_qty);
+      });
+      return total.reduce(function (total, num) {
+        return total + num;
+      }, 0).toFixed(2);
+    }
+  },
+  methods: {
+    getProducts: function getProducts() {
+      var _this = this;
+
+      axios.post('api/products/get_products', {
+        name: this.search_name
+      }).then(function (response) {
+        var r = response.data;
+        _this.products = r.data;
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    addProduct: function addProduct(product) {
+      var _this2 = this;
+
+      var _Swal$fire = Swal.fire({
+        title: 'Please enter quanity',
+        input: 'number',
+        inputPlaceholder: 'Quantity',
+        showCancelButton: true,
+        inputValidator: function inputValidator(value) {
+          return new Promise(function (resolve) {
+            if (value != '') {
+              product.purchased_qty = value;
+              product.subtotal = (value * product.price).toFixed(2);
+
+              _this2.purchases.push(product);
+
+              console.log(_this2.purchases);
+              swal.close();
+            } else {
+              resolve('Quantity is required :)');
+            }
+          });
+        }
+      }),
+          quantity = _Swal$fire.value;
+    },
+    finishOrder: function finishOrder() {
+      var _this3 = this;
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, completed the order!'
+      }).then(function (result) {
+        if (result.value) {
+          Swal.fire('Great Job!', 'Order successfully completed!', 'success');
+          _this3.purchases = {};
+        }
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -37788,7 +37992,25 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("div", { staticClass: "row" }, [
-      _vm._m(0),
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "card" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-12" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("a", { attrs: { href: _vm.pos_routes.products } }, [
+                  _vm._m(2)
+                ]),
+                _vm._v(" "),
+                _c("a", { attrs: { href: _vm.pos_routes.users } }, [_vm._m(3)])
+              ])
+            ])
+          ])
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-8" }, [
         _c(
@@ -37807,7 +38029,11 @@ var render = function() {
                   "summary",
                   {
                     staticClass: "card bg-primary",
-                    attrs: { "v:on:click": "addProduct(product)" }
+                    on: {
+                      click: function($event) {
+                        return _vm.addProduct(product)
+                      }
+                    }
                   },
                   [
                     _c("div", { staticClass: "card-body" }, [
@@ -37836,7 +38062,84 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(1)
+      _c("div", { staticClass: "col-md-4" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c(
+                "div",
+                { staticClass: "col-sm-12" },
+                [
+                  _vm.purchases.length > 0
+                    ? _c("table", { staticClass: "table" }, [
+                        _vm._m(4),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          [
+                            _vm._l(_vm.purchases, function(purchase) {
+                              return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(purchase.name))]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v("P" + _vm._s(purchase.price))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(purchase.purchased_qty))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v("P" + _vm._s(purchase.subtotal))
+                                ])
+                              ])
+                            }),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Total")]),
+                              _vm._v(" "),
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("P" + _vm._s(_vm.getTotal))])
+                            ])
+                          ],
+                          2
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  !_vm.purchases.length
+                    ? _c("center", [_vm._v("No purchases at the moment")])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.purchases.length > 0
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success btn-lg col-sm-12",
+                          on: {
+                            click: function($event) {
+                              return _vm.finishOrder()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("Save and Finish Order "),
+                          _c("i", { staticClass: "material-icons" }, [
+                            _vm._v("check")
+                          ])
+                        ]
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
+            ])
+          ])
+        ])
+      ])
     ]),
     _vm._v(" "),
     _c(
@@ -37857,54 +38160,9 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(2),
+              _vm._m(5),
               _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("div", { staticClass: "form-group mt-4" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Code Number")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.code_number,
-                        expression: "code_number"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text" },
-                    domProps: { value: _vm.code_number },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.code_number = $event.target.value
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c(
-                    "div",
-                    { staticClass: "col-sm-12" },
-                    [
-                      _c("center", [
-                        _c("h5", { staticClass: "font-weight-bold" }, [
-                          _vm._v("Connected to")
-                        ])
-                      ])
-                    ],
-                    1
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group mt-1" })
-              ]),
+              _c("div", { staticClass: "modal-body" }),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
                 _c(
@@ -37921,11 +38179,7 @@ var render = function() {
                   {
                     staticClass: "btn btn-primary",
                     attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        return _vm.connectUsers()
-                      }
-                    }
+                    on: { click: function($event) {} }
                   },
                   [_vm._v("Save changes")]
                 )
@@ -37942,25 +38196,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-12" }, [
-      _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-body" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-sm-12" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-info pull-right",
-                  attrs: {
-                    "data-toggle": "modal",
-                    "data-target": "#networkModal"
-                  }
-                },
-                [_vm._v("Create Network")]
-              )
-            ])
-          ])
-        ])
+    return _c("div", { staticClass: "card-header card-header-warning" }, [
+      _c("h4", { staticClass: "card-title " }, [
+        _vm._v("Health Patrol Life Center")
+      ]),
+      _vm._v(" "),
+      _c("p", { staticClass: "card-category" }, [
+        _vm._v("Point of Sale System")
       ])
     ])
   },
@@ -37968,27 +38210,42 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-4" }, [
-      _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-body" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-sm-12" }, [
-              _c("table", { staticClass: "table table-bordered" }, [
-                _c("thead", [
-                  _c("tr", [
-                    _c("th", [_vm._v("Item")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Price")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Qty")]),
-                    _vm._v(" "),
-                    _c("th", [_vm._v("Subtotal")])
-                  ])
-                ])
-              ])
-            ])
-          ])
-        ])
+    return _c("button", { staticClass: "btn btn-success" }, [
+      _c("i", { staticClass: "material-icons" }, [_vm._v("search")]),
+      _vm._v(" View Reports")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "btn btn-info" }, [
+      _c("i", { staticClass: "material-icons" }, [_vm._v("content_paste")]),
+      _vm._v(" Go to Product Management")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "btn btn-default" }, [
+      _c("i", { staticClass: "material-icons" }, [_vm._v("person")]),
+      _vm._v(" Go to Customer Management")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Item")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Qty")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Subtotal")])
       ])
     ])
   },
@@ -50382,9 +50639,7 @@ component.options.__file = "resources/js/components/POSComponent.vue"
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./POSComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/POSComponent.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 

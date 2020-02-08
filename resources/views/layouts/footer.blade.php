@@ -4,7 +4,7 @@
             <ul>
                 <li>
                     <a href="https://www.creative-tim.com">
-                        Creative Tim
+                        Health Patrol Life Center
                     </a>
                 </li>
                 <li>
@@ -14,12 +14,12 @@
                 </li>
                 <li>
                     <a href="http://blog.creative-tim.com">
-                        Blog
+                        Facebook
                     </a>
                 </li>
                 <li>
                     <a href="https://www.creative-tim.com/license">
-                        Licenses
+                        Instagram
                     </a>
                 </li>
             </ul>
@@ -29,7 +29,7 @@
             <script>
                 document.write(new Date().getFullYear())
             </script>, made with <i class="material-icons">favorite</i> by
-            <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a> for a better web.
+            <a href="https://www.creative-tim.com" target="_blank">Few Words Development</a> for a better web.
         </div>
     </div>
 </footer>
