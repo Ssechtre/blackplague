@@ -22,7 +22,7 @@
 			<li class="nav-item {{ (Request::is('users') || Request::is('users/create') || Request::is('users/*')) ? 'active' : null }}">
 				<a class="nav-link" href="{{ route('users.index') }}">
 				  <i class="material-icons">person</i>
-				  <p>User</p>
+				  <p>Users</p>
 				</a>
 			</li>
 			<li class="nav-item {{ (Request::is('products') || Request::is('products/create') || Request::is('products/*')) ? 'active' : null }}">
@@ -35,6 +35,12 @@
 				<a class="nav-link" href="{{ route('codes.index') }}">
 				  <i class="material-icons">library_books</i>
 				  <p>Codes</p>
+				</a>
+			</li>
+			<li class="nav-item {{ (Request::is('customer') || Request::is('customer/networks') || Request::is('customer/networks/*')) ? 'active' : null }}">
+				<a class="nav-link" href="{{ route('customer_networks.index') }}">
+				  <i class="material-icons">supervisor_account</i>
+				  <p>Customer Networks</p>
 				</a>
 			</li>
 			@endif

@@ -73,7 +73,7 @@ class Controller extends BaseController
 
 		$model = new $namespace_model;
 
-		$this->query = $namespace_model::paginate(10);
+		$this->query = $namespace_model::orderBy('id', 'DESC')->paginate(20);
 
 		$this->columns = \Schema::getColumnListing(strtolower($controller));
 

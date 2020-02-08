@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
         <title>{{ env("APP_NAME") }} - @yield('title')</title>
         <link href="{{ asset('css/material-dashboard/material-dashboard.css?v=2.1.1') }}" rel="stylesheet">
+        <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
         <style type="text/css">
             .alert ul {
                 margin-bottom: 0;
@@ -106,6 +107,10 @@
     <!--  Notifications Plugin    -->
     <script src="{{ asset('js/plugins/bootstrap-notify.js') }}"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="{{ asset('js/material-dashboard.js?v=2.1.1') }} type="text/javascript"></script>
+    <script src="{{ asset('js/material-dashboard.js?v=2.1.1') }}"></script>
+    <!-- Sweet Alert for popups -->
+    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+    <!-- Sweet Alert for popups -->
+    <script src="{{ asset('js/toastr.min.js') }}"></script>
 
 </html>

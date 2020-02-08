@@ -35,6 +35,8 @@ Route::group(['middleware' => 'admin'], function(){
     Route::resource('products', 'ProductController');
     Route::resource('users', 'UserController');
     Route::resource('codes', 'CodeController');
+
+    Route::get('customer_networks', 'CustomerNetworkController@index')->name('customer_networks.index');
 });
 
 

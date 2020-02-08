@@ -14,9 +14,9 @@
                 </div>
                 <div class="card-body mt-4">
                 	<form method="POST" action="{{ url($controller) }}">
+                		@csrf
 						<?php foreach($fillables as $key => $value): ?>
-							<div class="form-group mt-4">
-								@csrf
+							<div class="form-group mt-4">								
 								<?php if(!in_array($value, $fields['excludes'])): ?>
 									<label class="control-label">
 									<?= (array_key_exists($value, $fields['text_replace'])) ? $fields['text_replace'][$value] : str_replace('_', ' ', ucfirst($value)) ?>										

@@ -15,35 +15,6 @@ class CustomerNetworkController extends Controller
     public function index()
     {
         //
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(CustomerNetwork $customerNetwork)
-    {
-        //
-    }
-
-    public function edit(CustomerNetwork $customerNetwork)
-    {
-        //
-    }
-
-    public function update(Request $request, CustomerNetwork $customerNetwork)
-    {
-        //
-    }
-
-    public function destroy(CustomerNetwork $customerNetwork)
-    {
-        //
+        return view('customer_network.index');
     }
 }

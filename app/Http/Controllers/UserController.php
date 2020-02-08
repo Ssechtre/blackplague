@@ -28,6 +28,67 @@ class UserController extends Controller
             'govt_id_type' => 'Government ID Type',
             'govt_id_number' => 'Government ID Number',
         ];
+
+        $this->column_values = [
+            'user_type' => User::$user_types
+        ];
+    }
+
+    public function edit($id) {
+
+        $this->fields['excludes']  = ['password'];
+        return parent::edit($id);
+    }
+
+    public function create()
+    {   
+        $this->fields['excludes'] = ['code_id'];
+
+        return parent::create();
+    }
+
+    public function store(Request $request) {
+
+        if ($request['user_type'] && $request['user_type'] == 'customer') {
+
+            $code = Code::where('status', '1')->limit(1)->orderBy('id', 'ASC')->first();
+
+            if(!$code){
+                return back()
+                ->withInput($request->all())
+                ->with($this->_response(false, "No codes available. Please generate codes before creating customers.")); 
+            }
+
+            $rules = User::$rules;
+
+            $data = $request->all();
+
+            $validate = Validator::make($data, $rules, $this->error_messages);
+
+            if ($validate->fails()) {
+                return back()->withErrors($validate)->withInput($request->all);
+            }
+
+            $data['code_id'] = $code->id;
+
+            $user = User::create($data);
+
+            if ($user) {
+
+                $code->status = 0;
+                $code->save();
+
+                return redirect('users')->with($this->_response(true, "New User successfuly added"));
+
+            }else{
+                return back()
+                ->withInput($request->all())
+                ->with($this->_response(false, "An error occured.")); 
+            }
+        }
+
+        return parent::store($request);
+
     }
 
     public function index() {

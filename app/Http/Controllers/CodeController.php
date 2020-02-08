@@ -49,7 +49,7 @@ class CodeController extends Controller
         for ($i=0; $i < $request->code; $i++) { 
             $codes[] = [
                 'user_id' => auth()->user()->id,
-                'code' => (date('His', time())+$i).Str::random(4),
+                'code' => (date('Hjis', time())+$i).Str::random(4),
             ];
         }
 

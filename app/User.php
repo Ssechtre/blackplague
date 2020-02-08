@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'user_type', 'branch', 'phone', 'address', 'govt_id_type', 'govt_id_number'
+        'name', 'email', 'password', 'user_type', 'branch', 'phone', 'address', 'govt_id_type', 'govt_id_number', 'code_id'
     ];
 
     public static $user_types = [
@@ -24,6 +24,11 @@ class User extends Authenticatable
         'staff'    => 'Staff',
         'agent'    => 'Agent',
         'customer' => 'Customer'
+    ];
+
+    public static $rules = [
+        'name' => 'required',
+        'password' => 'required|min:4'
     ];
 
     /**
