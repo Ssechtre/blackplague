@@ -33,6 +33,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'admin'], function(){
     Route::resource('products', 'ProductController');
+    Route::resource('users', 'UserController');
+    Route::resource('codes', 'CodeController');
 });
 
 
@@ -45,7 +47,8 @@ Route::group(['middleware' => 'customer'], function(){
 });
 
 
-
 Route::get('pos', function(){
     return view('pos');
 });
+
+Route::get('createAccount', 'UserController@createAccount');

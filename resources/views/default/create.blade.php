@@ -15,7 +15,7 @@
                 <div class="card-body mt-4">
                 	<form method="POST" action="{{ url($controller) }}">
 						<?php foreach($fillables as $key => $value): ?>
-							<div class="form-group">
+							<div class="form-group mt-4">
 								@csrf
 								<?php if(!in_array($value, $fields['excludes'])): ?>
 									<label class="control-label">
@@ -30,7 +30,12 @@
 								<?php elseif(in_array($value, $fields['textareas'])): ?>
 									<textarea class="form-control" name="{{ $value }}" value="{{ old($value) }}"></textarea>
 								<?php elseif(array_key_exists($value, $fields['dropdowns'])): ?>
-									{!! Form::select($value, $fields['dropdowns'][$value], '', array('class' => 'form-control', )); !!}	
+									<select class="form-control" name="user_type">
+										<option value="">- Select -</option>
+										@foreach($fields['dropdowns'][$value] as $dk => $dv)
+										<option value="{{ $dk }}">{{ $dv }}</option>
+										@endforeach
+									</select>
 								<?php elseif(in_array($value, $fields['hiddens'])): ?>
 									<input type="hidden" class="form-control" name="{{ $value }}" value="{{ old($value) }}">
 								<?php elseif(in_array($value, $fields['times'])): ?>

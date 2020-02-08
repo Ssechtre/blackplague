@@ -17,7 +17,7 @@
 						<?php foreach($fillables as $key => $value): ?>
 							@method('PUT')
 							@csrf
-							<div class="form-group">								
+							<div class="form-group mt-4">								
 								<?php if(!in_array($value, $fields['excludes'])): ?>
 									<label class="control-label">
 									<?= (array_key_exists($value, $fields['text_replace'])) ? $fields['text_replace'][$value] : str_replace('_', ' ', ucfirst($value)) ?>
@@ -32,7 +32,12 @@
 								<?php elseif(in_array($value, $fields['textareas'])): ?>
 									<textarea class="form-control" name="{{ $value }}"><?= $data->$value ?></textarea>
 								<?php elseif(array_key_exists($value, $fields['dropdowns'])): ?>
-									{!! Form::select($value, $fields['dropdowns'][$value], $data->$value, array('class' => 'form-control', )); !!}	
+									<select class="form-control" name="user_type">
+										<option value="">- Select -</option>
+										@foreach($fields['dropdowns'][$value] as $dk => $dv)
+										<option value="{{ $dk }}" {{ ($data->$value == $dk) ? 'selected' : '' }}>{{ $dv }}</option>
+										@endforeach
+									</select>	
 								<?php elseif(in_array($value, $fields['hiddens'])): ?>
 									<input type="hidden" class="form-control" name="{{ $value }}" value="<?= $data->$value ?>">
 								<?php elseif(in_array($value, $fields['times'])): ?>

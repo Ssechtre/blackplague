@@ -10,7 +10,7 @@ class AuthStaff
     public function handle($request, Closure $next)
     {
         // return $next($request);
-        if(Auth::check() && Auth::user()->user_type == 'Customer'){
+        if(Auth::check() && Auth::user()->user_type == 'customer'){
             return redirect('home');
         }
         

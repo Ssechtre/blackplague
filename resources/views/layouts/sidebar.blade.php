@@ -12,47 +12,33 @@
 	
 	<div class="sidebar-wrapper">
 		<ul class="nav">
-			<li class="nav-item active">
+			<li class="nav-item {{ Request::is('') ? 'active' : null }}">
 				<a class="nav-link" href="">
 				  <i class="material-icons">dashboard</i>
 				  <p>Dashboard</p>
 				</a>
 			</li>
-			@if(Auth::check() && Auth::user()->user_type == 'Admin')
-			<li class="nav-item">
-				<a class="nav-link" href="">
+			@if(Auth::check() && Auth::user()->user_type == 'admin')
+			<li class="nav-item {{ (Request::is('users') || Request::is('users/create') || Request::is('users/*')) ? 'active' : null }}">
+				<a class="nav-link" href="{{ route('users.index') }}">
 				  <i class="material-icons">person</i>
 				  <p>User</p>
 				</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="">
-				  <i class="material-icons">person</i>
-				  <p>Customer</p>
-				</a>
-			</li>
-			@endif
-			{{-- <li class="nav-item ">
-				<a class="nav-link" href="">
-				  <i class="material-icons">content_paste</i>
-				  <p>Sales</p>
-				</a>
-			</li> --}}
-			<li class="nav-item ">
-				<a class="nav-link" href="{{ url('products') }}">
+			<li class="nav-item {{ (Request::is('products') || Request::is('products/create') || Request::is('products/*')) ? 'active' : null }}">
+				<a class="nav-link" href="{{ route('products.index') }}">
 				  <i class="material-icons">content_paste</i>
 				  <p>Products</p>
 				</a>
 			</li>
-			@if(Auth::check() && Auth::user()->user_type == 'Admin')
-			<li class="nav-item ">
-				<a class="nav-link" href="">
+			<li class="nav-item {{ (Request::is('codes') || Request::is('products/codes') || Request::is('codes/*')) ? 'active' : null }}">
+				<a class="nav-link" href="{{ route('codes.index') }}">
 				  <i class="material-icons">library_books</i>
 				  <p>Codes</p>
 				</a>
 			</li>
 			@endif
-			<li class="nav-item ">
+{{-- 			<li class="nav-item ">
 				<a class="nav-link" href="./icons.html">
 				  <i class="material-icons">bubble_chart</i>
 				  <p>Icons</p>
@@ -81,7 +67,7 @@
 				  <i class="material-icons">unarchive</i>
 				  <p>{{ date('M d, Y') }}</p>
 				</a>
-			</li>
+			</li> --}}
 		</ul>
 	</div>
 </div>

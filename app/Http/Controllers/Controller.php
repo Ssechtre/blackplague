@@ -29,7 +29,11 @@ class Controller extends BaseController
 
 	public $query_fields = ['*'];
 
+	public $excludes = [];
+
 	public $primary_key = 'id';
+
+	public $with_actions = true;
 
 	public $response = [
 		'success' => false,
@@ -54,10 +58,8 @@ class Controller extends BaseController
 		$regex = preg_match('/([a-z\_]+)\./', \Request::route()->getName(), $matches);
 
 		if ($regex) {
-
 			$this->controller = $matches[1];
 			return view()->share('controller', $this->controller);
-
 		}
 	}
 
@@ -71,7 +73,7 @@ class Controller extends BaseController
 
 		$model = new $namespace_model;
 
-		$this->query = $namespace_model::orderBy('created_at', 'DESC')->get($this->query_fields);
+		$this->query = $namespace_model::paginate(10);
 
 		$this->columns = \Schema::getColumnListing(strtolower($controller));
 
@@ -83,13 +85,16 @@ class Controller extends BaseController
 
 		if ($this->query) {
 
+			$this->fields['hiddens'] = ['id'];
+
 			return view('default/index')
 			->with('data', $this->query)
 			->with('columns', $this->columns)
 			->with('column_values', $this->column_values)
 			->with('primary_key', $this->primary_key)
 			->with('fields', $this->fields)
-			->with('excludes', isset($this->excludes) ? $this->excludes : []);
+			->with('excludes', isset($this->excludes) ? $this->excludes : [])
+			->with('with_actions', $this->with_actions);
 
 		}else{
 
@@ -111,7 +116,7 @@ class Controller extends BaseController
 
 		$model = new $namespace_model;
 
-		$fillables = $model::$fillables;
+		$fillables = $model->getFillables();
 
 		return view('default/create')
 		->with('fillables', $fillables)
@@ -143,7 +148,7 @@ class Controller extends BaseController
 
 		}else{
 			if ($namespace_model::create($data)) {
-				return redirect($controller)->with($this->_response(true, "New item successfuly added"));
+				return redirect($controller)->with($this->_response(true, "New ". str_replace('App\\', '', $namespace_model) ." successfuly added"));
 			}
 		}
 
@@ -162,7 +167,7 @@ class Controller extends BaseController
 		if ($this->query) {
 			$model = new $namespace_model;
 
-			$fillables = $model::$fillables;
+			$fillables = $model->getFillables();
 
 			return view('default/edit')
 			->with('data', $this->query)
@@ -255,7 +260,7 @@ class Controller extends BaseController
 
 		$new_controller = '';
 
-		if (substr($controller, -2) == 'es') {
+		if (substr($controller, -2) == 'es' && $controller != 'codes') {
 			$controller = substr($controller, 0, strlen($controller)-2);
 		}else{
 			$controller = substr($controller, 0, strlen($controller)-1);
@@ -265,8 +270,6 @@ class Controller extends BaseController
 		foreach ($parts as $key => $value) {
 			$new_controller .= ucfirst($value);
 		}
-
-
 
 		return $new_controller;
 	}

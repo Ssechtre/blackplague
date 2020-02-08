@@ -14,33 +14,35 @@ class CodeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
-    public function index()
-    {
-        $codes = Code::paginate(10);
+    public function index() {
 
-        $latest_codes = Code::whereDate('created_at', '=', Carbon::today())->count();
+        $this->query_fields = ['id', 'code', 'status', 'created_at', 'updated_at'];
+        $this->fields['hidden'] = ['id'];
+        $this->column_values = [
+            'status' => [1=>'Available',0=>'Sold']
+        ];
+        $this->with_actions = false;
 
-        return view('code.index', compact('codes', 'latest_codes'));
+        return parent::index();
     }
 
-    public function create()
-    {
-        return view('code.create');
+    public function create() {
+
+        $this->fields['text_replace'] = [
+            'code' => 'Number of codes to be generated'
+        ];
+
+        return parent::create();
     }
 
-    public function store(CreateCodeRequest $request)
+    public function store(Request $request)
     {
         if ($request->code > 100 || $request->code <= 0) {
-            $data = [
-                'message' => 'Error: Can only generate maximum of 100 minimum of 1',
-                'success' => false,
-            ];
-
-            return redirect('code')->with($data);
+            return back()->withInputs()->with(parent::_response(false, 'Error: Can only generate maximum of 100 minimum of 1'));
         }
-
 
         $codes = [];
 
@@ -53,31 +55,7 @@ class CodeController extends Controller
 
         Code::insert($codes);
 
-        $data = [
-            'message' => 'Code generated Successfully',
-            'success' => true,
-        ];
-
-        return redirect('code')->with($data);
+        return redirect('codes')->with(parent::_response(true, 'Codes generated Successfully'));
     }
 
-    public function show(Code $code)
-    {
-        //
-    }
-
-    public function edit(Code $code)
-    {
-        //
-    }
-
-    public function update(Request $request, Code $code)
-    {
-        //
-    }
-
-    public function destroy(Code $code)
-    {
-        //
-    }
 }

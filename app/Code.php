@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Code extends Model
 {
     protected $guarded = [];
+
+    protected $fillable = ['code'];
     
     public function getCodeAttribute($code)
     {
@@ -21,5 +23,9 @@ class Code extends Model
     public function customer()
     {
         return $this->hasOne('App\Customer');
+    }
+
+    public function getFillables() {
+        return $this->fillable;
     }
 }

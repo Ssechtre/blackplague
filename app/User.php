@@ -16,7 +16,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'user_type', 'branch'
+        'name', 'email', 'password', 'user_type', 'branch', 'phone', 'address', 'govt_id_type', 'govt_id_number'
+    ];
+
+    public static $user_types = [
+        'admin'    => 'Admin',
+        'staff'    => 'Staff',
+        'agent'    => 'Agent',
+        'customer' => 'Customer'
     ];
 
     /**
@@ -46,4 +53,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\CustomerNetwork', 'user_pid', 'id');
     }
+
+    public function getFillables() {
+        return $this->fillable;
+    }
+
 }
