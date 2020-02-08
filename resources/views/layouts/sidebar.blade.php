@@ -37,10 +37,16 @@
 				  <p>Codes</p>
 				</a>
 			</li>
-			<li class="nav-item {{ (Request::is('customer') || Request::is('customer/networks') || Request::is('customer/networks/*')) ? 'active' : null }}">
+			<li class="nav-item {{ (Request::is('customer_networks') || Request::is('customer_networks/*')) ? 'active' : null }}">
 				<a class="nav-link" href="{{ route('customer_networks.index') }}">
 				  <i class="material-icons">supervisor_account</i>
 				  <p>Customer Networks</p>
+				</a>
+			</li>
+			<li class="nav-item {{ (Request::is('pos') || Request::is('pos/*')) ? 'active' : null }}">
+				<a class="nav-link" href="{{ route('pos.app') }}">
+				  <i class="material-icons">apps</i>
+				  <p>Point of Sale</p>
 				</a>
 			</li>
 			@endif

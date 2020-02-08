@@ -21,7 +21,6 @@
         </style>
     </head>
     <body>
-
         <div class="wrapper">
             @section('sidebar')
                 @include('layouts.sidebar')
@@ -32,7 +31,7 @@
                     @include('layouts.navbar')
                 @show
 
-                <div class="content">
+                <div class="content" id="blackrice_app">
 
                     <div class="col-sm-12">
                         @if ($errors->any())
@@ -67,9 +66,8 @@
         </div>
     </body>
 
-    {{-- VUE --}}
-    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
-    {{-- END VUE --}}
+    <!-- For VueJS -->
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/core/jquery.min.js') }}"></script>
     <script src="{{ asset('js/core/popper.min.js') }}"></script>
     <script src="{{ asset('js/core/bootstrap-material-design.min.js') }}"></script>
@@ -112,5 +110,6 @@
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     <!-- Sweet Alert for popups -->
     <script src="{{ asset('js/toastr.min.js') }}"></script>
+
 
 </html>

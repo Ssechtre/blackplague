@@ -4,6 +4,11 @@ body{
     font-weight: 300;
 }
 
+summary.card:hover{
+    opacity: .7;
+    transition: .5s;
+}
+
 legend {
   border-bottom: 0;
 }

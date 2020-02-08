@@ -78,7 +78,7 @@ class UserController extends Controller
                 $code->status = 0;
                 $code->save();
 
-                return redirect('users')->with($this->_response(true, "New User successfuly added"));
+                return redirect('users')->with($this->_response(true, "New user successfuly added with code number: ". $code->code));
 
             }else{
                 return back()
@@ -97,23 +97,47 @@ class UserController extends Controller
         return parent::index();
     }
 
-    // public function createAccount() {
+    public function getUsers(Request $request) {
 
-    //     $data = [
-    //         'name' => 'Admin',
-    //         'password' => Hash::make('1234512345'),
-    //         'username' => 'admin',
-    //         'user_type' => 'Admin',
-    //         'contact_no' => '121212',
-    //         'address' => 'asdas',
-    //         'email' => 'sudo@mail.com',
-    //     ];
+        $data = User::query();
 
-    //     $save =  User::create($data);
+        $query = [];
 
-    //     if ($save) {
-    //         var_dump($save);die;
-    //     }
-    //     dd('error');
-    // }
+        $filter = $request->all();
+
+        if ($filter) {
+            foreach ($filter as $key => $value) {
+                if ($key != 'name') {
+                    $query[] = [$key,'=',$value];  
+                }else{
+                    $query[] = ['name', 'LIKE', "%".$filter['name']."%" ];
+                }            
+            }
+        }
+
+        $data = $data->where($query)->orderBy('name', 'ASC')->get(['id','name']);
+
+        return response()->json($data);
+
+    }
+
+    public function createAccount() {
+
+        $data = [
+            'name' => 'Admin',
+            'password' => Hash::make('1234512345'),
+            'username' => 'admin',
+            'user_type' => 'Admin',
+            'contact_no' => '121212',
+            'address' => 'asdas',
+            'email' => 'sudo@mail.com',
+        ];
+
+        $save =  User::create($data);
+
+        if ($save) {
+            dd($save);
+        }
+        dd('error');
+    }
 }

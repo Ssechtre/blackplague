@@ -22,6 +22,13 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 });
 
 
-Route::get('products', function(){
-    return 'CHECK';
+Route::prefix('customer_networks')->group(function () {
+	Route::post('get_users', 'UserController@getUsers');
+	Route::post('connect_users', 'CustomerNetworkController@connectUsers');
+
+	Route::get('get_customer_networks', 'CustomerNetworkController@getCustomersNetworks');
+});
+
+Route::prefix('products')->group(function () {
+	Route::post('get_products', 'ProductController@getProducts');
 });

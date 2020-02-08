@@ -37,6 +37,7 @@ Route::group(['middleware' => 'admin'], function(){
     Route::resource('codes', 'CodeController');
 
     Route::get('customer_networks', 'CustomerNetworkController@index')->name('customer_networks.index');
+    Route::get('pos', 'HomeController@pos')->name('pos.app');
 });
 
 
@@ -46,11 +47,6 @@ Route::group(['middleware' => 'staff'], function(){
 
 Route::group(['middleware' => 'customer'], function(){
     // Route::get('home', 'CustomerController@home')->name('customer.home');
-});
-
-
-Route::get('pos', function(){
-    return view('pos');
 });
 
 Route::get('createAccount', 'UserController@createAccount');

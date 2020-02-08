@@ -51,8 +51,8 @@
 														}elseif(array_key_exists($col_val, $column_values)){
 															echo $column_values[$col_val][$value[$col_val]];
 														}else{
-															$str = substr($value[$col_val], 0, 60);
-															$dots = (strlen($value[$col_val]) > 60) ? '...' : '';
+															$str = substr($value[$col_val], 0, 30);
+															$dots = (strlen($value[$col_val]) > 30) ? '...' : '';
 															echo $str.$dots;
 														}
 														?>

@@ -97,11 +97,7 @@ class Controller extends BaseController
 			->with('with_actions', $this->with_actions);
 
 		}else{
-
-			Session::flash('message', 'An error occured');
-			Session::flash('alert-class', 'alert-success'); 
-
-			return back();
+			return back()->with($this->_response(false, "An error occured"));
 		}
 
 	}
@@ -223,7 +219,7 @@ class Controller extends BaseController
 				return back()->withErrors($validate)->withInput($request->all);
 			}else{
 				if ($this->query->save()) {
-					return back()->with($this->_response(true, str_replace('App\\', '', $namespace_model)."updated successfully"));
+					return back()->with($this->_response(true, str_replace('App\\', '', $namespace_model)." updated successfully"));
 				}
 			}
 

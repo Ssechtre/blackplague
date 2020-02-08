@@ -3,7 +3,7 @@
 @section('title', 'About' )
 
 @section('content')
-    pos
+	<pos-component></pos-component>
 @endsection
 
 
