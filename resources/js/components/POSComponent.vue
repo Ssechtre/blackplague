@@ -123,7 +123,10 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" v-model="discount.discount_amount" placeholder="Enter discount amount here">                         
+                            <input type="text" 
+                            class="form-control" 
+                            v-model="discount.discount_amount" 
+                            v-bind:placeholder="(!discount.discount_type) ? 'Enter amount in percentage' : 'Enter fixed amount'">                         
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -145,6 +148,7 @@
         },
         created() {
             this.getProducts();
+            this.getUsers();
         },
         data : function(){
             return {
@@ -161,7 +165,7 @@
                 discount : {
                     discount_applied : false,
                     discount_type : false,
-                    discount_amount : 0,
+                    discount_amount : "",
                 }
             }
         },
@@ -265,9 +269,11 @@
                 return total.reduce(function(total, num){ return total + num }, 0).toFixed(2);
             },
             applyDiscount : function() {
+
                 this.discount.discount_applied = true;
                 $('#discountModal').modal('hide');
                 $('.modal-backdrop').hide();
+
             },
             removeDiscount : function() {
                 this.discount = {

@@ -2234,6 +2234,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['usersRoute', 'productsRoute'],
   mounted: function mounted() {
@@ -2241,6 +2244,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
   },
   created: function created() {
     this.getProducts();
+    this.getUsers();
   },
   data: function data() {
     return {
@@ -2257,7 +2261,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       discount: {
         discount_applied: false,
         discount_type: false,
-        discount_amount: 0
+        discount_amount: ""
       }
     };
   },
@@ -38461,7 +38465,9 @@ var render = function() {
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
-                      placeholder: "Enter discount amount here"
+                      placeholder: !_vm.discount.discount_type
+                        ? "Enter amount in percentage"
+                        : "Enter fixed amount"
                     },
                     domProps: { value: _vm.discount.discount_amount },
                     on: {
