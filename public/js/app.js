@@ -2196,6 +2196,44 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['usersRoute', 'productsRoute'],
   mounted: function mounted() {
@@ -2206,6 +2244,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
   },
   data: function data() {
     return {
+      users: [],
       products: [],
       purchases: [],
       search_name: null,
@@ -2213,22 +2252,32 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       pos_routes: {
         users: this.usersRoute,
         products: this.productsRoute
+      },
+      selected_user: "",
+      discount: {
+        discount_applied: false,
+        discount_type: false,
+        discount_amount: 0
       }
     };
   },
   computed: {
     getTotal: function getTotal() {
-      var total = [];
-      Object.entries(this.purchases).forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            key = _ref2[0],
-            val = _ref2[1];
+      return this.computeTotal();
+    },
+    getFinalTotal: function getFinalTotal() {
+      var total = this.computeTotal();
 
-        total.push(val.price * val.purchased_qty);
-      });
-      return total.reduce(function (total, num) {
-        return total + num;
-      }, 0).toFixed(2);
+      if (this.discount.discount_applied) {
+        if (!this.discount.discount_type) {
+          var discount = total / 100 * this.discount.discount_amount;
+          return (total - discount).toFixed(2);
+        }
+
+        return (total - this.discount.discount_amount).toFixed(2);
+      }
+
+      return total;
     }
   },
   methods: {
@@ -2287,6 +2336,43 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           _this3.purchases = {};
         }
       });
+    },
+    getUsers: function getUsers() {
+      var _this4 = this;
+
+      axios.post('api/customer_networks/get_users', {
+        user_type: 'customer',
+        name: this.search_name
+      }).then(function (response) {
+        _this4.users = response.data;
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    computeTotal: function computeTotal() {
+      var total = [];
+      Object.entries(this.purchases).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            key = _ref2[0],
+            val = _ref2[1];
+
+        total.push(val.price * val.purchased_qty);
+      });
+      return total.reduce(function (total, num) {
+        return total + num;
+      }, 0).toFixed(2);
+    },
+    applyDiscount: function applyDiscount() {
+      this.discount.discount_applied = true;
+      $('#discountModal').modal('hide');
+      $('.modal-backdrop').hide();
+    },
+    removeDiscount: function removeDiscount() {
+      this.discount = {
+        discount_applied: false,
+        discount_type: false,
+        discount_amount: 0
+      };
     }
   }
 });
@@ -38021,7 +38107,7 @@ var render = function() {
               "div",
               {
                 key: product.id,
-                staticClass: "col-sm-3",
+                staticClass: "col-lg-3 col-sm-6",
                 attrs: { title: product.description }
               },
               [
@@ -38103,6 +38189,41 @@ var render = function() {
                               _c("td"),
                               _vm._v(" "),
                               _c("td", [_vm._v("P" + _vm._s(_vm.getTotal))])
+                            ]),
+                            _vm._v(" "),
+                            _vm.discount.discount_applied
+                              ? _c("tr", [
+                                  _c("td"),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v("Discount")]),
+                                  _vm._v(" "),
+                                  _c("td"),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(
+                                      "-" +
+                                        _vm._s(
+                                          _vm.discount.discount_type ? "P" : ""
+                                        ) +
+                                        _vm._s(_vm.discount.discount_amount) +
+                                        _vm._s(
+                                          !_vm.discount.discount_type ? "%" : ""
+                                        )
+                                    )
+                                  ])
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("Grand Total")]),
+                              _vm._v(" "),
+                              _c("td"),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "font-weight-bold" }, [
+                                _vm._v("P" + _vm._s(_vm.getFinalTotal))
+                              ])
                             ])
                           ],
                           2
@@ -38115,23 +38236,52 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.purchases.length > 0
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-success btn-lg col-sm-12",
-                          on: {
-                            click: function($event) {
-                              return _vm.finishOrder()
+                    ? _c("div", { staticClass: "check-out-container" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-info btn-sm mb-2",
+                            attrs: {
+                              "data-toggle": "modal",
+                              "data-target": "#discountModal"
                             }
-                          }
-                        },
-                        [
-                          _vm._v("Save and Finish Order "),
-                          _c("i", { staticClass: "material-icons" }, [
-                            _vm._v("check")
-                          ])
-                        ]
-                      )
+                          },
+                          [_vm._v("Appy Discount")]
+                        ),
+                        _vm._v(" "),
+                        _vm.discount.discount_applied
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger btn-sm mb-2",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.removeDiscount()
+                                  }
+                                }
+                              },
+                              [_vm._v("Remove Discount")]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success btn-lg col-sm-12",
+                            on: {
+                              click: function($event) {
+                                return _vm.finishOrder()
+                              }
+                            }
+                          },
+                          [
+                            _vm._v("Save and Finish Order "),
+                            _c("i", { staticClass: "material-icons" }, [
+                              _vm._v("check")
+                            ])
+                          ]
+                        )
+                      ])
                     : _vm._e()
                 ],
                 1
@@ -38147,7 +38297,7 @@ var render = function() {
       {
         staticClass: "modal",
         attrs: {
-          id: "networkModal",
+          id: "discountModal",
           tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "exampleModalLabel",
@@ -38162,7 +38312,173 @@ var render = function() {
             _c("div", { staticClass: "modal-content" }, [
               _vm._m(5),
               _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group mt-1" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.search_name,
+                        expression: "search_name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      placeholder: "Search customer here"
+                    },
+                    domProps: { value: _vm.search_name },
+                    on: {
+                      keyup: function($event) {
+                        return _vm.getUsers()
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.search_name = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selected_user,
+                          expression: "selected_user"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.selected_user = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "" } }, [
+                        _vm._v("- Select customer to apply discount -")
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.users, function(user) {
+                        return _c(
+                          "option",
+                          { key: user.id, domProps: { value: user.id } },
+                          [_vm._v(_vm._s(user.name))]
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mt-2" }, [
+                  _c("label", { staticClass: "switch" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.discount.discount_type,
+                          expression: "discount.discount_type"
+                        }
+                      ],
+                      attrs: { type: "checkbox" },
+                      domProps: {
+                        checked: Array.isArray(_vm.discount.discount_type)
+                          ? _vm._i(_vm.discount.discount_type, null) > -1
+                          : _vm.discount.discount_type
+                      },
+                      on: {
+                        change: function($event) {
+                          var $$a = _vm.discount.discount_type,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(
+                                  _vm.discount,
+                                  "discount_type",
+                                  $$a.concat([$$v])
+                                )
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  _vm.discount,
+                                  "discount_type",
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
+                          } else {
+                            _vm.$set(_vm.discount, "discount_type", $$c)
+                          }
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "slider round" })
+                  ]),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "switch-text" }, [
+                    _vm._v(
+                      _vm._s(
+                        !_vm.discount.discount_type
+                          ? "By Percentage"
+                          : "By Fixed Amount"
+                      )
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.discount.discount_amount,
+                        expression: "discount.discount_amount"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      placeholder: "Enter discount amount here"
+                    },
+                    domProps: { value: _vm.discount.discount_amount },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.discount,
+                          "discount_amount",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ])
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
                 _c(
@@ -38178,10 +38494,18 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
-                    on: { click: function($event) {} }
+                    attrs: {
+                      type: "button",
+                      disabled:
+                        !_vm.discount.discount_amount || !_vm.selected_user
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.applyDiscount()
+                      }
+                    }
                   },
-                  [_vm._v("Save changes")]
+                  [_vm._v("Apply Discount")]
                 )
               ])
             ])
@@ -38257,7 +38581,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Create Network")]
+        [_vm._v("Apply Discount")]
       ),
       _vm._v(" "),
       _c(
@@ -50595,15 +50919,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************!*\
   !*** ./resources/js/components/POSComponent.vue ***!
   \**************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _POSComponent_vue_vue_type_template_id_b4df9718___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./POSComponent.vue?vue&type=template&id=b4df9718& */ "./resources/js/components/POSComponent.vue?vue&type=template&id=b4df9718&");
 /* harmony import */ var _POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./POSComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/POSComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _POSComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -50633,7 +50956,7 @@ component.options.__file = "resources/js/components/POSComponent.vue"
 /*!***************************************************************************!*\
   !*** ./resources/js/components/POSComponent.vue?vue&type=script&lang=js& ***!
   \***************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50672,6 +50995,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/scss/custom.scss":
+/*!************************************!*\
+  !*** ./resources/scss/custom.scss ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/scss/material-dashboard.scss":
 /*!************************************************!*\
   !*** ./resources/scss/material-dashboard.scss ***!
@@ -50684,15 +51018,16 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 0:
-/*!******************************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/scss/material-dashboard.scss ***!
-  \******************************************************************************************************/
+/*!***********************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/scss/material-dashboard.scss ./resources/scss/custom.scss ***!
+  \***********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! /var/www/html/blackplague/resources/js/app.js */"./resources/js/app.js");
 __webpack_require__(/*! /var/www/html/blackplague/resources/sass/app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! /var/www/html/blackplague/resources/scss/material-dashboard.scss */"./resources/scss/material-dashboard.scss");
+__webpack_require__(/*! /var/www/html/blackplague/resources/scss/material-dashboard.scss */"./resources/scss/material-dashboard.scss");
+module.exports = __webpack_require__(/*! /var/www/html/blackplague/resources/scss/custom.scss */"./resources/scss/custom.scss");
 
 
 /***/ })
