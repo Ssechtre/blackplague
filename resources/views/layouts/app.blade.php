@@ -68,12 +68,12 @@
         </div>
     </body>
 
-    <!-- For VueJS -->
-    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/core/jquery.min.js') }}"></script>
     <script src="{{ asset('js/core/popper.min.js') }}"></script>
-    <script src="{{ asset('js/core/bootstrap-material-design.min.js') }}"></script>
+    {{-- <script src="{{ asset('js/core/bootstrap-material-design.min.js') }}"></script> --}}
     <script src="{{ asset('js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>
+    <!-- For VueJS -->
+    <script src="{{ asset('js/app.js') }}"></script>
     <!-- Plugin for the momentJs  -->
     <script src="{{ asset('js/plugins/moment.min.js') }}"></script>
     <!--  Plugin for Sweet Alert -->

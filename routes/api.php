@@ -13,15 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-use App\User;
-use App\Code;
-use Illuminate\Support\Facades\DB;
-
-Route::middleware('auth')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 Route::prefix('customer_networks')->group(function () {
 	Route::post('get_users', 'UserController@getUsers');
 	Route::post('connect_users', 'CustomerNetworkController@connectUsers');
@@ -31,4 +22,8 @@ Route::prefix('customer_networks')->group(function () {
 
 Route::prefix('products')->group(function () {
 	Route::post('get_products', 'ProductController@getProducts');
+});
+
+Route::prefix('orders')->group(function () {
+	Route::post('create_order', 'OrderController@createOrder');
 });

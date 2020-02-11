@@ -142,7 +142,7 @@
 
 <script>
     export default {
-        props: ['usersRoute', 'productsRoute'],
+        props: ['usersRoute', 'productsRoute', 'userId'],
         mounted() {
             console.log('Component mounted.')            
         },
@@ -153,6 +153,7 @@
         data : function(){
             return {
                 users: [],
+                user_id : this.userId,
                 products: [],
                 purchases : [],
                 search_name : null,
@@ -166,12 +167,12 @@
                     discount_applied : false,
                     discount_type : false,
                     discount_amount : "",
-                }
+                },
+                final_total : 0,
             }
         },
         computed : {
             getTotal: function(){
-
                 return this.computeTotal();
             },
             getFinalTotal : function() {
@@ -183,12 +184,19 @@
                     if (!this.discount.discount_type) {
                         let discount = (total/100)*this.discount.discount_amount;
 
-                        return (total-discount).toFixed(2);
+                        let total_discount = (total-discount).toFixed(2);
+
+                        this.final_total = total_discount;
+                        return total_discount;
                     }
 
-                    return (total-this.discount.discount_amount).toFixed(2);
+                    let total_discount =(total-this.discount.discount_amount).toFixed(2)
+
+                    this.final_total = total_discount;
+                    return total_discount;
                 }
 
+                this.final_total = total;
                 return total;
             }
         },
@@ -227,25 +235,55 @@
                 });
             },
             finishOrder: function() {
+
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
+                    title: 'Finish this order?',
+                    input: 'text',
+                    inputPlaceholder: 'Enter remarks here(Optional)',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, completed the order!'
+                    confirmButtonText: 'Yes, completed this order',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (remarks) => {
+                        return axios.post(`/api/orders/create_order`, {
+                            discount_applications : this.discount,
+                            line_items : this.purchases,
+                            user_cid : this.selected_user,
+                            subtotal_price : this.computeTotal(),
+                            total_price : this.final_total,
+                            remarks : remarks,
+                            user_id : this.user_id
+                        })
+                        .then(response => {
+                            console.log(response);
+                            var r = response.data;
+                            if (!r.success) {
+                                throw new Error(r.message)
+                            }
+                            return r;
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                                )
+                        })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
                     if (result.value) {
+                        console.log(result);
                         Swal.fire(
                             'Great Job!',
-                            'Order successfully completed!',
+                            result.value.message,
                             'success'
                         )
-                        this.purchases = {};
+                        this.clearOrder();
                     }
-                })
-                
+                })    
             },
             getUsers: function() {
                 axios
@@ -280,6 +318,15 @@
                     discount_applied : false,
                     discount_type : false,
                     discount_amount : 0,
+                }
+            },
+            clearOrder : function() {
+                this.purchases = [];
+                this.selected_user = "";
+                this.discount = {
+                    discount_applied : false,
+                    discount_type : false,
+                    discount_amount : "",
                 }
             }
         }

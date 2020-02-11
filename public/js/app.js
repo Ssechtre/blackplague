@@ -2238,7 +2238,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['usersRoute', 'productsRoute'],
+  props: ['usersRoute', 'productsRoute', 'userId'],
   mounted: function mounted() {
     console.log('Component mounted.');
   },
@@ -2249,6 +2249,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
   data: function data() {
     return {
       users: [],
+      user_id: this.userId,
       products: [],
       purchases: [],
       search_name: null,
@@ -2262,7 +2263,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         discount_applied: false,
         discount_type: false,
         discount_amount: ""
-      }
+      },
+      final_total: 0
     };
   },
   computed: {
@@ -2275,12 +2277,19 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       if (this.discount.discount_applied) {
         if (!this.discount.discount_type) {
           var discount = total / 100 * this.discount.discount_amount;
-          return (total - discount).toFixed(2);
+
+          var _total_discount = (total - discount).toFixed(2);
+
+          this.final_total = _total_discount;
+          return _total_discount;
         }
 
-        return (total - this.discount.discount_amount).toFixed(2);
+        var total_discount = (total - this.discount.discount_amount).toFixed(2);
+        this.final_total = total_discount;
+        return total_discount;
       }
 
+      this.final_total = total;
       return total;
     }
   },
@@ -2327,17 +2336,48 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var _this3 = this;
 
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
+        title: 'Finish this order?',
+        input: 'text',
+        inputPlaceholder: 'Enter remarks here(Optional)',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, completed the order!'
+        confirmButtonText: 'Yes, completed this order',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm(remarks) {
+          return axios.post("/api/orders/create_order", {
+            discount_applications: _this3.discount,
+            line_items: _this3.purchases,
+            user_cid: _this3.selected_user,
+            subtotal_price: _this3.computeTotal(),
+            total_price: _this3.final_total,
+            remarks: remarks,
+            user_id: _this3.user_id
+          }).then(function (response) {
+            console.log(response);
+            var r = response.data;
+
+            if (!r.success) {
+              throw new Error(r.message);
+            }
+
+            return r;
+          })["catch"](function (error) {
+            Swal.showValidationMessage("Request failed: ".concat(error));
+          });
+        },
+        allowOutsideClick: function allowOutsideClick() {
+          return !Swal.isLoading();
+        }
       }).then(function (result) {
         if (result.value) {
-          Swal.fire('Great Job!', 'Order successfully completed!', 'success');
-          _this3.purchases = {};
+          console.log(result);
+          Swal.fire('Great Job!', result.value.message, 'success');
+
+          _this3.clearOrder();
         }
       });
     },
@@ -2376,6 +2416,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         discount_applied: false,
         discount_type: false,
         discount_amount: 0
+      };
+    },
+    clearOrder: function clearOrder() {
+      this.purchases = [];
+      this.selected_user = "";
+      this.discount = {
+        discount_applied: false,
+        discount_type: false,
+        discount_amount: ""
       };
     }
   }
