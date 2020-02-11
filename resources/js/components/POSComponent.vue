@@ -246,7 +246,7 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, completed this order',
+                    confirmButtonText: 'Yes, completethis order',
                     showLoaderOnConfirm: true,
                     preConfirm: (remarks) => {
                         return axios.post(`/api/orders/create_order`, {
