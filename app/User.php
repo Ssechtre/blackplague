@@ -51,7 +51,7 @@ class User extends Authenticatable
 
     public function code()
     {
-        return $this->hasMany('App\Code');
+        return $this->hasOne('App\Code', 'id', 'code_id');
     }
 
     public function network()

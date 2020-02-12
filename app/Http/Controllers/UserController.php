@@ -36,7 +36,7 @@ class UserController extends Controller
 
     public function edit($id) {
 
-        $this->fields['excludes']  = ['password'];
+        $this->fields['excludes']  = ['password', 'code_id', 'user_type'];
         return parent::edit($id);
     }
 
@@ -94,6 +94,15 @@ class UserController extends Controller
     public function index() {
 
         $this->query_fields  = ['id', 'name', 'email', 'user_type', 'created_at', 'updated_at'];
+        $this->relationships = [
+            'code' => [
+                'name' => 'Code Number',
+                'column' => 'code'
+            ]
+        ];
+
+        $this->query = User::orderBy('id', 'DESC')->with('code')->paginate(20);
+
         return parent::index();
     }
 

@@ -33,6 +33,12 @@
 											@endif
 										<?php endforeach; ?>
 
+										@if($relationships)
+											<?php foreach($relationships as $rkey => $rval) : ?>
+												<th><?= $rval['name'] ?></th>
+											<?php endforeach; ?>
+										@endif
+
 										@if($with_actions)
 											<th>Action</th>
 										@endif
@@ -40,6 +46,7 @@
 								</thead>
 								<tbody>
 									<?php foreach($data as $key => $value): ?>
+			
 										<tr>
 											<?php foreach($columns as $col_key => $col_val): ?>
 												@if(!in_array($col_val, $excludes))
@@ -60,11 +67,19 @@
 													@endif
 												@endif
 											<?php endforeach; ?>
+
+											@if($relationships)
+												<?php foreach($relationships as $rkey => $rval) : ?>
+													<th><?= $value[$rkey][$rval['column']] ?></th>
+												<?php endforeach; ?>
+											@endif
+
 											<?php $url = url($controller.'/'.$value[$primary_key]).'/edit' ?>
+
 											@if($with_actions)
-											<td>
-												<a href="<?= $url ?>"><button class="btn btn-default btn-xs pull-left"><i class="fa fa-search"></i></button></a>
-											</td>
+												<td>
+													<a href="<?= $url ?>"><button class="btn btn-default btn-xs pull-left"><i class="fa fa-search"></i></button></a>
+												</td>
 											@endif
 										</tr>
 									<?php endforeach; ?>

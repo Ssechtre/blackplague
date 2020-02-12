@@ -52,7 +52,24 @@ class Controller extends BaseController
 		'times' => [],
 	];
 
+	/*
+	* Replaces column value in the table
+	*	$this->column_values = [
+    *        'user_type' => [1 => 'Active', 0 => 'Inactive']
+    *   ];
+	*/ 
 	public $column_values = [];
+
+	/*
+	* $relationships example usage
+	* $this->relationships = [
+	*   'product' => [
+	*     'name' => 'Product Code',
+	*     'column' => 'product_code'
+	*    ]
+	* ];
+	*/
+	public $relationships = [];
 
 	public function getController() {
 		$regex = preg_match('/([a-z\_]+)\./', \Request::route()->getName(), $matches);
@@ -73,8 +90,10 @@ class Controller extends BaseController
 
 		$model = new $namespace_model;
 
-		$this->query = $namespace_model::orderBy('id', 'DESC')->paginate(20);
-
+		if (!$this->query) {
+			$this->query = $namespace_model::orderBy('id', 'DESC')->paginate(20);
+		}
+		
 		$this->columns = \Schema::getColumnListing(strtolower($controller));
 
 		if ($this->query_fields[0] != '*') {
@@ -94,7 +113,8 @@ class Controller extends BaseController
 			->with('primary_key', $this->primary_key)
 			->with('fields', $this->fields)
 			->with('excludes', isset($this->excludes) ? $this->excludes : [])
-			->with('with_actions', $this->with_actions);
+			->with('with_actions', $this->with_actions)
+			->with('relationships', $this->relationships);
 
 		}else{
 			return back()->with($this->_response(false, "An error occured"));
