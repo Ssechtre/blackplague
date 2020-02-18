@@ -16,6 +16,7 @@
         <link href="{{ asset('css/material-dashboard/material-dashboard.css?v=2.1.1') }}" rel="stylesheet">
         <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
         <style type="text/css">
             .alert ul {
                 margin-bottom: 0;
@@ -68,12 +69,13 @@
         </div>
     </body>
 
-    <script src="{{ asset('js/core/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/core/popper.min.js') }}"></script>
-    {{-- <script src="{{ asset('js/core/bootstrap-material-design.min.js') }}"></script> --}}
-    <script src="{{ asset('js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>
     <!-- For VueJS -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/core/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/core/popper.min.js') }}"></script>
+    
+    <script src="{{ asset('js/core/bootstrap-material-design.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>        
     <!-- Plugin for the momentJs  -->
     <script src="{{ asset('js/plugins/moment.min.js') }}"></script>
     <!--  Plugin for Sweet Alert -->
@@ -85,7 +87,7 @@
     <!--  Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
     <script src="{{ asset('js/plugins/bootstrap-selectpicker.js') }}"></script>
     <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-    <script src="{{ asset('js/plugins/bootstrap-datetimepicker.min.js') }}"></script>
+    {{-- <script src="{{ asset('js/plugins/bootstrap-datetimepicker.min.js') }}"></script> --}}
     <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
     <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
     <!--  Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
@@ -112,6 +114,4 @@
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     <!-- Sweet Alert for popups -->
     <script src="{{ asset('js/toastr.min.js') }}"></script>
-
-
 </html>

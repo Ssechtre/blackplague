@@ -8,6 +8,42 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import VueCurrencyFilter from 'vue-currency-filter'
+
+Vue.mixin({
+	data: function() {
+		return {
+			get getMonths() {
+				let months = [
+					'January',
+					'February',
+					'March',
+					'April',
+					'May',
+					'June',
+					'July',
+					'August',
+					'September',
+					'October',
+					'November',
+					'December'
+				];
+				return months;
+			}
+		}
+	}
+});
+
+Vue.use(VueCurrencyFilter, {
+	symbol: "P",
+	thousandsSeparator: ",",
+	fractionCount: 2,
+	fractionSeparator: ".",
+	symbolPosition: "front",
+	symbolSpacing: true
+})
+
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -22,6 +58,7 @@ window.Vue = require('vue');
 
 Vue.component('customer-network-component', require('./components/CustomerNetworkComponent.vue').default);
 Vue.component('pos-component', require('./components/POSComponent.vue').default);
+Vue.component('report-component', require('./components/ReportComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31,4 +68,7 @@ Vue.component('pos-component', require('./components/POSComponent.vue').default)
 
 const app = new Vue({
     el: '#blackrice_app',
+    created: function() {
+
+	}
 });

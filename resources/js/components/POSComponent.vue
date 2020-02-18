@@ -38,52 +38,51 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table" v-if="purchases.length > 0">
+                            <div class="col-sm-12" v-if="!purchases.length">
+                                 <center>No purchases at the moment</center>
+                            </div>
+                            <div class="col-sm-12" v-if="purchases.length > 0">
+                                <button class="btn btn-info btn-sm mb-2" data-toggle="modal" data-target="#discountModal">Appy Discount</button>
+                                <button class="btn btn-danger btn-sm mb-2" v-if="discount.discount_applied" v-on:click="removeDiscount()">Remove Discount</button>
+                                <button class="btn btn-danger btn-sm mb-2 pull-right" v-on:click="clearPurchase()">Clear All</button>
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>Item</th>
                                             <th>Price</th>
                                             <th>Qty</th>
-                                            <th>Subtotal</th>
+                                            <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="purchase in purchases">
                                             <td>{{ purchase.name }}</td>
-                                            <td>P{{ purchase.price }}</td>
+                                            <td>{{ purchase.price | currency }}</td>
                                             <td>{{ purchase.purchased_qty }}</td>
-                                            <td>P{{ purchase.subtotal }}</td>
+                                            <td>{{ purchase.subtotal | currency }}</td>
                                         </tr>
 
                                         <tr>
-                                            <td></td>
-                                            <td>Total</td>
-                                            <td></td>
-                                            <td>P{{ getTotal }}</td>
+                                            <td></td>                                         
+                                            <td colspan="2">Total</td>
+                                            <td>{{ getTotal | currency }}</td>
                                         </tr>
 
                                         <tr v-if="discount.discount_applied">
-                                            <td></td>
-                                            <td>Discount</td>
-                                            <td></td>
+                                            <td></td>                                          
+                                            <td colspan="2">Discount</td>
                                             <td>-{{ (discount.discount_type) ? "P" : "" }}{{ discount.discount_amount }}{{ (!discount.discount_type) ? "%" : "" }}</td>
                                         </tr>
 
                                         <tr>
-                                            <td></td>
-                                            <td>Grand Total</td>
-                                            <td></td>
-                                            <td class="font-weight-bold">P{{ getFinalTotal }}</td>
+                                            <td></td>                                           
+                                            <td colspan="2">Grand Total</td>
+                                            <td class="font-weight-bold">{{ getFinalTotal | currency }}</td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table>                               
 
-                                <center v-if="!purchases.length">No purchases at the moment</center>
-
-                                <div class="check-out-container" v-if="purchases.length > 0">
-                                    <button class="btn btn-info btn-sm mb-2" data-toggle="modal" data-target="#discountModal">Appy Discount</button>
-                                    <button class="btn btn-danger btn-sm mb-2" v-if="discount.discount_applied" v-on:click="removeDiscount()">Remove Discount</button>
+                                <div class="check-out-container">                                    
                                     <button class="btn btn-success btn-lg col-sm-12" v-on:click="finishOrder()">Save and Finish Order <i class="material-icons">check</i></button>
                                 </div>
                                 
@@ -225,7 +224,6 @@
                                 product.purchased_qty = value;
                                 product.subtotal = (value*product.price).toFixed(2);
                                 this.purchases.push(product);
-                                console.log(this.purchases);
                                 swal.close();
                             } else {
                                 resolve('Quantity is required :)')
@@ -237,7 +235,7 @@
             finishOrder: function() {
 
                 Swal.fire({
-                    title: 'Finish this order?',
+                    title: 'Finish this order? P'+this.final_total,
                     input: 'text',
                     inputPlaceholder: 'Enter remarks here(Optional)',
                     inputAttributes: {
@@ -246,9 +244,10 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, completethis order',
+                    confirmButtonText: 'Yes, complete this order',
                     showLoaderOnConfirm: true,
                     preConfirm: (remarks) => {
+
                         return axios.post(`/api/orders/create_order`, {
                             discount_applications : this.discount,
                             line_items : this.purchases,
@@ -259,7 +258,6 @@
                             user_id : this.user_id
                         })
                         .then(response => {
-                            console.log(response);
                             var r = response.data;
                             if (!r.success) {
                                 throw new Error(r.message)
@@ -275,7 +273,6 @@
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
                     if (result.value) {
-                        console.log(result);
                         Swal.fire(
                             'Great Job!',
                             result.value.message,
@@ -328,6 +325,26 @@
                     discount_type : false,
                     discount_amount : "",
                 }
+            },
+            clearPurchase : function() {
+                Swal.fire({
+                    title: 'Are you sure to clear orders?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, clear everything!'
+                  }).then((result) => {
+                      if (result.value) {
+                        this.clearOrder();
+                        Swal.fire(
+                          'Order Cleared!',
+                          'All orders removed',
+                          'success'
+                        )
+                    }
+                })
             }
         }
     }

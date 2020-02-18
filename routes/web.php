@@ -25,19 +25,15 @@ Route::post('admin/password/email', 'Auth\ForgotPasswordController@sendResetLink
 Route::get('admin/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
-
-Route::get('/login', 'CustomerLoginController@showLoginForm')->name('customer.login');
-Route::post('/login', 'CustomerLoginController@login')->name('customer.islogin');
-
-Route::get('/home', 'HomeController@index')->name('home');
-
 Route::group(['middleware' => 'admin'], function(){
+	Route::get('/home', 'HomeController@index')->name('home');
     Route::resource('products', 'ProductController');
     Route::resource('users', 'UserController');
     Route::resource('codes', 'CodeController');
 
     Route::get('customer_networks', 'CustomerNetworkController@index')->name('customer_networks.index');
     Route::get('pos', 'HomeController@pos')->name('pos.app');
+    Route::get('reports', 'HomeController@reports')->name('reports.app');
 });
 
 

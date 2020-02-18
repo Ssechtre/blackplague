@@ -16,12 +16,19 @@ class OrderController extends Controller
 
 		$validate = Validator::make($data, $rules, $this->error_messages);
 
+		$today = date("Ymd");
+		$rand = strtoupper(substr(uniqid(sha1(time())),0,4));
+
+		$discount_type = (!$data['discount_applications']['discount_type']) ? 'percentage' : 'fixed';
+
+		$data['discount_applications']['discount_type'] = $discount_type;
+
 		$data['line_items'] = json_encode($data['line_items']);
 		$data['discount_applications'] = json_encode($data['discount_applications']);
 		$data['order_status'] = 'delivered';
 		$data['confirmed'] = 1;
 		$data['browser_ip'] = request()->ip();
-		$data['order_number'] = $data['user_id'].''.$data['user_cid'].''.date('His', time());
+		$data['order_number'] = $today . $rand;
 
 		if ($validate->fails()) {
 
@@ -29,6 +36,10 @@ class OrderController extends Controller
 
 		}else{
 			if (Order::create($data)) {
+
+				if (isset($data['user_cid']) && !empty($data['user_cid'])) {
+					# code...
+				}
 
 				// Update quantity of products
 				// $items = $data['line_items'];

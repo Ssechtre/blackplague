@@ -27,3 +27,7 @@ Route::prefix('products')->group(function () {
 Route::prefix('orders')->group(function () {
 	Route::post('create_order', 'OrderController@createOrder');
 });
+
+Route::prefix('reports')->group(function () {
+	Route::post('get_dailysales', 'ReportController@getDailySales');
+});

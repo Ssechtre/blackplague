@@ -70,3 +70,8 @@ input:checked + .slider:before {
   padding-left: 10px;
 }
 
+.datepicker.form-control.picker__input {
+  padding-left: 10px;
+  background-color: #fff;
+}
+

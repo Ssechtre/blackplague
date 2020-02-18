@@ -30,4 +30,9 @@ class HomeController extends Controller
     {
         return view('pos');
     }
+
+    public function reports()
+    {
+        return view('reports');
+    }
 }

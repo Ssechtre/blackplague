@@ -5,8 +5,8 @@
     Tip 2: you can also add an image using data-image tag
 	-->
 	<div class="logo">
-		<a href="http://www.creative-tim.com" class="simple-text logo-normal">
-		  YOUR LOGO
+		<a href="{{ route('home') }}" class="simple-text logo-normal">
+		  Health Patrol Life Center
 		</a>
 	</div>
 	
@@ -41,6 +41,12 @@
 				<a class="nav-link" href="{{ route('customer_networks.index') }}">
 				  <i class="material-icons">supervisor_account</i>
 				  <p>Customer Networks</p>
+				</a>
+			</li>
+			<li class="nav-item {{ (Request::is('reports') || Request::is('reports/*')) ? 'active' : null }}">
+				<a class="nav-link" href="{{ route('reports.app') }}">
+				  <i class="material-icons">timeline</i>
+				  <p>Reports</p>
 				</a>
 			</li>
 			<li class="nav-item {{ (Request::is('pos') || Request::is('pos/*')) ? 'active' : null }}">
