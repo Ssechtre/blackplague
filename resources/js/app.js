@@ -9,6 +9,8 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueCurrencyFilter from 'vue-currency-filter'
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 
 Vue.mixin({
 	data: function() {
@@ -34,6 +36,8 @@ Vue.mixin({
 	}
 });
 
+Vue.use(DatePicker);
+
 Vue.use(VueCurrencyFilter, {
 	symbol: "P",
 	thousandsSeparator: ",",
@@ -42,8 +46,6 @@ Vue.use(VueCurrencyFilter, {
 	symbolPosition: "front",
 	symbolSpacing: true
 })
-
-
 
 /**
  * The following block of code may be used to automatically register your

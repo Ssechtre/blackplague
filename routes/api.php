@@ -30,4 +30,6 @@ Route::prefix('orders')->group(function () {
 
 Route::prefix('reports')->group(function () {
 	Route::post('get_dailysales', 'ReportController@getDailySales');
+	Route::post('get_monthlysales', 'ReportController@getMonthlySales');
+	Route::post('get_annualsales', 'ReportController@getAnnualSales');
 });

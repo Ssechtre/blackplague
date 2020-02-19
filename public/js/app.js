@@ -2456,9 +2456,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
-/* harmony import */ var vue2_datepicker_index_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-datepicker/index.css */ "./node_modules/vue2-datepicker/index.css");
-/* harmony import */ var vue2_datepicker_index_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_datepicker_index_css__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -2546,12 +2543,103 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
   props: ['currentYear'],
   mounted: function mounted() {
     console.log('Report Component mounted.');
@@ -2566,10 +2654,17 @@ __webpack_require__.r(__webpack_exports__);
           month: null,
           year: null
         },
-        annual: null
+        year: null
       },
-      daily_orders: [],
-      daily_orders_total: 0
+      daily_data: {
+        orders: []
+      },
+      monthly_data: {
+        orders: []
+      },
+      annual_data: {
+        orders: []
+      }
     };
   },
   methods: {
@@ -2582,15 +2677,43 @@ __webpack_require__.r(__webpack_exports__);
         var r = response.data;
 
         if (r.success) {
-          _this.daily_orders = r.data.orders;
-          _this.daily_orders_total = r.data.total;
+          _this.daily_data = r.data;
+          console.log(_this.daily_data);
         }
       })["catch"](function (error) {
         return console.log(error);
       });
     },
-    getMonthlySales: function getMonthlySales() {},
-    getYearlySales: function getYearlySales() {}
+    getMonthlySales: function getMonthlySales() {
+      var _this2 = this;
+
+      axios.post('api/reports/get_monthlysales', {
+        date: this.dates.m
+      }).then(function (response) {
+        var r = response.data;
+
+        if (r.success) {
+          _this2.monthly_data = r.data;
+        }
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    getAnnualSales: function getAnnualSales() {
+      var _this3 = this;
+
+      axios.post('api/reports/get_annualsales', {
+        date: this.dates.year
+      }).then(function (response) {
+        var r = response.data;
+
+        if (r.success) {
+          _this3.annual_data = r.data;
+        }
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    }
   }
 });
 
@@ -56927,138 +57050,427 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _vm._m(0),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-12" }, [
+      _c("div", { staticClass: "col-lg-12 col-md-12" }, [
         _c("div", { staticClass: "card" }, [
           _vm._m(1),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _c(
-              "div",
-              { staticClass: "form-group" },
-              [
-                _c("date-picker", {
-                  attrs: { valueType: "format" },
-                  on: {
-                    change: function($event) {
-                      return _vm.getDailySales()
-                    }
-                  },
-                  model: {
-                    value: _vm.dates.daily,
-                    callback: function($$v) {
-                      _vm.$set(_vm.dates, "daily", $$v)
-                    },
-                    expression: "dates.daily"
-                  }
-                }),
-                _vm._v(" "),
-                _c("table", { staticClass: "table table-bordered mt-2" }, [
-                  _vm._m(2),
-                  _vm._v(" "),
-                  _c(
-                    "tbody",
-                    _vm._l(_vm.daily_orders, function(order) {
-                      return _c("tr", [
-                        _c("td", [_vm._v(_vm._s(order.order_number))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(order.name))]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(
-                            _vm._s(_vm._f("currency")(order.subtotal_price))
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(order.discount))]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("b", [
-                            _vm._v(
-                              _vm._s(_vm._f("currency")(order.total_price))
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _vm._m(3, true)
-                      ])
-                    }),
-                    0
-                  )
-                ])
-              ],
-              1
-            )
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-sm-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _vm._m(4),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "tab-content" }, [
               _c(
                 "div",
-                { staticClass: "col-md-6 col-sm-12" },
+                { staticClass: "tab-pane active", attrs: { id: "daily" } },
                 [
-                  _c("date-picker", {
-                    attrs: { type: "month" },
-                    model: {
-                      value: _vm.dates.m.month,
-                      callback: function($$v) {
-                        _vm.$set(_vm.dates.m, "month", $$v)
-                      },
-                      expression: "dates.m.month"
-                    }
-                  })
-                ],
-                1
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        { staticClass: "col-lg-6 col-sm-12 mb-3" },
+                        [
+                          _c("date-picker", {
+                            attrs: { valueType: "format" },
+                            on: {
+                              change: function($event) {
+                                return _vm.getDailySales()
+                              }
+                            },
+                            model: {
+                              value: _vm.dates.daily,
+                              callback: function($$v) {
+                                _vm.$set(_vm.dates, "daily", $$v)
+                              },
+                              expression: "dates.daily"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.daily_data.orders.length > 0,
+                              expression: "daily_data.orders.length > 0"
+                            }
+                          ],
+                          staticClass: "col-lg-3 offset-lg-3 col-sm-12"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "alert alert-success pb-1" },
+                            [
+                              _c("span", [
+                                _vm._v("Grand Total as of "),
+                                _c("b", [_vm._v(_vm._s(_vm.dates.daily))])
+                              ]),
+                              _vm._v(" "),
+                              _c("h2", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("currency")(
+                                      _vm.daily_data.total_revenue
+                                    )
+                                  )
+                                )
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: !_vm.daily_data.orders,
+                              expression: "!daily_data.orders"
+                            }
+                          ],
+                          staticClass: "col-sm-12"
+                        },
+                        [
+                          _c("center", [
+                            _c("p", [_vm._v("No records available")])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-sm-12" }, [
+                        _c(
+                          "table",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.daily_data.orders.length > 0,
+                                expression: "daily_data.orders.length > 0"
+                              }
+                            ],
+                            staticClass:
+                              "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
+                          },
+                          [
+                            _vm._m(2),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.daily_data.orders, function(order) {
+                                return _c("tr", [
+                                  _c("td", [
+                                    _vm._v(_vm._s(order.order_number))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(order.name))]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("currency")(order.subtotal_price)
+                                      )
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(order.discount))]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _c("b", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm._f("currency")(order.total_price)
+                                        )
+                                      )
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(3, true)
+                                ])
+                              }),
+                              0
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+                  ])
+                ]
               ),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-md-6 col-sm-12" },
-                [
-                  _c("date-picker", {
-                    attrs: { type: "year" },
-                    model: {
-                      value: _vm.dates.m.year,
-                      callback: function($$v) {
-                        _vm.$set(_vm.dates.m, "year", $$v)
+              _c("div", { staticClass: "tab-pane", attrs: { id: "monthly" } }, [
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    { staticClass: "col-md-6 col-sm-12" },
+                    [
+                      _c("date-picker", {
+                        attrs: { valueType: "format", type: "month" },
+                        on: {
+                          change: function($event) {
+                            return _vm.getMonthlySales()
+                          }
+                        },
+                        model: {
+                          value: _vm.dates.m.month,
+                          callback: function($$v) {
+                            _vm.$set(_vm.dates.m, "month", $$v)
+                          },
+                          expression: "dates.m.month"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("date-picker", {
+                        attrs: { valueType: "date", type: "year" },
+                        on: {
+                          change: function($event) {
+                            return _vm.getMonthlySales()
+                          }
+                        },
+                        model: {
+                          value: _vm.dates.m.year,
+                          callback: function($$v) {
+                            _vm.$set(_vm.dates.m, "year", $$v)
+                          },
+                          expression: "dates.m.year"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.monthly_data.orders.length > 0,
+                          expression: "monthly_data.orders.length > 0"
+                        }
+                      ],
+                      staticClass: "col-lg-3 offset-lg-3 col-sm-12"
+                    },
+                    [
+                      _c("div", { staticClass: "alert alert-success pb-1" }, [
+                        _c("span", [_vm._v("Grand Total")]),
+                        _vm._v(" "),
+                        _c("h2", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("currency")(_vm.monthly_data.total_revenue)
+                            )
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: !_vm.monthly_data.orders,
+                          expression: "!monthly_data.orders"
+                        }
+                      ],
+                      staticClass: "col-sm-12"
+                    },
+                    [_c("center", [_c("p", [_vm._v("No records available")])])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-12" }, [
+                    _c(
+                      "table",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.monthly_data.orders.length > 0,
+                            expression: "monthly_data.orders.length > 0"
+                          }
+                        ],
+                        staticClass:
+                          "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
                       },
-                      expression: "dates.m.year"
-                    }
-                  })
-                ],
-                1
-              )
+                      [
+                        _vm._m(4),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.monthly_data.orders, function(order) {
+                            return _c("tr", [
+                              _c("td", [_vm._v(_vm._s(order.date_beautified))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(_vm._s(order.daily_orders) + " order(s)")
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("b", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("currency")(
+                                        order.total_daily_sales
+                                      )
+                                    )
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _vm._m(5, true)
+                            ])
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "tab-pane", attrs: { id: "annual" } }, [
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    { staticClass: "col-md-6 col-sm-12" },
+                    [
+                      _c("date-picker", {
+                        attrs: { valueType: "date", type: "year" },
+                        on: {
+                          change: function($event) {
+                            return _vm.getAnnualSales()
+                          }
+                        },
+                        model: {
+                          value: _vm.dates.year,
+                          callback: function($$v) {
+                            _vm.$set(_vm.dates, "year", $$v)
+                          },
+                          expression: "dates.year"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.annual_data.orders.length > 0,
+                          expression: "annual_data.orders.length > 0"
+                        }
+                      ],
+                      staticClass: "col-lg-3 offset-lg-3 col-sm-12"
+                    },
+                    [
+                      _c("div", { staticClass: "alert alert-success pb-1" }, [
+                        _c("span", [_vm._v("Annual Revenue")]),
+                        _vm._v(" "),
+                        _c("h2", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("currency")(_vm.annual_data.total_revenue)
+                            )
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: !_vm.annual_data.orders,
+                          expression: "!annual_data.orders"
+                        }
+                      ],
+                      staticClass: "col-sm-12"
+                    },
+                    [_c("center", [_c("p", [_vm._v("No records available")])])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-12" }, [
+                    _c(
+                      "table",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.annual_data.orders.length > 0,
+                            expression: "annual_data.orders.length > 0"
+                          }
+                        ],
+                        staticClass:
+                          "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
+                      },
+                      [
+                        _vm._m(6),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.annual_data.orders, function(order) {
+                            return _c("tr", [
+                              _c("td", [_vm._v(_vm._s(order.month_name))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(order.monthly_orders) + " order(s)"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("b", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("currency")(
+                                        order.total_monthly_sales
+                                      )
+                                    )
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _vm._m(7, true)
+                            ])
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ])
             ])
           ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-sm-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _vm._m(5),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "card-body" },
-            [
-              _c("date-picker", {
-                attrs: { type: "year" },
-                model: {
-                  value: _vm.dates.annual,
-                  callback: function($$v) {
-                    _vm.$set(_vm.dates, "annual", $$v)
-                  },
-                  expression: "dates.annual"
-                }
-              })
-            ],
-            1
-          )
         ])
       ])
     ])
@@ -57089,13 +57501,80 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header card-header-primary" }, [
-      _c("h4", { staticClass: "card-title " }, [_vm._v("Daily Sales")]),
-      _vm._v(" "),
-      _c("p", { staticClass: "card-category" }, [
-        _vm._v(" View sales reports per day.")
-      ])
-    ])
+    return _c(
+      "div",
+      { staticClass: "card-header card-header-tabs card-header-info" },
+      [
+        _c("div", { staticClass: "nav-tabs-navigation" }, [
+          _c("div", { staticClass: "nav-tabs-wrapper" }, [
+            _c("span", { staticClass: "nav-tabs-title" }, [_vm._v("Sales:")]),
+            _vm._v(" "),
+            _c(
+              "ul",
+              { staticClass: "nav nav-tabs", attrs: { "data-tabs": "tabs" } },
+              [
+                _c("li", { staticClass: "nav-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link active",
+                      attrs: { href: "#daily", "data-toggle": "tab" }
+                    },
+                    [
+                      _c("i", { staticClass: "material-icons" }, [
+                        _vm._v("calendar_today")
+                      ]),
+                      _vm._v(
+                        " Daily Sales\n                                        "
+                      ),
+                      _c("div", { staticClass: "ripple-container" })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("li", { staticClass: "nav-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link",
+                      attrs: { href: "#monthly", "data-toggle": "tab" }
+                    },
+                    [
+                      _c("i", { staticClass: "material-icons" }, [
+                        _vm._v("calendar_today")
+                      ]),
+                      _vm._v(
+                        " Monthly Sales\n                                        "
+                      ),
+                      _c("div", { staticClass: "ripple-container" })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("li", { staticClass: "nav-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link",
+                      attrs: { href: "#annual", "data-toggle": "tab" }
+                    },
+                    [
+                      _c("i", { staticClass: "material-icons" }, [
+                        _vm._v("calendar_today")
+                      ]),
+                      _vm._v(
+                        " Annual Sales\n                                        "
+                      ),
+                      _c("div", { staticClass: "ripple-container" })
+                    ]
+                  )
+                ])
+              ]
+            )
+          ])
+        ])
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -57131,11 +57610,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header card-header-warning" }, [
-      _c("h4", { staticClass: "card-title " }, [_vm._v("Monthly Sales")]),
-      _vm._v(" "),
-      _c("p", { staticClass: "card-category" }, [
-        _vm._v(" View sales reports per month.")
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Date")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total Orders")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total Revenue")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Action")])
       ])
     ])
   },
@@ -57143,11 +57626,35 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header card-header-success" }, [
-      _c("h4", { staticClass: "card-title " }, [_vm._v("Annaul Sales")]),
-      _vm._v(" "),
-      _c("p", { staticClass: "card-category" }, [
-        _vm._v(" View sales reports per year.")
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-sm btn-primary" }, [
+        _vm._v("View details")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Month")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total Orders")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Total Revenue")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Action")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-sm btn-primary" }, [
+        _vm._v("View details")
       ])
     ])
   }
@@ -73502,6 +74009,9 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_currency_filter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-currency-filter */ "./node_modules/vue-currency-filter/lib-out/VueCurrencyFilter.js");
 /* harmony import */ var vue_currency_filter__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_currency_filter__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
+/* harmony import */ var vue2_datepicker_index_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-datepicker/index.css */ "./node_modules/vue2-datepicker/index.css");
+/* harmony import */ var vue2_datepicker_index_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue2_datepicker_index_css__WEBPACK_IMPORTED_MODULE_2__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -73510,6 +74020,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+
+
 
 Vue.mixin({
   data: function data() {
@@ -73522,6 +74034,7 @@ Vue.mixin({
     };
   }
 });
+Vue.use(vue2_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"]);
 Vue.use(vue_currency_filter__WEBPACK_IMPORTED_MODULE_0___default.a, {
   symbol: "P",
   thousandsSeparator: ",",
