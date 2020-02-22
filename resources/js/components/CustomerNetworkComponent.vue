@@ -132,6 +132,8 @@
                         toastr.success(r.message);
                         $('#networkModal').modal('hide');
                         $('.modal-backdrop').hide();
+                        this.getCustomerNetworks();
+                        this.code_number = null;
                     }else{
                         toastr.error(r.message);
                     }                    

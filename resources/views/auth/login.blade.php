@@ -10,7 +10,7 @@
                     <p class="card-category">Welcome back, mortal</p>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('islogin') }}">
+                    <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <div class="form-group row">

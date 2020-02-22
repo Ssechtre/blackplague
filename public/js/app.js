@@ -2056,6 +2056,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     connectUsers: function connectUsers() {
+      var _this3 = this;
+
       axios.post('api/customer_networks/connect_users', {
         code_number: this.code_number,
         user_id: this.connected_user_id
@@ -2066,6 +2068,10 @@ __webpack_require__.r(__webpack_exports__);
           toastr.success(r.message);
           $('#networkModal').modal('hide');
           $('.modal-backdrop').hide();
+
+          _this3.getCustomerNetworks();
+
+          _this3.code_number = null;
         } else {
           toastr.error(r.message);
         }
@@ -2235,9 +2241,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['usersRoute', 'productsRoute', 'userId'],
+  props: ['usersRoute', 'productsRoute', 'userId', 'userType'],
   mounted: function mounted() {
     console.log('Component mounted.');
   },
@@ -2249,6 +2254,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     return {
       users: [],
       user_id: this.userId,
+      user_type: this.userType,
       products: [],
       purchases: [],
       search_name: null,
@@ -2334,7 +2340,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var _this3 = this;
 
       Swal.fire({
-        title: 'Finish this order? P' + this.final_total,
+        title: 'Finish this order? <br> Total : P' + this.final_total,
         input: 'text',
         inputPlaceholder: 'Enter remarks here(Optional)',
         inputAttributes: {
@@ -56488,7 +56494,7 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "row d-none" }, [
               _c("div", { staticClass: "col-sm-12" }, [
                 _vm._m(1),
                 _vm._v(" "),
@@ -56568,17 +56574,19 @@ var render = function() {
               _vm._v(" "),
               _vm.purchases.length > 0
                 ? _c("div", { staticClass: "col-sm-12" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-info btn-sm mb-2",
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#discountModal"
-                        }
-                      },
-                      [_vm._v("Appy Discount")]
-                    ),
+                    _vm.user_type != "customer"
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-info btn-sm mb-2",
+                            attrs: {
+                              "data-toggle": "modal",
+                              "data-target": "#discountModal"
+                            }
+                          },
+                          [_vm._v("Appy Discount")]
+                        )
+                      : _vm._e(),
                     _vm._v(" "),
                     _vm.discount.discount_applied
                       ? _c(
@@ -56716,229 +56724,233 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal",
-        attrs: {
-          id: "discountModal",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "exampleModalLabel",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
+    _vm.user_type != "customer"
+      ? _c(
           "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          {
+            staticClass: "modal",
+            attrs: {
+              id: "discountModal",
+              tabindex: "-1",
+              role: "dialog",
+              "aria-labelledby": "exampleModalLabel",
+              "aria-hidden": "true"
+            }
+          },
           [
-            _c("div", { staticClass: "modal-content" }, [
-              _vm._m(5),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("div", { staticClass: "form-group mt-1" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.search_name,
-                        expression: "search_name"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      placeholder: "Search customer here"
-                    },
-                    domProps: { value: _vm.search_name },
-                    on: {
-                      keyup: function($event) {
-                        return _vm.getUsers()
-                      },
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.search_name = $event.target.value
-                      }
-                    }
-                  }),
+            _c(
+              "div",
+              { staticClass: "modal-dialog", attrs: { role: "document" } },
+              [
+                _c("div", { staticClass: "modal-content" }, [
+                  _vm._m(5),
                   _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.selected_user,
-                          expression: "selected_user"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.selected_user = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "" } }, [
-                        _vm._v("- Select customer to apply discount -")
-                      ]),
-                      _vm._v(" "),
-                      _vm._l(_vm.users, function(user) {
-                        return _c(
-                          "option",
-                          { key: user.id, domProps: { value: user.id } },
-                          [_vm._v(_vm._s(user.name))]
-                        )
-                      })
-                    ],
-                    2
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group mt-2" }, [
-                  _c("label", { staticClass: "switch" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.discount.discount_type,
-                          expression: "discount.discount_type"
-                        }
-                      ],
-                      attrs: { type: "checkbox" },
-                      domProps: {
-                        checked: Array.isArray(_vm.discount.discount_type)
-                          ? _vm._i(_vm.discount.discount_type, null) > -1
-                          : _vm.discount.discount_type
-                      },
-                      on: {
-                        change: function($event) {
-                          var $$a = _vm.discount.discount_type,
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = null,
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 &&
-                                _vm.$set(
-                                  _vm.discount,
-                                  "discount_type",
-                                  $$a.concat([$$v])
-                                )
-                            } else {
-                              $$i > -1 &&
-                                _vm.$set(
-                                  _vm.discount,
-                                  "discount_type",
-                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                )
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c("div", { staticClass: "form-group mt-1" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.search_name,
+                            expression: "search_name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          placeholder: "Search customer here"
+                        },
+                        domProps: { value: _vm.search_name },
+                        on: {
+                          keyup: function($event) {
+                            return _vm.getUsers()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          } else {
-                            _vm.$set(_vm.discount, "discount_type", $$c)
+                            _vm.search_name = $event.target.value
                           }
                         }
-                      }
-                    }),
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selected_user,
+                              expression: "selected_user"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selected_user = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("- Select customer to apply discount -")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.users, function(user) {
+                            return _c(
+                              "option",
+                              { key: user.id, domProps: { value: user.id } },
+                              [_vm._v(_vm._s(user.name))]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
                     _vm._v(" "),
-                    _c("span", { staticClass: "slider round" })
+                    _c("div", { staticClass: "form-group mt-2" }, [
+                      _c("label", { staticClass: "switch" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.discount.discount_type,
+                              expression: "discount.discount_type"
+                            }
+                          ],
+                          attrs: { type: "checkbox" },
+                          domProps: {
+                            checked: Array.isArray(_vm.discount.discount_type)
+                              ? _vm._i(_vm.discount.discount_type, null) > -1
+                              : _vm.discount.discount_type
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.discount.discount_type,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.discount,
+                                      "discount_type",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.discount,
+                                      "discount_type",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.discount, "discount_type", $$c)
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "slider round" })
+                      ]),
+                      _vm._v(" "),
+                      _c("label", { staticClass: "switch-text" }, [
+                        _vm._v(
+                          _vm._s(
+                            !_vm.discount.discount_type
+                              ? "By Percentage"
+                              : "By Fixed Amount"
+                          )
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.discount.discount_amount,
+                            expression: "discount.discount_amount"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          placeholder: !_vm.discount.discount_type
+                            ? "Enter amount in percentage"
+                            : "Enter fixed amount"
+                        },
+                        domProps: { value: _vm.discount.discount_amount },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.discount,
+                              "discount_amount",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("label", { staticClass: "switch-text" }, [
-                    _vm._v(
-                      _vm._s(
-                        !_vm.discount.discount_type
-                          ? "By Percentage"
-                          : "By Fixed Amount"
-                      )
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Close")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: {
+                          type: "button",
+                          disabled:
+                            !_vm.discount.discount_amount || !_vm.selected_user
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.applyDiscount()
+                          }
+                        }
+                      },
+                      [_vm._v("Apply Discount")]
                     )
                   ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.discount.discount_amount,
-                        expression: "discount.discount_amount"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      placeholder: !_vm.discount.discount_type
-                        ? "Enter amount in percentage"
-                        : "Enter fixed amount"
-                    },
-                    domProps: { value: _vm.discount.discount_amount },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.discount,
-                          "discount_amount",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  })
                 ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary",
-                    attrs: { type: "button", "data-dismiss": "modal" }
-                  },
-                  [_vm._v("Close")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: {
-                      type: "button",
-                      disabled:
-                        !_vm.discount.discount_amount || !_vm.selected_user
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.applyDiscount()
-                      }
-                    }
-                  },
-                  [_vm._v("Apply Discount")]
-                )
-              ])
-            ])
+              ]
+            )
           ]
         )
-      ]
-    )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [

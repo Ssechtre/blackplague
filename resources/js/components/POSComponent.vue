@@ -8,9 +8,8 @@
                         <p class="card-category">Point of Sale System</p>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                
+                        <div class="row d-none">
+                            <div class="col-sm-12">                                
                                 <button class="btn btn-success"><i class="material-icons">search</i> View Reports</button>
                                 <a v-bind:href="pos_routes.products"><button class="btn btn-info"><i class="material-icons">content_paste</i> Go to Product Management</button></a>
                                 <a v-bind:href="pos_routes.users"><button class="btn btn-default"><i class="material-icons">person</i> Go to Customer Management</button></a>
@@ -42,7 +41,7 @@
                                  <center>No purchases at the moment</center>
                             </div>
                             <div class="col-sm-12" v-if="purchases.length > 0">
-                                <button class="btn btn-info btn-sm mb-2" data-toggle="modal" data-target="#discountModal">Appy Discount</button>
+                                <button class="btn btn-info btn-sm mb-2" data-toggle="modal" data-target="#discountModal" v-if="user_type != 'customer'">Appy Discount</button>
                                 <button class="btn btn-danger btn-sm mb-2" v-if="discount.discount_applied" v-on:click="removeDiscount()">Remove Discount</button>
                                 <button class="btn btn-danger btn-sm mb-2 pull-right" v-on:click="clearPurchase()">Clear All</button>
                                 <table class="table">
@@ -94,7 +93,7 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-if="user_type != 'customer'">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -141,7 +140,7 @@
 
 <script>
     export default {
-        props: ['usersRoute', 'productsRoute', 'userId'],
+        props: ['usersRoute', 'productsRoute', 'userId', 'userType'],
         mounted() {
             console.log('Component mounted.')            
         },
@@ -153,6 +152,7 @@
             return {
                 users: [],
                 user_id : this.userId,
+                user_type : this.userType,
                 products: [],
                 purchases : [],
                 search_name : null,
@@ -196,6 +196,7 @@
                 }
 
                 this.final_total = total;
+                
                 return total;
             }
         },
@@ -235,7 +236,7 @@
             finishOrder: function() {
 
                 Swal.fire({
-                    title: 'Finish this order? P'+this.final_total,
+                    title: 'Finish this order? <br> Total : P'+this.final_total,
                     input: 'text',
                     inputPlaceholder: 'Enter remarks here(Optional)',
                     inputAttributes: {

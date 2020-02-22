@@ -1,4 +1,4 @@
-@extends('layouts.login')
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -24,29 +24,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('User Type') }}</label>
 
-                            <div class="col-md-6">
-                                <select class="custom-select" id="inputGroupSelect01" name="user_type">
-                                    <option value="Admin">Admin</option>
-                                    <option value="Staff" selected>Staff</option>
-                                  </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('User Type') }}</label>
-
-                            <div class="col-md-6">
-                                <select class="custom-select" id="inputGroupSelect01" name="branch">
-                                    <option value="Matina">Matina</option>
-                                    <option value="Tagum">Tagum</option>
-                                    <option value="Mati">Mati</option>
-                                  </select>
-                            </div>
-                        </div>
-                        
                         <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
@@ -60,7 +38,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 

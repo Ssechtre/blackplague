@@ -22,13 +22,14 @@ class User extends Authenticatable
     public static $user_types = [
         'admin'    => 'Admin',
         'staff'    => 'Staff',
-        'agent'    => 'Agent',
-        'customer' => 'Customer'
+        'customer'    => 'Customer',
     ];
 
     public static $rules = [
         'name' => 'required',
-        'password' => 'required|min:4'
+        'password' => 'required|min:4',
+        'email' => 'required|unique:users',
+        'user_type' => 'required',
     ];
 
     /**

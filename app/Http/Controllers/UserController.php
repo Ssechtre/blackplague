@@ -71,6 +71,8 @@ class UserController extends Controller
 
             $data['code_id'] = $code->id;
 
+            $data['password'] = Hash::make($data['password']);
+
             $user = User::create($data);
 
             if ($user) {

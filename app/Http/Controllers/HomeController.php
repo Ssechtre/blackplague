@@ -26,6 +26,11 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function privileges()
+    {
+        return view('privileges');
+    }
+
     public function pos()
     {
         return view('pos');
@@ -34,5 +39,10 @@ class HomeController extends Controller
     public function reports()
     {
         return view('reports');
+    }
+
+    public function networks()
+    {
+        return view('networks');
     }
 }
