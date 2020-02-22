@@ -48,9 +48,5 @@ Route::group(['middleware' => 'staff'], function(){
 
 });
 
-
-
 Route::get('createAccount', 'UserController@createAccount');
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');

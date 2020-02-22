@@ -58,12 +58,6 @@
 					  <p>Privileges</p>
 					</a>
 				</li>
-				<li class="nav-item {{ Request::is('my_networks') ? 'active' : null }}">
-					<a class="nav-link" href="{{ route('user.networks') }}">
-					  <i class="material-icons">call_split</i>
-					  <p>My Networks</p>
-					</a>
-				</li>
 			@endif
 
 			<li class="nav-item {{ (Request::is('pos') || Request::is('pos/*')) ? 'active' : null }}">

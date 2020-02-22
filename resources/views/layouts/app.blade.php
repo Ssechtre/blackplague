@@ -120,10 +120,10 @@
         $(document).ready(function() {
             $(document).ready(function() {
                 $('.parent').connections();
-                $('.child-1').connections({ from: '.parent' });
-                $('.child-2').connections({ from: '.parent' });
-                $('.child-3').connections({ from: '.parent' });
-                $('.child-4').connections({ from: '.parent' });
+                $('.child-1').connections({ from: '.parent-network' });
+                $('.child-2').connections({ from: '.parent-network' });
+                $('.child-3').connections({ from: '.parent-network' });
+                $('.child-4').connections({ from: '.parent-network' });
                 setInterval(function() { connections.connections('update') }, 100);
                 // $('.parent-container').connections({ to: '.child-container-4' });
             });
