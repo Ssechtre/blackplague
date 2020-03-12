@@ -116,29 +116,4 @@
     <script src="{{ asset('js/toastr.min.js') }}"></script>
     <!-- JQuery Connections -->
     <script src="{{ asset('js/jquery.connections.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $(document).ready(function() {
-                $('.parent').connections();
-                $('.child-1').connections({ from: '.parent-network' });
-                $('.child-2').connections({ from: '.parent-network' });
-                $('.child-3').connections({ from: '.parent-network' });
-                $('.child-4').connections({ from: '.parent-network' });
-                setInterval(function() { connections.connections('update') }, 100);
-                // $('.parent-container').connections({ to: '.child-container-4' });
-            });
-            // $('.parent-network').connections({ to: 'div:first', 'class': 'first' });
-            // $('h1 *').connections({ to: 'div:first', 'class': 'first' });
-            // $('div.styles .anchor').connections({ to: 'div.styles li:nth-child(1)', within: '.styles', tag: 'inner', css: { zIndex: -1 } });
-            // $('div.styles .anchor').connections({ to: 'div.styles li:nth-child(2)', within: '.styles', tag: 'inner', css: { color: '#d62' } });
-            // $('div.styles .anchor').connections({ to: 'div.styles li:nth-child(3)', within: '.styles', tag: 'inner', css: { borderWidth: 0.5 } });
-            // $('div.styles .anchor').connections({ to: 'div.styles li:nth-child(4)', within: '.styles', tag: 'inner', css: { borderRadius: 0 } });
-            // $('div.styles .anchor').connections({ to: 'div.styles li:nth-child(5)', within: '.styles', tag: 'inner', css: { borderStyle: 'double' } });
-            // $('div.positioning .anchor').connections({ to: 'div.positioning li', tag: 'inner' });
-            // $('p, div').connections();
-            // $('connection:odd').addClass('odd');
-            // var connections = $('connection, inner');
-            // setInterval(function() { connections.connections('update') }, 100);
-        });
-    </script>
 </html>

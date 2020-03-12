@@ -30,7 +30,11 @@ class UserController extends Controller
         ];
 
         $this->column_values = [
-            'user_type' => User::$user_types
+            'user_type' => User::$user_types,
+            'is_member' => [
+                0 => 'No',
+                1 => 'Yes'
+            ]
         ];
     }
 
@@ -95,7 +99,7 @@ class UserController extends Controller
 
     public function index() {
 
-        $this->query_fields  = ['id', 'name', 'email', 'user_type', 'created_at', 'updated_at'];
+        $this->query_fields  = ['id', 'name', 'email', 'user_type', 'is_member', 'created_at'];
         $this->relationships = [
             'code' => [
                 'name' => 'Code Number',

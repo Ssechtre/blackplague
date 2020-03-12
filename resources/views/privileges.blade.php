@@ -34,12 +34,13 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="bmd-label-floating">ID</label>
-                                <input type="text" class="form-control" value="{{ $data->govt_id_type." - ".$data->govt_id_number }}" disabled>
+                                <input type="text" class="form-control" 
+                                value="{{ $data->govt_id_type." - ".$data->govt_id_number }}" disabled>
                             </div>
                         </div>
                         <div class="col-md-3 mt-3">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Point Accumulated</label>
+                                <label class="bmd-label-floating">Total Referrals</label>
                                 <input type="text" class="form-control" value="{{ count($networks) }}" disabled>
                             </div>
                         </div>
@@ -97,3 +98,17 @@
     </div>
 </div>
 @endsection
+
+<script>
+    $(document).ready(function() {
+        $(document).ready(function() {
+            $('.parent').connections();
+            $('.child-1').connections({ from: '.parent-network' });
+            $('.child-2').connections({ from: '.parent-network' });
+            $('.child-3').connections({ from: '.parent-network' });
+            $('.child-4').connections({ from: '.parent-network' });
+            setInterval(function() { connections.connections('update') }, 100);
+            // $('.parent-container').connections({ to: '.child-container-4' });
+        });
+    });
+</script>

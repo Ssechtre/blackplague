@@ -13,17 +13,6 @@
 
 
 Auth::routes();
-// Route::get('admin/', 'Auth\LoginController@showLoginForm')->name('login');
-// Route::post('admin/login', 'Auth\LoginController@login')->name('islogin');
-// Route::post('admin/logout', 'Auth\LoginController@logout')->name('logout');
-
-// Route::get('admin/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-// Route::post('admin/register', 'Auth\RegisterController@register');
-
-// Route::get('admin/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-// Route::post('admin/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-// Route::get('admin/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-// Route::post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::group(['middleware' => 'admin'], function(){
 
@@ -41,6 +30,7 @@ Route::group(['middleware' => 'customer'], function(){
     Route::get('privileges', 'HomeController@privileges')->name('customer.home');
     Route::get('my_networks', 'HomeController@networks')->name('user.networks');
     Route::get('pos', 'HomeController@pos')->name('pos.app');
+    Route::get('commissions', 'HomeController@commissions')->name('user.commissions');
 });
 
 

@@ -31,6 +31,7 @@ class HomeController extends Controller
 
     public function privileges(CustomerNetwork $cn)
     {
+        $data = [];
 
         $data = User::where('id', Auth::user()->id)->with('code')->first();
 
@@ -76,5 +77,10 @@ class HomeController extends Controller
     public function networks()
     {
         return view('networks');
+    }
+
+    public function commissions()
+    {
+        return view('commissions');
     }
 }

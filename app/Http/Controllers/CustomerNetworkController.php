@@ -55,12 +55,6 @@ class CustomerNetworkController extends Controller
         	return response()->json($this->_response(false, "Customer not found."));
         }
 
-        $networks = CustomerNetwork::where(['user_pid' => $parent_user->id])->get();
-
-        if (count($networks) >= 4) {
-        	return response()->json($this->_response(false, "The selected customer reach its max(4) networks."));
-        }
-
         $connected = CustomerNetwork::where('user_cid', $user->id)->get();
 
         if (count($connected) > 0) {
@@ -76,7 +70,18 @@ class CustomerNetworkController extends Controller
         	return response()->json($this->_response(false, "Failed to connect customers."));
         }
 
-        return response()->json( $this->_response(true, "Customers successfully connected.") );
+        if ($connect) {
+            $networks = CustomerNetwork::where(['user_pid' => $parent_user->id])->get();
+
+            if (count($networks) >= 2) {
+                $parent_user->is_member = 1;
+                $parent_user->save();
+            }
+
+            return response()->json( $this->_response(true, "Customers successfully connected.") );
+        }
+
+        return response()->json( $this->_response(false, "An error occured.") );
     }
 
 

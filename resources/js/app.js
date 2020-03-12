@@ -61,6 +61,7 @@ Vue.use(VueCurrencyFilter, {
 Vue.component('customer-network-component', require('./components/CustomerNetworkComponent.vue').default);
 Vue.component('pos-component', require('./components/POSComponent.vue').default);
 Vue.component('report-component', require('./components/ReportComponent.vue').default);
+Vue.component('commission-component', require('./components/CommissionComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

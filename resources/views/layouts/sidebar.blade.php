@@ -58,6 +58,12 @@
 					  <p>Privileges</p>
 					</a>
 				</li>
+				<li class="nav-item {{ Request::is('commisions') ? 'active' : null }}">
+					<a class="nav-link" href="{{ route('user.commissions') }}">
+					  <i class="material-icons">monetization_on</i>
+					  <p>Commisions</p>
+					</a>
+				</li>
 			@endif
 
 			<li class="nav-item {{ (Request::is('pos') || Request::is('pos/*')) ? 'active' : null }}">

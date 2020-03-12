@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Order;
+use App\CustomerNetwork;
+use App\User;
 use DB;
 use DateTime;
 
@@ -121,6 +123,59 @@ class ReportController extends Controller
         $data['orders'] = $orders;
 
         return response()->json($this->_response(true, "Data received", $data));
+    }
+
+    public function getCustomerCommissions(Request $request) {
+
+        $req = $request->all();
+
+        $year = $req['year'];
+
+        $user_id = $req['user_id'];
+
+        $user = User::find($user_id);
+
+        $referrals = DB::table('users')
+        ->join('customer_networks', 'customer_networks.user_cid', '=', 'users.id')        
+        ->select(DB::raw('users.id, users.name'))
+        ->where('customer_networks.user_pid', $user_id)
+        ->whereYear('customer_networks.created_at', $year)
+        ->get();
+
+        $referral_ids = [];
+
+        foreach ($referrals as $key => $value) {
+            $referral_ids[] = $value->id;
+        }
+
+        $orders = [];
+
+        if ($user->is_member) {
+
+            $orders = DB::table('orders')
+            ->join('users', 'orders.user_cid', '=', 'users.id')
+            ->select([DB::raw("users.name AS customer_name"), DB::raw('orders.*')])
+            ->whereYear('orders.created_at', $year)
+            ->whereIn('orders.user_cid', $referral_ids)
+            ->orderBy('orders.created_at', 'ASC')
+            ->get();
+
+            foreach ($orders as $key => $value) {
+                $orders[$key]->commission = ($value->total_price*0.10);
+            }
+
+        }
+
+        $data = [
+            'referrals' => [
+                'users' => $referrals,
+                'amount' => count($referrals) * 500,
+            ],
+            'commissions' => $orders
+        ]; 
+
+        return response()->json($this->_response(true, "Data received", $data));
+
     }
 
 }

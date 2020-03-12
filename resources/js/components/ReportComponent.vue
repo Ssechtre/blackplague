@@ -182,8 +182,6 @@
 </template>
 
 <script>
-    
-
     export default {
         props: ['currentYear'],
         mounted() {
