@@ -10,7 +10,58 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-12">
-                                <date-picker v-model="dates.year" valueType="date" type="year"></date-picker>  
+                                <date-picker v-model="dates.year" valueType="date" type="year" @change="getCommissions()"></date-picker>  
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <h3>Direct Referrals</h3>
+                                <div class="alert alert-warning pb-1" v-if="referrals.users.length > 0">
+                                    <span>Referral Bonus</span> 
+                                    <h2>{{ referrals.amount | currency }}</h2>
+                                </div>
+                                <table class="table table-bordered table-striped table-sm mt-2 table-responsive-sm" 
+                                v-if="referrals.users.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Created At</th>
+                                            <th>Bonus</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="user in referrals.users">
+                                            <td>{{ user.name }}</td>
+                                            <td>{{ user.created_at }}</td>
+                                            <td>P 500.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-md-6 col-sm-12">
+                                <h3>Profit Sharing</h3>
+                                <div class="alert alert-success pb-1" v-if="commissions.data.length > 0">
+                                    <span>Profit Sharing Total</span> <h2>{{ commissions.total | currency }}</h2>
+                                </div>
+                                <table class="table table-bordered table-striped table-sm mt-2 table-responsive-sm" 
+                                v-if="commissions.data.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th>From</th>
+                                            <th>Commission</th>
+                                            <th>Order Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="commission in commissions.data">
+                                            <td>{{ commission.customer_name }}</td>
+                                            <td>{{ commission.commission | currency }}</td>
+                                            <td>{{ commission.created_at }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -23,7 +74,7 @@
 
 <script>
     export default {
-        props: ['currentYear'],
+        props: ['currentYear', 'userId'],
         mounted() {
             console.log('Component mounted.')            
         },
@@ -32,21 +83,33 @@
         },
         data : function(){
             return {
+                user_id : this.userId,
                 current_year : this.currentYear,
                 dates : {
                     year : this.currentYear
                 },
+                referrals : {
+                    users : [],
+                    amount : 0,
+                },
+                commissions : {
+                    data : [],
+                    total : 0,
+                },
             }
         },
         methods: {
-            getReferrals() {
+            getCommissions() {
                 axios
-                .post('api/reports/get_dailysales', {
-                    date: this.dates.year,
+                .post('api/reports/get_customer_commissions', {
+                    year : this.dates.year,
+                    user_id : this.user_id,
                 })
                 .then(response => {
                     let r = response.data
                     if (r.success) {
+                        this.referrals = r.data.referrals;
+                        this.commissions = r.data.commissions;
                     }
                 })
                 .catch(error => console.log(error))

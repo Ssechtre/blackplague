@@ -49,6 +49,13 @@
 					  <p>Reports</p>
 					</a>
 				</li>
+
+				<li class="nav-item {{ (Request::is('pos') || Request::is('pos/*')) ? 'active' : null }}">
+					<a class="nav-link" href="{{ route('point_of_sales.app') }}">
+					  <i class="material-icons">apps</i>
+					  <p>Point of Sale</p>
+					</a>
+				</li>
 			@endif
 
 			@if(Auth::check() && Auth::user()->user_type == 'customer')
@@ -64,14 +71,16 @@
 					  <p>Commisions</p>
 					</a>
 				</li>
+
+				<li class="nav-item {{ (Request::is('pos') || Request::is('pos/*')) ? 'active' : null }}">
+					<a class="nav-link" href="{{ route('pos.app') }}">
+					  <i class="material-icons">apps</i>
+					  <p>Point of Sale</p>
+					</a>
+				</li>
 			@endif
 
-			<li class="nav-item {{ (Request::is('pos') || Request::is('pos/*')) ? 'active' : null }}">
-				<a class="nav-link" href="{{ route('pos.app') }}">
-				  <i class="material-icons">apps</i>
-				  <p>Point of Sale</p>
-				</a>
-			</li>
+			
 {{-- 			<li class="nav-item ">
 				<a class="nav-link" href="./icons.html">
 				  <i class="material-icons">bubble_chart</i>

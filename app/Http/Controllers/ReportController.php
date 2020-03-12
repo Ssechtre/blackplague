@@ -129,7 +129,7 @@ class ReportController extends Controller
 
         $req = $request->all();
 
-        $year = $req['year'];
+        $year = date('Y', strtotime($req['year']))+1;;
 
         $user_id = $req['user_id'];
 
@@ -137,7 +137,7 @@ class ReportController extends Controller
 
         $referrals = DB::table('users')
         ->join('customer_networks', 'customer_networks.user_cid', '=', 'users.id')        
-        ->select(DB::raw('users.id, users.name'))
+        ->select(DB::raw('users.id, users.name, users.created_at'))
         ->where('customer_networks.user_pid', $user_id)
         ->whereYear('customer_networks.created_at', $year)
         ->get();
@@ -149,6 +149,7 @@ class ReportController extends Controller
         }
 
         $orders = [];
+        $total_commission = 0;
 
         if ($user->is_member) {
 
@@ -161,7 +162,9 @@ class ReportController extends Controller
             ->get();
 
             foreach ($orders as $key => $value) {
-                $orders[$key]->commission = ($value->total_price*0.10);
+                $commission = ($value->total_price*0.10);
+                $orders[$key]->commission = $commission;
+                $total_commission += $commission;
             }
 
         }
@@ -171,7 +174,10 @@ class ReportController extends Controller
                 'users' => $referrals,
                 'amount' => count($referrals) * 500,
             ],
-            'commissions' => $orders
+            'commissions' => [
+                'data' => $orders,
+                'total' => $total_commission
+            ]
         ]; 
 
         return response()->json($this->_response(true, "Data received", $data));

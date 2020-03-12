@@ -1955,8 +1955,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['currentYear'],
+  props: ['currentYear', 'userId'],
   mounted: function mounted() {
     console.log('Component mounted.');
   },
@@ -1965,20 +2016,35 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      user_id: this.userId,
       current_year: this.currentYear,
       dates: {
         year: this.currentYear
+      },
+      referrals: {
+        users: [],
+        amount: 0
+      },
+      commissions: {
+        data: [],
+        total: 0
       }
     };
   },
   methods: {
-    getReferrals: function getReferrals() {
-      axios.post('api/reports/get_dailysales', {
-        date: this.dates.year
+    getCommissions: function getCommissions() {
+      var _this = this;
+
+      axios.post('api/reports/get_customer_commissions', {
+        year: this.dates.year,
+        user_id: this.user_id
       }).then(function (response) {
         var r = response.data;
 
-        if (r.success) {}
+        if (r.success) {
+          _this.referrals = r.data.referrals;
+          _this.commissions = r.data.commissions;
+        }
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -56239,6 +56305,11 @@ var render = function() {
                 [
                   _c("date-picker", {
                     attrs: { valueType: "date", type: "year" },
+                    on: {
+                      change: function($event) {
+                        return _vm.getCommissions()
+                      }
+                    },
                     model: {
                       value: _vm.dates.year,
                       callback: function($$v) {
@@ -56250,6 +56321,100 @@ var render = function() {
                 ],
                 1
               )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+                _c("h3", [_vm._v("Direct Referrals")]),
+                _vm._v(" "),
+                _vm.referrals.users.length > 0
+                  ? _c("div", { staticClass: "alert alert-warning pb-1" }, [
+                      _c("span", [_vm._v("Referral Bonus")]),
+                      _vm._v(" "),
+                      _c("h2", [
+                        _vm._v(_vm._s(_vm._f("currency")(_vm.referrals.amount)))
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.referrals.users.length > 0
+                  ? _c(
+                      "table",
+                      {
+                        staticClass:
+                          "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
+                      },
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.referrals.users, function(user) {
+                            return _c("tr", [
+                              _c("td", [_vm._v(_vm._s(user.name))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(user.created_at))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v("P 500.00")])
+                            ])
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+                _c("h3", [_vm._v("Profit Sharing")]),
+                _vm._v(" "),
+                _vm.commissions.data.length > 0
+                  ? _c("div", { staticClass: "alert alert-success pb-1" }, [
+                      _c("span", [_vm._v("Profit Sharing Total")]),
+                      _vm._v(" "),
+                      _c("h2", [
+                        _vm._v(
+                          _vm._s(_vm._f("currency")(_vm.commissions.total))
+                        )
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.commissions.data.length > 0
+                  ? _c(
+                      "table",
+                      {
+                        staticClass:
+                          "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
+                      },
+                      [
+                        _vm._m(2),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.commissions.data, function(commission) {
+                            return _c("tr", [
+                              _c("td", [
+                                _vm._v(_vm._s(commission.customer_name))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("currency")(commission.commission)
+                                  )
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(commission.created_at))])
+                            ])
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              ])
             ])
           ])
         ])
@@ -56267,6 +56432,34 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("p", { staticClass: "card-category" }, [
         _vm._v(" View all your commissions here per year.")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Created At")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Bonus")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("From")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Commission")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Order Date")])
       ])
     ])
   }

@@ -22,7 +22,7 @@ Route::group(['middleware' => 'admin'], function(){
     Route::resource('codes', 'CodeController');
 
     Route::get('customer_networks', 'CustomerNetworkController@index')->name('customer_networks.index');
-    Route::get('pos', 'HomeController@pos')->name('pos.app');
+    Route::get('point_of_sales', 'HomeController@pos')->name('point_of_sales.app');
     Route::get('reports', 'HomeController@reports')->name('reports.app');
 });
 
@@ -32,7 +32,6 @@ Route::group(['middleware' => 'customer'], function(){
     Route::get('pos', 'HomeController@pos')->name('pos.app');
     Route::get('commissions', 'HomeController@commissions')->name('user.commissions');
 });
-
 
 Route::group(['middleware' => 'staff'], function(){
 

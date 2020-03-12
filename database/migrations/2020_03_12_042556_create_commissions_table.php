@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommissionTable extends Migration
+class CreateCommissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,9 @@ class CreateCommissionTable extends Migration
             $table->unsignedBigInteger('user_cid');
             $table->foreign('user_cid')->references('id')->on('users');
             $table->string('transaction_id');
-            $table->string('year')
+            $table->string('year');
+            $table->float('referral_amount');
+            $table->float('commission_amount');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

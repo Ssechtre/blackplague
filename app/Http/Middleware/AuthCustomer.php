@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 
 class AuthCustomer
@@ -15,6 +16,10 @@ class AuthCustomer
      */
     public function handle($request, Closure $next)
     {
+        if(Auth::check() && Auth::user()->user_type != 'customer'){
+            return abort(403, 'Unauthorized action.');
+        }
+
         return $next($request);
     }
 }

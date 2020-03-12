@@ -71,6 +71,12 @@ class Controller extends BaseController
 	*/
 	public $relationships = [];
 
+	public $filters = [
+		'text'     => [],
+		'checkbox' => [],
+		'dropdown' => [],
+	];
+
 	public function getController() {
 		$regex = preg_match('/([a-z\_]+)\./', \Request::route()->getName(), $matches);
 
