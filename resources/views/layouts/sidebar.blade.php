@@ -21,7 +21,7 @@
 				</li>
 				<li class="nav-item {{ (Request::is('users') || Request::is('users/create') || Request::is('users/*')) ? 'active' : null }}">
 					<a class="nav-link" href="{{ route('users.index') }}">
-					  <i class="material-icons">person</i>
+					  <i class="material-icons">supervised_user_circle</i>
 					  <p>Users</p>
 					</a>
 				</li>

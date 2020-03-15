@@ -10,6 +10,7 @@ window.Vue = require('vue');
 
 import VueCurrencyFilter from 'vue-currency-filter'
 import DatePicker from 'vue2-datepicker';
+import VueSelect from 'vue-select';
 import 'vue2-datepicker/index.css';
 
 Vue.mixin({
@@ -62,6 +63,8 @@ Vue.component('customer-network-component', require('./components/CustomerNetwor
 Vue.component('pos-component', require('./components/POSComponent.vue').default);
 Vue.component('report-component', require('./components/ReportComponent.vue').default);
 Vue.component('commission-component', require('./components/CommissionComponent.vue').default);
+Vue.component('v-select', VueSelect)
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

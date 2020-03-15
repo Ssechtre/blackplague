@@ -16,6 +16,7 @@
         <link href="{{ asset('css/material-dashboard/material-dashboard.css?v=2.1.1') }}" rel="stylesheet">
         <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
 
         <style type="text/css">
             .alert ul {

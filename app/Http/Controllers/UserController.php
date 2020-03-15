@@ -41,6 +41,8 @@ class UserController extends Controller
     public function edit($id) {
 
         $this->fields['excludes']  = ['password', 'code_id', 'user_type'];
+        $this->view_path = 'user/edit';
+
         return parent::edit($id);
     }
 
@@ -107,7 +109,34 @@ class UserController extends Controller
             ]
         ];
 
-        $this->query = User::orderBy('id', 'DESC')->with('code')->paginate(20);
+        $this->filters = [
+            'text' => ['name'],
+            'dropdown' => [
+                'user_type' => [
+                    'label' => 'User Type',
+                    'data' => User::$user_types
+                ],
+                'is_member' => [
+                    'label' => 'Membership',
+                    'data' => [
+                        0 => 'Non-member',
+                        1 => 'Member',
+                    ]
+                ]
+            ]
+        ];
+
+        $this->query = User::orderBy('id', 'DESC')->with('code');
+
+        if (isset($_GET['search']) && $_GET['search'] == true) {
+            foreach ($_GET as $key => $value) {
+                if ($key != 'search' && $value != "") {
+                    $this->query->where($key, 'like', '%' . $value . '%');
+                }
+            }
+        }
+
+        $this->query = $this->query->paginate(20);
 
         return parent::index();
     }

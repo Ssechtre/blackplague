@@ -77,6 +77,8 @@ class Controller extends BaseController
 		'dropdown' => [],
 	];
 
+	public $view_path = null;
+
 	public function getController() {
 		$regex = preg_match('/([a-z\_]+)\./', \Request::route()->getName(), $matches);
 
@@ -97,7 +99,17 @@ class Controller extends BaseController
 		$model = new $namespace_model;
 
 		if (!$this->query) {
-			$this->query = $namespace_model::orderBy('id', 'DESC')->paginate(20);
+			$this->query = $namespace_model::orderBy('id', 'DESC');
+
+			if (isset($_GET['search']) && $_GET['search'] == true) {
+				foreach ($_GET as $key => $value) {
+					if ($key != 'search' && $value != "") {
+						$this->query->orWhere($key, 'like', '%' . $value . '%');
+					}
+				}
+			}
+
+			$this->query = $this->query->paginate(20);
 		}
 		
 		$this->columns = \Schema::getColumnListing(strtolower($controller));
@@ -120,7 +132,8 @@ class Controller extends BaseController
 			->with('fields', $this->fields)
 			->with('excludes', isset($this->excludes) ? $this->excludes : [])
 			->with('with_actions', $this->with_actions)
-			->with('relationships', $this->relationships);
+			->with('relationships', $this->relationships)
+			->with('filters', $this->filters);
 
 		}else{
 			return back()->with($this->_response(false, "An error occured"));
@@ -191,7 +204,13 @@ class Controller extends BaseController
 
 			$fillables = $model->getFillables();
 
-			return view('default/edit')
+			$path = 'default/edit';
+
+			if (isset($this->view_path)) {
+				$path = $this->view_path;
+			}
+
+			return view($path)
 			->with('data', $this->query)
 			->with('fillables', $fillables)
 			->with('fields', $this->fields)

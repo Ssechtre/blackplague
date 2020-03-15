@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create' )
+@section('title', 'Lists' )
 
 @section('content')
 
@@ -14,7 +14,44 @@
                 </div>
                 <div class="card-body">
                 	<div class="row">
-                		<div class="col-sm-12">
+                		<form method="GET" class="col-md-6" action="{{ url($controller) }}">
+                			<input type="hidden" name="search" value="true">
+                			@if(isset($filters['text']) && count($filters['text']) > 0)
+	                			@foreach($filters['text'] as $key => $value)
+	                			<div class="form-group mt-3">
+	                				<label class="control-label">Search</label>
+	                				<input type="text" 
+	                				name="{{ $value }}"
+	                				class="form-control" 
+	                				placeholder="Search {{ implode(', ',$filters['text']) }}"
+	                				value="<?= isset($_GET[$value]) ? $_GET[$value] : '' ?>">
+	                			</div>
+	                			@endforeach
+                			@endif
+
+                			@if(isset($filters['dropdown']) && count($filters['dropdown']) > 0)
+                				@foreach($filters['dropdown'] as $key => $value)
+	                			<div class="form-group">
+	                				<label class="control-label">Filter by {{ $value['label'] }}</label>
+	                				<select class="form-control" name="{{ $key }}">
+	                					<option value="">- Select {{ $value['label'] }} -</option>
+	                					@foreach($value['data'] as $k => $v)
+		                				<option value="{{ $k }}" 
+		                				<?= (isset($_GET[$key]) && $_GET[$key] != '' && $_GET[$key] == $k) ? 'selected="selected"' : '' ?>>
+		                				{{ $v }}
+		                				</option>
+		                				@endforeach
+		                			</select>
+	                			</div>
+                				@endforeach
+                			@endif
+                		
+		            		@if($filters['text'] || $filters['dropdown'])
+		            		<button class="btn btn-primary"><i class="material-icons">search</i> Search</button>
+		            		@endif
+                		</form>
+
+                		<div class="col-lg-3 offset-lg-3 col-sm-12">
                 			<a href="{{ url($controller.'/create') }}"><button class="btn btn-success pull-right"><i class="fa fa-plus fa-fw"></i> Add new {{ $controller }}</button></a>
                 		</div>
                 	</div>

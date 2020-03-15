@@ -5,18 +5,25 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">Commissions</h4>
-                        <p class="card-category"> View all your commissions here per year.</p>
+                        <p class="card-category"> View commissions here per year.</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-md-2 col-sm-12">
                                 <date-picker v-model="dates.year" valueType="date" type="year" @change="getCommissions()"></date-picker>  
+                            </div>
+                            <div class="col-md-3 col-sm-12" v-if="user_type == 'admin'">
+                                <v-select v-model="user_selected" 
+                                :options="customers"
+                                label="name"
+                                ></v-select>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <h3>Direct Referrals</h3>
+                                <p v-if="referrals.users.length == 0">No referrals found</p>
                                 <div class="alert alert-warning pb-1" v-if="referrals.users.length > 0">
                                     <span>Referral Bonus</span> 
                                     <h2>{{ referrals.amount | currency }}</h2>
@@ -42,6 +49,7 @@
 
                             <div class="col-md-6 col-sm-12">
                                 <h3>Profit Sharing</h3>
+                                <p v-if="referrals.users.length == 0">No profit sharing found</p>
                                 <div class="alert alert-success pb-1" v-if="commissions.data.length > 0">
                                     <span>Profit Sharing Total</span> <h2>{{ commissions.total | currency }}</h2>
                                 </div>
@@ -74,15 +82,18 @@
 
 <script>
     export default {
-        props: ['currentYear', 'userId'],
+        props: ['currentYear', 'userId', 'userType'],
         mounted() {
             console.log('Component mounted.')            
         },
         created() {
-            console.log(this.dates.year);
+            let url = window.location.protocol + '//' + window.location.host;
+            axios.defaults.baseURL = url;
+            this.getUsers();
         },
         data : function(){
             return {
+                user_type : this.userType,
                 user_id : this.userId,
                 current_year : this.currentYear,
                 dates : {
@@ -96,10 +107,13 @@
                     data : [],
                     total : 0,
                 },
+                user_selected : null,
+                customers : [],
             }
         },
         methods: {
             getCommissions() {
+                console.log(this.user_selected);
                 axios
                 .post('api/reports/get_customer_commissions', {
                     year : this.dates.year,
@@ -113,7 +127,18 @@
                     }
                 })
                 .catch(error => console.log(error))
-            }
+            },
+            getUsers: function() {
+                axios
+                .post('api/customer_networks/get_users', {
+                    user_type: 'customer',
+                })
+                .then(response => {
+                    this.customers = response.data;
+                })
+                .catch(error => console.log(error))
+
+            },
         }
     }
 </script>

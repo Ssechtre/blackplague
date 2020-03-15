@@ -26,6 +26,10 @@ class CodeController extends Controller
         ];
         $this->with_actions = false;
 
+        $this->filters = [
+            'text' => ['code'],
+        ];
+
         return parent::index();
     }
 
