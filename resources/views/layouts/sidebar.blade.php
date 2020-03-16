@@ -6,7 +6,7 @@
 	-->
 	<div class="logo">
 		<a href="{{ route('home') }}" class="simple-text logo-normal">
-		  Health Patrol
+		  Health Patrol Lifestyle
 		</a>
 	</div>
 	
