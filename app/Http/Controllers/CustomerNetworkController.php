@@ -21,7 +21,7 @@ class CustomerNetworkController extends Controller
 
     	$data = DB::table('users')
         ->join('customer_networks', 'customer_networks.user_pid', '=', 'users.id')        
-        ->select(DB::raw('COUNT(customer_networks.id) as connected_customers, users.*'))
+        ->select(DB::raw('COUNT(customer_networks.id) as connected_customers, users.name as member_name, users.phone, users.email'))
         ->groupBy('users.id')
         ->get();
 

@@ -56560,7 +56560,7 @@ var render = function() {
                       "tbody",
                       _vm._l(_vm.customers, function(customer) {
                         return _c("tr", { key: customer.id }, [
-                          _c("td", [_vm._v(_vm._s(customer.name))]),
+                          _c("td", [_vm._v(_vm._s(customer.member_name))]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(customer.email))]),
                           _vm._v(" "),
