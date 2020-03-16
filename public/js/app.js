@@ -2020,8 +2020,8 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component mounted.');
   },
   created: function created() {
-    var url = window.location.protocol + '//' + window.location.host;
-    axios.defaults.baseURL = url;
+    // let url = window.location.protocol + '//' + window.location.host;
+    // axios.defaults.baseURL = url+'public/';
     this.getUsers();
   },
   data: function data() {

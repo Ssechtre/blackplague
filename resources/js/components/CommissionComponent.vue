@@ -87,8 +87,8 @@
             console.log('Component mounted.')            
         },
         created() {
-            let url = window.location.protocol + '//' + window.location.host;
-            axios.defaults.baseURL = url;
+            // let url = window.location.protocol + '//' + window.location.host;
+            // axios.defaults.baseURL = url+'public/';
             this.getUsers();
         },
         data : function(){
