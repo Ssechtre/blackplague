@@ -104,11 +104,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group mt-1">
-                            <input type="text" class="form-control" v-on:keyup="getUsers()" v-model="search_name" placeholder="Search customer here">
-                            <select class="form-control" v-model="selected_user">
-                                <option value="">- Select customer to apply discount -</option>
-                                <option v-for="user in users"  v-bind:key="user.id" v-bind:value="user.id">{{ user.name }}</option>
-                            </select>                               
+                            <v-select v-model="selected_user" 
+                            :options="users"
+                            label="name"
+                            ></v-select>                              
                         </div>
 
                         <div class="form-group mt-2">
@@ -161,7 +160,7 @@
                     users : this.usersRoute,
                     products : this.productsRoute
                 },
-                selected_user : "",
+                selected_user : null,
                 discount : {
                     discount_applied : false,
                     discount_type : false,
@@ -252,7 +251,7 @@
                         return axios.post(`/api/orders/create_order`, {
                             discount_applications : this.discount,
                             line_items : this.purchases,
-                            user_cid : this.selected_user,
+                            user_cid : this.selected_user.id,
                             subtotal_price : this.computeTotal(),
                             total_price : this.final_total,
                             remarks : remarks,
@@ -320,7 +319,7 @@
             },
             clearOrder : function() {
                 this.purchases = [];
-                this.selected_user = "";
+                this.selected_user = null;
                 this.discount = {
                     discount_applied : false,
                     discount_type : false,

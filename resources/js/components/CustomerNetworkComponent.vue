@@ -63,11 +63,10 @@
                             </div>     
                         </div>
                         <div class="form-group mt-1">
-                            <input type="text" class="form-control" v-on:keyup="getUsers()" v-model="search_name" placeholder="Search customer this person is connected to">
-                            <select class="form-control" v-model="connected_user_id">
-                                <option value="">- Select customer this person is connected to -</option>
-                                <option v-for="user in users"  v-bind:key="user.id" v-bind:value="user.id">{{ user.name }}</option>
-                            </select>                               
+                            <v-select v-model="user_selected" 
+                            :options="users"
+                            label="name"
+                            ></v-select>                             
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -94,7 +93,7 @@
             return {
                 users: [],
                 search_name : null,
-                connected_user_id : "",
+                user_selected : null,
                 code_number : null,
                 customers: [],
             }
@@ -124,7 +123,7 @@
                 axios
                 .post('api/customer_networks/connect_users', {
                     code_number: this.code_number,
-                    user_id : this.connected_user_id
+                    user_id : this.user_selected.id
                 })
                 .then(response => {
                     let r = response.data;

@@ -171,7 +171,7 @@ class UserController extends Controller
             'name' => 'Admin',
             'password' => Hash::make('1234512345'),
             'username' => 'admin',
-            'user_type' => 'Admin',
+            'user_type' => 'admin',
             'contact_no' => '121212',
             'address' => 'asdas',
             'email' => 'sudo@mail.com',

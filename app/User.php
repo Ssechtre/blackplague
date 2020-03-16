@@ -22,7 +22,7 @@ class User extends Authenticatable
     public static $user_types = [
         'admin'    => 'Admin',
         'staff'    => 'Staff',
-        'customer'    => 'Customer',
+        'customer'    => 'Member',
     ];
 
     public static $rules = [

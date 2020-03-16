@@ -2170,7 +2170,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -2183,7 +2182,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       users: [],
       search_name: null,
-      connected_user_id: "",
+      user_selected: null,
       code_number: null,
       customers: []
     };
@@ -2216,7 +2215,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post('api/customer_networks/connect_users', {
         code_number: this.code_number,
-        user_id: this.connected_user_id
+        user_id: this.user_selected.id
       }).then(function (response) {
         var r = response.data;
 
@@ -2396,7 +2395,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['usersRoute', 'productsRoute', 'userId', 'userType'],
   mounted: function mounted() {
@@ -2419,7 +2417,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         users: this.usersRoute,
         products: this.productsRoute
       },
-      selected_user: "",
+      selected_user: null,
       discount: {
         discount_applied: false,
         discount_type: false,
@@ -2511,7 +2509,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           return axios.post("/api/orders/create_order", {
             discount_applications: _this3.discount,
             line_items: _this3.purchases,
-            user_cid: _this3.selected_user,
+            user_cid: _this3.selected_user.id,
             subtotal_price: _this3.computeTotal(),
             total_price: _this3.final_total,
             remarks: remarks,
@@ -2578,7 +2576,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     },
     clearOrder: function clearOrder() {
       this.purchases = [];
-      this.selected_user = "";
+      this.selected_user = null;
       this.discount = {
         discount_applied: false,
         discount_type: false,
@@ -56650,81 +56648,23 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-group mt-1" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.search_name,
-                        expression: "search_name"
+                _c(
+                  "div",
+                  { staticClass: "form-group mt-1" },
+                  [
+                    _c("v-select", {
+                      attrs: { options: _vm.users, label: "name" },
+                      model: {
+                        value: _vm.user_selected,
+                        callback: function($$v) {
+                          _vm.user_selected = $$v
+                        },
+                        expression: "user_selected"
                       }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      placeholder: "Search customer this person is connected to"
-                    },
-                    domProps: { value: _vm.search_name },
-                    on: {
-                      keyup: function($event) {
-                        return _vm.getUsers()
-                      },
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.search_name = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.connected_user_id,
-                          expression: "connected_user_id"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.connected_user_id = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "" } }, [
-                        _vm._v(
-                          "- Select customer this person is connected to -"
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _vm._l(_vm.users, function(user) {
-                        return _c(
-                          "option",
-                          { key: user.id, domProps: { value: user.id } },
-                          [_vm._v(_vm._s(user.name))]
-                        )
-                      })
-                    ],
-                    2
-                  )
-                ])
+                    })
+                  ],
+                  1
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
@@ -57124,79 +57064,23 @@ var render = function() {
                   _vm._m(5),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
-                    _c("div", { staticClass: "form-group mt-1" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.search_name,
-                            expression: "search_name"
+                    _c(
+                      "div",
+                      { staticClass: "form-group mt-1" },
+                      [
+                        _c("v-select", {
+                          attrs: { options: _vm.users, label: "name" },
+                          model: {
+                            value: _vm.selected_user,
+                            callback: function($$v) {
+                              _vm.selected_user = $$v
+                            },
+                            expression: "selected_user"
                           }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "text",
-                          placeholder: "Search customer here"
-                        },
-                        domProps: { value: _vm.search_name },
-                        on: {
-                          keyup: function($event) {
-                            return _vm.getUsers()
-                          },
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.search_name = $event.target.value
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.selected_user,
-                              expression: "selected_user"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.selected_user = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "" } }, [
-                            _vm._v("- Select customer to apply discount -")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.users, function(user) {
-                            return _c(
-                              "option",
-                              { key: user.id, domProps: { value: user.id } },
-                              [_vm._v(_vm._s(user.name))]
-                            )
-                          })
-                        ],
-                        2
-                      )
-                    ]),
+                        })
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group mt-2" }, [
                       _c("label", { staticClass: "switch" }, [
