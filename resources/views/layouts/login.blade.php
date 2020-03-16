@@ -1,3 +1,17 @@
+<?php
+function isLocal ()
+{
+  return !checkdnsrr($_SERVER['SERVER_NAME'], 'NS');
+}
+
+$asset_path = 'public/';
+
+if (isLocal()) {
+    $asset_path = '';
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -10,15 +24,15 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset($asset_path.'js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/material-dashboard/material-dashboard.css?v=2.1.1') }}" rel="stylesheet">
+    <link href="{{ asset($asset_path.'css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset($asset_path.'css/material-dashboard/material-dashboard.css?v=2.1.1') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">

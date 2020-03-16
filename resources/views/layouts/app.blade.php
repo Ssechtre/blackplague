@@ -9,6 +9,7 @@ $asset_path = 'public/';
 if (isLocal()) {
     $asset_path = '';
 }
+
 ?>
 
 <!DOCTYPE html>
