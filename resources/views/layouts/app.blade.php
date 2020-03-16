@@ -1,3 +1,15 @@
+<?php
+function isLocal ()
+{
+  return !checkdnsrr($_SERVER['SERVER_NAME'], 'NS');
+}
+
+$asset_path = 'public/';
+
+if (isLocal()) {
+    $asset_path = '';
+}
+?>
 
 <!DOCTYPE html>
 <html>
@@ -13,9 +25,9 @@
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
         <title>{{ env("APP_NAME") }} - @yield('title')</title>
-        <link href="{{ asset('css/material-dashboard/material-dashboard.css?v=2.1.1') }}" rel="stylesheet">
-        <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+        <link href="{{ asset($asset_path.'css/material-dashboard/material-dashboard.css?v=2.1.1') }}" rel="stylesheet">
+        <link href="{{ asset($asset_path.'css/toastr.min.css') }}" rel="stylesheet">
+        <link href="{{ asset($asset_path.'css/custom.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
 
         <style type="text/css">
@@ -71,50 +83,50 @@
     </body>
 
     <!-- For VueJS -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/core/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/core/popper.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/app.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/core/jquery.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/core/popper.min.js') }}"></script>
     
-    <script src="{{ asset('js/core/bootstrap-material-design.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>        
+    <script src="{{ asset($asset_path.'js/core/bootstrap-material-design.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>        
     <!-- Plugin for the momentJs  -->
-    <script src="{{ asset('js/plugins/moment.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/moment.min.js') }}"></script>
     <!--  Plugin for Sweet Alert -->
-    <script src="{{ asset('js/plugins/sweetalert2.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/sweetalert2.js') }}"></script>
     <!-- Forms Validations Plugin -->
-    <script src="{{ asset('js/plugins/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/jquery.validate.min.js') }}"></script>
     <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-    <script src="{{ asset('js/plugins/jquery.bootstrap-wizard.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/jquery.bootstrap-wizard.js') }}"></script>
     <!--  Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-    <script src="{{ asset('js/plugins/bootstrap-selectpicker.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/bootstrap-selectpicker.js') }}"></script>
     <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-    {{-- <script src="{{ asset('js/plugins/bootstrap-datetimepicker.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset($asset_path.'js/plugins/bootstrap-datetimepicker.min.js') }}"></script> --}}
     <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-    <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/jquery.dataTables.min.js') }}"></script>
     <!--  Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-    <script src="{{ asset('js/plugins/bootstrap-tagsinput.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/bootstrap-tagsinput.js') }}"></script>
     <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-    <script src="{{ asset('js/plugins/jasny-bootstrap.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/jasny-bootstrap.min.js') }}"></script>
     <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-    <script src="{{ asset('js/plugins/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/fullcalendar.min.js') }}"></script>
     <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-    <script src="{{ asset('js/plugins/jquery-jvectormap.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/jquery-jvectormap.js') }}"></script>
     <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-    <script src="{{ asset('js/plugins/nouislider.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/nouislider.min.js') }}"></script>
     <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
     <!-- Library for adding dinamically elements -->
-    <script src="{{ asset('js/plugins/arrive.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/arrive.min.js') }}"></script>
     <!-- Chartist JS -->
-    <script src="{{ asset('js/plugins/chartist.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/chartist.min.js') }}"></script>
     <!--  Notifications Plugin    -->
-    <script src="{{ asset('js/plugins/bootstrap-notify.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/plugins/bootstrap-notify.js') }}"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="{{ asset('js/material-dashboard.js?v=2.1.1') }}"></script>
+    <script src="{{ asset($asset_path.'js/material-dashboard.js?v=2.1.1') }}"></script>
     <!-- Sweet Alert for popups -->
-    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/sweetalert2.all.min.js') }}"></script>
     <!-- Sweet Alert for popups -->
-    <script src="{{ asset('js/toastr.min.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/toastr.min.js') }}"></script>
     <!-- JQuery Connections -->
-    <script src="{{ asset('js/jquery.connections.js') }}"></script>
+    <script src="{{ asset($asset_path.'js/jquery.connections.js') }}"></script>
 </html>
