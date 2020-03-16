@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">Customer Networks</h4>
-                        <p class="card-category"> Here you can; View the customer network level and create networks.</p>
+                        <p class="card-category"> Here you can view the customer network level and create networks.</p>
                     </div>
                     <div class="card-body">
                         <div class="row">

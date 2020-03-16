@@ -56708,7 +56708,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("p", { staticClass: "card-category" }, [
         _vm._v(
-          " Here you can; View the customer network level and create networks."
+          " Here you can view the customer network level and create networks."
         )
       ])
     ])
