@@ -38,7 +38,9 @@ Route::group(['middleware' => 'customer'], function(){
 });
 
 Route::group(['middleware' => 'staff'], function(){
-
+    Route::get('home', 'HomeController@index')->name('home');
+    Route::get('point_of_sales', 'HomeController@pos')->name('point_of_sales.app');
+    Route::get('customer_networks', 'CustomerNetworkController@index')->name('customer_networks.index');
 });
 
 Route::get('createAccount', 'UserController@createAccount');

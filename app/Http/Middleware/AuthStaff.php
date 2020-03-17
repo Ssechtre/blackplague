@@ -9,9 +9,12 @@ class AuthStaff
 {
     public function handle($request, Closure $next)
     {
-        // return $next($request);
-        if(Auth::check() && Auth::user()->user_type == 'customer'){
-            return redirect('home');
+    	if (!Auth::check()) {
+            return redirect('/');
+        }
+
+        if(Auth::check() && Auth::user()->user_type != 'staff'){
+            return abort(403, 'Unauthorized action.');
         }
         
         return $next($request);
