@@ -40,7 +40,7 @@
 				<li class="nav-item {{ (Request::is('customer_networks') || Request::is('customer_networks/*')) ? 'active' : null }}">
 					<a class="nav-link" href="{{ route('customer_networks.index') }}">
 					  <i class="material-icons">supervisor_account</i>
-					  <p>Customer Networks</p>
+					  <p>Referral Management</p>
 					</a>
 				</li>
 				<li class="nav-item {{ (Request::is('reports') || Request::is('reports/*')) ? 'active' : null }}">
@@ -62,7 +62,7 @@
 				<li class="nav-item {{ (Request::is('customer_networks') || Request::is('customer_networks/*')) ? 'active' : null }}">
 					<a class="nav-link" href="{{ route('customer_networks.staff') }}">
 					  <i class="material-icons">supervisor_account</i>
-					  <p>Customer Networks</p>
+					  <p>Referral Management</p>
 					</a>
 				</li>
 				<li class="nav-item {{ (Request::is('staff_pos') || Request::is('staff_pos/*')) ? 'active' : null }}">

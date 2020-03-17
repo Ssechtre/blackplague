@@ -50,7 +50,7 @@
                             </div>
 
                             <div class="col-md-6 col-sm-12">
-                                <h3>Profit Sharing</h3>
+                                <h3>Incentives</h3>
                                 <p v-if="referrals.users.length == 0">No profit sharing found</p>
                                 <div class="alert alert-success pb-1" v-if="commissions.data.length > 0">
                                     <span>Profit Sharing Total</span> <h2>{{ commissions.total | currency }}</h2>

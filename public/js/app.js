@@ -56488,7 +56488,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-md-6 col-sm-12" }, [
-                    _c("h3", [_vm._v("Profit Sharing")]),
+                    _c("h3", [_vm._v("Incentives")]),
                     _vm._v(" "),
                     _vm.referrals.users.length == 0
                       ? _c("p", [_vm._v("No profit sharing found")])
