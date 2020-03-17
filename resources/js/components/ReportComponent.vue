@@ -50,7 +50,8 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-lg-6 col-sm-12 mb-3">
-                                            <date-picker v-model="dates.daily" valueType="format" @change="getDailySales()"></date-picker> 
+                                            <date-picker v-model="dates.daily" valueType="format" 
+                                            @change="getDailySales()" placeholder="Select Date"></date-picker> 
                                         </div>
                                         <div class="col-lg-3 offset-lg-3 col-sm-12" v-show="daily_data.orders.length > 0">
                                             <div class="alert alert-success pb-1">
@@ -60,8 +61,11 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-sm-12" v-show="!daily_data.orders">
+                                        <div class="col-sm-12" v-show="daily_data.orders.length == 0 && !is_loading">
                                             <center><p>No records available</p></center>
+                                        </div>
+                                        <div class="col-sm-12" v-if="is_loading == true">
+                                            <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
                                         </div>
                                         <div class="col-sm-12">
                                             <table class="table table-bordered table-striped table-sm mt-2 table-responsive-sm" v-show="daily_data.orders.length > 0">
@@ -96,8 +100,13 @@
                             <div class="tab-pane" id="monthly">
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
-                                        <date-picker v-model="dates.m.month" valueType="format" type="month" @change="getMonthlySales()"></date-picker>  
-                                        <date-picker v-model="dates.m.year" valueType="date" type="year" @change="getMonthlySales()"></date-picker>    
+                                        <date-picker v-model="dates.m.month" valueType="format" type="month" 
+                                        @change="getMonthlySales()"
+                                        placeholder="Select Month">
+                                        </date-picker>  
+                                        <date-picker v-model="dates.m.year" valueType="date" type="year" @change="getMonthlySales()"
+                                         placeholder="Select Year">
+                                         </date-picker>    
                                     </div>
                                     <div class="col-lg-3 offset-lg-3 col-sm-12" v-show="monthly_data.orders.length > 0">
                                         <div class="alert alert-success pb-1">
@@ -106,8 +115,11 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-12" v-show="!monthly_data.orders">
+                                    <div class="col-sm-12" v-show="monthly_data.orders.length == 0 && !is_loading">
                                         <center><p>No records available</p></center>
+                                    </div>
+                                    <div class="col-sm-12" v-if="is_loading == true">
+                                        <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
                                     </div>
                                     <div class="col-sm-12">
                                         <table class="table table-bordered table-striped table-sm mt-2 table-responsive-sm" v-show="monthly_data.orders.length > 0">
@@ -137,7 +149,9 @@
                             <div class="tab-pane" id="annual">
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
-                                        <date-picker v-model="dates.year" valueType="date" type="year" @change="getAnnualSales()"></date-picker>  
+                                        <date-picker v-model="dates.year" valueType="date" type="year" 
+                                        @change="getAnnualSales()"  
+                                        placeholder="Select Year"></date-picker>  
                                     </div>
                                     <div class="col-lg-3 offset-lg-3 col-sm-12" v-show="annual_data.orders.length > 0">
                                         <div class="alert alert-success pb-1">
@@ -146,9 +160,14 @@
                                     </div>
                                 </div> 
                                 <div class="row">
-                                    <div class="col-sm-12" v-show="!annual_data.orders">
+                                    <div class="col-sm-12" v-show="annual_data.orders.length == 0 && !is_loading">
                                         <center><p>No records available</p></center>
                                     </div>
+                         
+                                    <div class="col-sm-12" v-if="is_loading == true">
+                                        <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
+                                    </div>
+                                
                                     <div class="col-sm-12">
                                         <table class="table table-bordered table-striped table-sm mt-2 table-responsive-sm" v-show="annual_data.orders.length > 0">
                                             <thead>
@@ -210,10 +229,12 @@
                 annual_data : {
                     orders : []
                 },
+                is_loading : false,
             }
         },
         methods: {
             getDailySales : function() {
+                this.is_loading = true;
                 axios
                 .post('api/reports/get_dailysales', {
                     date:this.dates.daily,
@@ -224,23 +245,30 @@
                         this.daily_data = r.data;
                         console.log(this.daily_data);
                     }
+                    this.is_loading = false;
                 })
                 .catch(error => console.log(error))
             },
             getMonthlySales: function() {
-                axios
-                .post('api/reports/get_monthlysales', {
-                    date:this.dates.m,
-                })
-                .then(response => {
-                    let r = response.data
-                    if (r.success) {
-                        this.monthly_data = r.data;
-                    }
-                })
-                .catch(error => console.log(error))
+                
+                if (this.dates.m.year && this.dates.m.month) {
+                    this.is_loading = true;
+                    axios
+                    .post('api/reports/get_monthlysales', {
+                        date:this.dates.m,
+                    })
+                    .then(response => {
+                        let r = response.data
+                        if (r.success) {
+                            this.monthly_data = r.data;
+                        }
+                        this.is_loading = false;
+                    })
+                    .catch(error => console.log(error))
+                }
             },
             getAnnualSales : function() {
+                this.is_loading = true;
                 axios
                 .post('api/reports/get_annualsales', {
                     date : this.dates.year,
@@ -250,6 +278,7 @@
                     if (r.success) {
                         this.annual_data = r.data;
                     }
+                    this.is_loading = false;
                 })
                 .catch(error => console.log(error))
             }

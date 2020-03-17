@@ -2014,14 +2014,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['currentYear', 'userId', 'userType'],
   mounted: function mounted() {
     console.log('Component mounted.');
   },
   created: function created() {
-    // let url = window.location.protocol + '//' + window.location.host;
-    // axios.defaults.baseURL = url+'public/';
     this.getUsers();
   },
   data: function data() {
@@ -2030,7 +2030,12 @@ __webpack_require__.r(__webpack_exports__);
       user_id: this.userId,
       current_year: this.currentYear,
       dates: {
-        year: this.currentYear
+        daily: null,
+        m: {
+          month: null,
+          year: null
+        },
+        year: null
       },
       referrals: {
         users: [],
@@ -2041,27 +2046,34 @@ __webpack_require__.r(__webpack_exports__);
         total: 0
       },
       user_selected: null,
-      customers: []
+      customers: [],
+      is_loading: false
     };
   },
   methods: {
     getCommissions: function getCommissions() {
       var _this = this;
 
-      console.log(this.user_selected);
-      axios.post('api/reports/get_customer_commissions', {
-        year: this.dates.year,
-        user_id: this.user_id
-      }).then(function (response) {
-        var r = response.data;
+      if (this.dates.m.year && this.dates.m.month) {
+        this.is_loading = true;
+        axios.post('api/reports/get_customer_commissions', {
+          date: this.dates.m,
+          user_id: this.user_id
+        }).then(function (response) {
+          var r = response.data;
 
-        if (r.success) {
-          _this.referrals = r.data.referrals;
-          _this.commissions = r.data.commissions;
-        }
-      })["catch"](function (error) {
-        return console.log(error);
-      });
+          if (r.success) {
+            _this.referrals = r.data.referrals;
+            _this.commissions = r.data.commissions;
+          } else {
+            toastr.error(r.message);
+          }
+
+          _this.is_loading = false;
+        })["catch"](function (error) {
+          return console.log(error);
+        });
+      }
     },
     getUsers: function getUsers() {
       var _this2 = this;
@@ -2799,6 +2811,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['currentYear'],
   mounted: function mounted() {
@@ -2824,13 +2855,15 @@ __webpack_require__.r(__webpack_exports__);
       },
       annual_data: {
         orders: []
-      }
+      },
+      is_loading: false
     };
   },
   methods: {
     getDailySales: function getDailySales() {
       var _this = this;
 
+      this.is_loading = true;
       axios.post('api/reports/get_dailysales', {
         date: this.dates.daily
       }).then(function (response) {
@@ -2840,6 +2873,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.daily_data = r.data;
           console.log(_this.daily_data);
         }
+
+        _this.is_loading = false;
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -2847,21 +2882,27 @@ __webpack_require__.r(__webpack_exports__);
     getMonthlySales: function getMonthlySales() {
       var _this2 = this;
 
-      axios.post('api/reports/get_monthlysales', {
-        date: this.dates.m
-      }).then(function (response) {
-        var r = response.data;
+      if (this.dates.m.year && this.dates.m.month) {
+        this.is_loading = true;
+        axios.post('api/reports/get_monthlysales', {
+          date: this.dates.m
+        }).then(function (response) {
+          var r = response.data;
 
-        if (r.success) {
-          _this2.monthly_data = r.data;
-        }
-      })["catch"](function (error) {
-        return console.log(error);
-      });
+          if (r.success) {
+            _this2.monthly_data = r.data;
+          }
+
+          _this2.is_loading = false;
+        })["catch"](function (error) {
+          return console.log(error);
+        });
+      }
     },
     getAnnualSales: function getAnnualSales() {
       var _this3 = this;
 
+      this.is_loading = true;
       axios.post('api/reports/get_annualsales', {
         date: this.dates.year
       }).then(function (response) {
@@ -2870,6 +2911,8 @@ __webpack_require__.r(__webpack_exports__);
         if (r.success) {
           _this3.annual_data = r.data;
         }
+
+        _this3.is_loading = false;
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -56324,149 +56367,180 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c(
                 "div",
-                { staticClass: "col-md-2 col-sm-12" },
+                { staticClass: "col-md-6 col-sm-12" },
                 [
                   _c("date-picker", {
-                    attrs: { valueType: "date", type: "year" },
+                    attrs: {
+                      valueType: "format",
+                      type: "month",
+                      placeholder: "Select Month"
+                    },
                     on: {
                       change: function($event) {
                         return _vm.getCommissions()
                       }
                     },
                     model: {
-                      value: _vm.dates.year,
+                      value: _vm.dates.m.month,
                       callback: function($$v) {
-                        _vm.$set(_vm.dates, "year", $$v)
+                        _vm.$set(_vm.dates.m, "month", $$v)
                       },
-                      expression: "dates.year"
+                      expression: "dates.m.month"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("date-picker", {
+                    attrs: {
+                      valueType: "date",
+                      type: "year",
+                      placeholder: "Select Year"
+                    },
+                    on: {
+                      change: function($event) {
+                        return _vm.getCommissions()
+                      }
+                    },
+                    model: {
+                      value: _vm.dates.m.year,
+                      callback: function($$v) {
+                        _vm.$set(_vm.dates.m, "year", $$v)
+                      },
+                      expression: "dates.m.year"
                     }
                   })
                 ],
                 1
-              ),
-              _vm._v(" "),
-              _vm.user_type == "admin"
-                ? _c(
+              )
+            ]),
+            _vm._v(" "),
+            _vm.is_loading == true
+              ? _c("div", { staticClass: "row mt-5" }, [
+                  _c(
                     "div",
-                    { staticClass: "col-md-3 col-sm-12" },
+                    { staticClass: "col-sm-12" },
                     [
-                      _c("v-select", {
-                        attrs: { options: _vm.customers, label: "name" },
-                        model: {
-                          value: _vm.user_selected,
-                          callback: function($$v) {
-                            _vm.user_selected = $$v
-                          },
-                          expression: "user_selected"
-                        }
-                      })
+                      _c("center", [
+                        _c("i", { staticClass: "fa fa-gear fa-spin fa-lg" }),
+                        _c("br"),
+                        _c("label", [_vm._v("Getting Data...")])
+                      ])
                     ],
                     1
                   )
-                : _vm._e()
-            ]),
+                ])
+              : _vm._e(),
             _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-md-6 col-sm-12" }, [
-                _c("h3", [_vm._v("Direct Referrals")]),
-                _vm._v(" "),
-                _vm.referrals.users.length == 0
-                  ? _c("p", [_vm._v("No referrals found")])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.referrals.users.length > 0
-                  ? _c("div", { staticClass: "alert alert-warning pb-1" }, [
-                      _c("span", [_vm._v("Referral Bonus")]),
-                      _vm._v(" "),
-                      _c("h2", [
-                        _vm._v(_vm._s(_vm._f("currency")(_vm.referrals.amount)))
-                      ])
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.referrals.users.length > 0
-                  ? _c(
-                      "table",
-                      {
-                        staticClass:
-                          "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
-                      },
-                      [
-                        _vm._m(1),
-                        _vm._v(" "),
-                        _c(
-                          "tbody",
-                          _vm._l(_vm.referrals.users, function(user) {
-                            return _c("tr", [
-                              _c("td", [_vm._v(_vm._s(user.name))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(user.created_at))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("P 500.00")])
-                            ])
-                          }),
-                          0
+            !_vm.is_loading
+              ? _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+                    _c("h3", [_vm._v("Direct Referrals")]),
+                    _vm._v(" "),
+                    _vm.referrals.users.length == 0
+                      ? _c("p", [_vm._v("No referrals found")])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.referrals.users.length > 0
+                      ? _c("div", { staticClass: "alert alert-warning pb-1" }, [
+                          _c("span", [_vm._v("Referral Bonus")]),
+                          _vm._v(" "),
+                          _c("h2", [
+                            _vm._v(
+                              _vm._s(_vm._f("currency")(_vm.referrals.amount))
+                            )
+                          ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.referrals.users.length > 0
+                      ? _c(
+                          "table",
+                          {
+                            staticClass:
+                              "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
+                          },
+                          [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.referrals.users, function(user) {
+                                return _c("tr", [
+                                  _c("td", [_vm._v(_vm._s(user.name))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(user.created_at))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v("P 500.00")])
+                                ])
+                              }),
+                              0
+                            )
+                          ]
                         )
-                      ]
-                    )
-                  : _vm._e()
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-6 col-sm-12" }, [
-                _c("h3", [_vm._v("Profit Sharing")]),
-                _vm._v(" "),
-                _vm.referrals.users.length == 0
-                  ? _c("p", [_vm._v("No profit sharing found")])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.commissions.data.length > 0
-                  ? _c("div", { staticClass: "alert alert-success pb-1" }, [
-                      _c("span", [_vm._v("Profit Sharing Total")]),
-                      _vm._v(" "),
-                      _c("h2", [
-                        _vm._v(
-                          _vm._s(_vm._f("currency")(_vm.commissions.total))
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+                    _c("h3", [_vm._v("Profit Sharing")]),
+                    _vm._v(" "),
+                    _vm.referrals.users.length == 0
+                      ? _c("p", [_vm._v("No profit sharing found")])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.commissions.data.length > 0
+                      ? _c("div", { staticClass: "alert alert-success pb-1" }, [
+                          _c("span", [_vm._v("Profit Sharing Total")]),
+                          _vm._v(" "),
+                          _c("h2", [
+                            _vm._v(
+                              _vm._s(_vm._f("currency")(_vm.commissions.total))
+                            )
+                          ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.commissions.data.length > 0
+                      ? _c(
+                          "table",
+                          {
+                            staticClass:
+                              "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
+                          },
+                          [
+                            _vm._m(2),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.commissions.data, function(
+                                commission
+                              ) {
+                                return _c("tr", [
+                                  _c("td", [
+                                    _vm._v(_vm._s(commission.customer_name))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("currency")(
+                                          commission.commission
+                                        )
+                                      )
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(_vm._s(commission.created_at))
+                                  ])
+                                ])
+                              }),
+                              0
+                            )
+                          ]
                         )
-                      ])
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.commissions.data.length > 0
-                  ? _c(
-                      "table",
-                      {
-                        staticClass:
-                          "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
-                      },
-                      [
-                        _vm._m(2),
-                        _vm._v(" "),
-                        _c(
-                          "tbody",
-                          _vm._l(_vm.commissions.data, function(commission) {
-                            return _c("tr", [
-                              _c("td", [
-                                _vm._v(_vm._s(commission.customer_name))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm._f("currency")(commission.commission)
-                                  )
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(commission.created_at))])
-                            ])
-                          }),
-                          0
-                        )
-                      ]
-                    )
-                  : _vm._e()
-              ])
-            ])
+                      : _vm._e()
+                  ])
+                ])
+              : _vm._e()
           ])
         ])
       ])
@@ -56482,7 +56556,7 @@ var staticRenderFns = [
       _c("h4", { staticClass: "card-title " }, [_vm._v("Commissions")]),
       _vm._v(" "),
       _c("p", { staticClass: "card-category" }, [
-        _vm._v(" View commissions here per year.")
+        _vm._v(" View commissions here.")
       ])
     ])
   },
@@ -57341,7 +57415,10 @@ var render = function() {
                         { staticClass: "col-lg-6 col-sm-12 mb-3" },
                         [
                           _c("date-picker", {
-                            attrs: { valueType: "format" },
+                            attrs: {
+                              valueType: "format",
+                              placeholder: "Select Date"
+                            },
                             on: {
                               change: function($event) {
                                 return _vm.getDailySales()
@@ -57405,8 +57482,11 @@ var render = function() {
                             {
                               name: "show",
                               rawName: "v-show",
-                              value: !_vm.daily_data.orders,
-                              expression: "!daily_data.orders"
+                              value:
+                                _vm.daily_data.orders.length == 0 &&
+                                !_vm.is_loading,
+                              expression:
+                                "daily_data.orders.length == 0 && !is_loading"
                             }
                           ],
                           staticClass: "col-sm-12"
@@ -57418,6 +57498,23 @@ var render = function() {
                         ],
                         1
                       ),
+                      _vm._v(" "),
+                      _vm.is_loading == true
+                        ? _c(
+                            "div",
+                            { staticClass: "col-sm-12" },
+                            [
+                              _c("center", [
+                                _c("i", {
+                                  staticClass: "fa fa-gear fa-spin fa-lg"
+                                }),
+                                _c("br"),
+                                _c("label", [_vm._v("Getting Data...")])
+                              ])
+                            ],
+                            1
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-sm-12" }, [
                         _c(
@@ -57487,7 +57584,11 @@ var render = function() {
                     { staticClass: "col-md-6 col-sm-12" },
                     [
                       _c("date-picker", {
-                        attrs: { valueType: "format", type: "month" },
+                        attrs: {
+                          valueType: "format",
+                          type: "month",
+                          placeholder: "Select Month"
+                        },
                         on: {
                           change: function($event) {
                             return _vm.getMonthlySales()
@@ -57503,7 +57604,11 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("date-picker", {
-                        attrs: { valueType: "date", type: "year" },
+                        attrs: {
+                          valueType: "date",
+                          type: "year",
+                          placeholder: "Select Year"
+                        },
                         on: {
                           change: function($event) {
                             return _vm.getMonthlySales()
@@ -57558,8 +57663,11 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: !_vm.monthly_data.orders,
-                          expression: "!monthly_data.orders"
+                          value:
+                            _vm.monthly_data.orders.length == 0 &&
+                            !_vm.is_loading,
+                          expression:
+                            "monthly_data.orders.length == 0 && !is_loading"
                         }
                       ],
                       staticClass: "col-sm-12"
@@ -57567,6 +57675,23 @@ var render = function() {
                     [_c("center", [_c("p", [_vm._v("No records available")])])],
                     1
                   ),
+                  _vm._v(" "),
+                  _vm.is_loading == true
+                    ? _c(
+                        "div",
+                        { staticClass: "col-sm-12" },
+                        [
+                          _c("center", [
+                            _c("i", {
+                              staticClass: "fa fa-gear fa-spin fa-lg"
+                            }),
+                            _c("br"),
+                            _c("label", [_vm._v("Getting Data...")])
+                          ])
+                        ],
+                        1
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-sm-12" }, [
                     _c(
@@ -57626,7 +57751,11 @@ var render = function() {
                     { staticClass: "col-md-6 col-sm-12" },
                     [
                       _c("date-picker", {
-                        attrs: { valueType: "date", type: "year" },
+                        attrs: {
+                          valueType: "date",
+                          type: "year",
+                          placeholder: "Select Year"
+                        },
                         on: {
                           change: function($event) {
                             return _vm.getAnnualSales()
@@ -57681,8 +57810,11 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: !_vm.annual_data.orders,
-                          expression: "!annual_data.orders"
+                          value:
+                            _vm.annual_data.orders.length == 0 &&
+                            !_vm.is_loading,
+                          expression:
+                            "annual_data.orders.length == 0 && !is_loading"
                         }
                       ],
                       staticClass: "col-sm-12"
@@ -57690,6 +57822,23 @@ var render = function() {
                     [_c("center", [_c("p", [_vm._v("No records available")])])],
                     1
                   ),
+                  _vm._v(" "),
+                  _vm.is_loading == true
+                    ? _c(
+                        "div",
+                        { staticClass: "col-sm-12" },
+                        [
+                          _c("center", [
+                            _c("i", {
+                              staticClass: "fa fa-gear fa-spin fa-lg"
+                            }),
+                            _c("br"),
+                            _c("label", [_vm._v("Getting Data...")])
+                          ])
+                        ],
+                        1
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-sm-12" }, [
                     _c(

@@ -3,22 +3,22 @@
         <nav class="float-left">
             <ul>
                 <li>
-                    <a href="https://www.creative-tim.com">
+                    <a href="https://www.facebook.com/groups/2763283063728308/">
                         Health Patrol Life Center
                     </a>
                 </li>
                 <li>
-                    <a href="https://creative-tim.com/presentation">
+                    <a href="https://www.facebook.com/groups/2763283063728308/">
                         About Us
                     </a>
                 </li>
                 <li>
-                    <a href="http://blog.creative-tim.com">
+                    <a href="https://www.facebook.com/groups/2763283063728308/">
                         Facebook
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.creative-tim.com/license">
+                    <a href="https://www.facebook.com/groups/2763283063728308/">
                         Instagram
                     </a>
                 </li>
@@ -29,7 +29,7 @@
             <script>
                 document.write(new Date().getFullYear())
             </script>, made with <i class="material-icons">favorite</i> by
-            <a href="https://www.creative-tim.com" target="_blank">Few Words Development</a> for a better web.
+            <a href="https://www.facebook.com/groups/2763283063728308/" target="_blank">Few Words Development</a> for a better web.
         </div>
     </div>
 </footer>

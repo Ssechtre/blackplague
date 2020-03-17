@@ -5,22 +5,24 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">Commissions</h4>
-                        <p class="card-category"> View commissions here per year.</p>
+                        <p class="card-category"> View commissions here.</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-2 col-sm-12">
-                                <date-picker v-model="dates.year" valueType="date" type="year" @change="getCommissions()"></date-picker>  
-                            </div>
-                            <div class="col-md-3 col-sm-12" v-if="user_type == 'admin'">
-                                <v-select v-model="user_selected" 
-                                :options="customers"
-                                label="name"
-                                ></v-select>
+                            <div class="col-md-6 col-sm-12">
+                                <date-picker v-model="dates.m.month" valueType="format" type="month" 
+                                @change="getCommissions()" placeholder="Select Month"></date-picker> 
+                                <date-picker v-model="dates.m.year" valueType="date" type="year"
+                                @change="getCommissions()" placeholder="Select Year"></date-picker> 
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mt-5" v-if="is_loading == true">
+                            <div class="col-sm-12">
+                                <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
+                            </div>
+                        </div>
+                        <div class="row" v-if="!is_loading">
                             <div class="col-md-6 col-sm-12">
                                 <h3>Direct Referrals</h3>
                                 <p v-if="referrals.users.length == 0">No referrals found</p>
@@ -87,8 +89,6 @@
             console.log('Component mounted.')            
         },
         created() {
-            // let url = window.location.protocol + '//' + window.location.host;
-            // axios.defaults.baseURL = url+'public/';
             this.getUsers();
         },
         data : function(){
@@ -97,7 +97,12 @@
                 user_id : this.userId,
                 current_year : this.currentYear,
                 dates : {
-                    year : this.currentYear
+                    daily : null,
+                    m : {
+                        month : null,
+                        year : null
+                    },
+                    year : null
                 },
                 referrals : {
                     users : [],
@@ -109,24 +114,32 @@
                 },
                 user_selected : null,
                 customers : [],
+                is_loading: false,
             }
         },
         methods: {
             getCommissions() {
-                console.log(this.user_selected);
-                axios
-                .post('api/reports/get_customer_commissions', {
-                    year : this.dates.year,
-                    user_id : this.user_id,
-                })
-                .then(response => {
-                    let r = response.data
-                    if (r.success) {
-                        this.referrals = r.data.referrals;
-                        this.commissions = r.data.commissions;
-                    }
-                })
-                .catch(error => console.log(error))
+                
+                if (this.dates.m.year && this.dates.m.month) {
+                    this.is_loading = true;
+                    axios
+                    .post('api/reports/get_customer_commissions', {
+                        date: this.dates.m,
+                        user_id : this.user_id
+                    })
+                    .then(response => {
+                        let r = response.data
+                        if (r.success) {
+                            this.referrals = r.data.referrals;
+                            this.commissions = r.data.commissions;
+                        }else{
+                            toastr.error(r.message);
+                        }
+                        this.is_loading = false;
+                    })
+                    .catch(error => console.log(error))
+                }
+
             },
             getUsers: function() {
                 axios

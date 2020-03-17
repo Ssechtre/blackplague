@@ -129,9 +129,14 @@ class ReportController extends Controller
 
         $req = $request->all();
 
-        $year = date('Y', strtotime($req['year']))+1;;
+        $month = date('m', strtotime($req['date']['month']));
+        $year = date('Y', strtotime($req['date']['year']))+1;
 
         $user_id = $req['user_id'];
+
+        if (!$user_id) {
+            return response()->json($this->_response(false, "User not found"));
+        }
 
         $user = User::find($user_id);
 
@@ -139,6 +144,7 @@ class ReportController extends Controller
         ->join('customer_networks', 'customer_networks.user_cid', '=', 'users.id')        
         ->select(DB::raw('users.id, users.name, users.created_at'))
         ->where('customer_networks.user_pid', $user_id)
+        ->whereMonth('customer_networks.created_at', $month)
         ->whereYear('customer_networks.created_at', $year)
         ->get();
 
