@@ -2187,6 +2187,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -2202,7 +2253,9 @@ __webpack_require__.r(__webpack_exports__);
       user_selected: null,
       code_number: null,
       customers: [],
-      is_loading: false
+      is_loading: false,
+      networks: [],
+      network_selected: null
     };
   },
   methods: {
@@ -2247,6 +2300,25 @@ __webpack_require__.r(__webpack_exports__);
           _this3.getCustomerNetworks();
 
           _this3.code_number = null;
+        } else {
+          toastr.error(r.message);
+        }
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    getNetworks: function getNetworks(data) {
+      var _this4 = this;
+
+      this.network_selected = data;
+      this.networks = [];
+      axios.post('api/customer_networks/get_user_networks', {
+        user_id: data.member_id
+      }).then(function (response) {
+        var r = response.data;
+
+        if (r.success) {
+          _this4.networks = r.data;
         } else {
           toastr.error(r.message);
         }
@@ -56651,7 +56723,7 @@ var render = function() {
                       "table",
                       {
                         staticClass:
-                          "table table-bordered table-hover table-striped"
+                          "table table-bordered table-hover table-striped table-responsive-sm"
                       },
                       [
                         _vm._m(2),
@@ -56670,7 +56742,24 @@ var render = function() {
                                 _vm._v(_vm._s(customer.connected_customers))
                               ]),
                               _vm._v(" "),
-                              _vm._m(3, true)
+                              _c("td", [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary btn-sm",
+                                    attrs: {
+                                      "data-toggle": "modal",
+                                      "data-target": "#userNetworksModal"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.getNetworks(customer)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("View more details")]
+                                )
+                              ])
                             ])
                           }),
                           0
@@ -56703,7 +56792,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(4),
+              _vm._m(3),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "form-group mt-4" }, [
@@ -56796,6 +56885,98 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal",
+        attrs: {
+          id: "userNetworksModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _vm.network_selected
+                  ? _c("h4", { staticClass: "modal-title" }, [
+                      _vm._v(
+                        _vm._s(_vm.network_selected.member_name) +
+                          "'s Referrals"
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm._m(4)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _vm.networks.length == 0
+                  ? _c("div", { staticClass: "row mt-5" }, [
+                      _c(
+                        "div",
+                        { staticClass: "col-sm-12" },
+                        [
+                          _c("center", [
+                            _c("i", {
+                              staticClass: "fa fa-gear fa-spin fa-lg"
+                            }),
+                            _c("br"),
+                            _c("label", [_vm._v("Getting Data...")])
+                          ])
+                        ],
+                        1
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.networks.length > 0
+                  ? _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-sm-12" }, [
+                        _c(
+                          "table",
+                          {
+                            staticClass:
+                              "table table-bordered table-hover table-striped table-responsive-sm"
+                          },
+                          [
+                            _vm._m(5),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.networks, function(network) {
+                                return _c("tr", { key: network.id }, [
+                                  _c("td", [_vm._v(_vm._s(network.name))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(network.email))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(network.phone))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(network.created_at))])
+                                ])
+                              }),
+                              0
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _vm._m(6)
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -56853,16 +57034,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("button", { staticClass: "btn btn-primary btn-sm" }, [
-        _vm._v("View more details")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c(
         "h5",
@@ -56881,6 +57052,54 @@ var staticRenderFns = [
           }
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("td", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Phone")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Date Approved")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
       )
     ])
   }

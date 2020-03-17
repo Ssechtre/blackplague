@@ -58,7 +58,7 @@
 
 					<div class="row mt-3">
 						<div class="col-sm-12">
-							<table class="table table-bordered table-hover table-striped">
+							<table class="table table-bordered table-hover table-striped table-responsive-sm">
 								<thead>
 									<tr>
 										<?php foreach($columns as $key => $value): ?>

@@ -21,12 +21,26 @@ class CustomerNetworkController extends Controller
 
     	$data = DB::table('users')
         ->join('customer_networks', 'customer_networks.user_pid', '=', 'users.id')        
-        ->select(DB::raw('COUNT(customer_networks.id) as connected_customers, users.name as member_name, users.phone, users.email'))
+        ->select(DB::raw('COUNT(customer_networks.id) as connected_customers, 
+            users.name as member_name, 
+            users.phone, 
+            users.email, 
+            users.id AS member_id'))
         ->groupBy('users.id')
         ->get();
 
         return response()->json($this->_response(true, "Data retrieved", $data));
     
+    }
+
+    public function getUserNetworks(Request $request, CustomerNetwork $cn) {
+
+        $req = $request->all();
+
+        $data = $cn->getUserNetworks($req['user_id']);
+
+        return response()->json($this->_response(true, "Data retrieved", $data));
+
     }
 
     public function connectUsers(Request $request) {

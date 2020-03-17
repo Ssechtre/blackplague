@@ -19,7 +19,7 @@ class CustomerNetwork extends Model
     	$data = DB::table('customer_networks')
     	->join('users as u', 'u.id', '=', 'customer_networks.user_pid')
     	->join('users as uc', 'uc.id', '=', 'customer_networks.user_cid')
-    	->where('customer_networks.user_pid', $user_id)->get(['uc.name', 'u.created_at']);
+    	->where('customer_networks.user_pid', $user_id)->get(['uc.name', 'uc.phone', 'uc.email','u.created_at']);
 
     	return $data;
 

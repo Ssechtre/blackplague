@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 Route::prefix('customer_networks')->group(function () {
 	Route::post('get_users', 'UserController@getUsers');
 	Route::post('connect_users', 'CustomerNetworkController@connectUsers');
-
 	Route::get('get_customer_networks', 'CustomerNetworkController@getCustomersNetworks');
+	Route::post('get_user_networks', 'CustomerNetworkController@getUserNetworks');
 });
 
 Route::prefix('products')->group(function () {

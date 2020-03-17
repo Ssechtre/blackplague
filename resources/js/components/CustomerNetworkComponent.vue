@@ -20,7 +20,7 @@
                         </div>
                         <div class="row" v-if="customers.length > 0 && !is_loading">
                             <div class="col-sm-12">
-                                <table class="table table-bordered table-hover table-striped">
+                                <table class="table table-bordered table-hover table-striped table-responsive-sm">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -36,7 +36,9 @@
                                             <td>{{ customer.email }}</td>
                                             <td>{{ customer.phone }}</td>
                                             <td>{{ customer.connected_customers }}</td>
-                                            <td><button class="btn btn-primary btn-sm">View more details</button></td>
+                                            <td><button class="btn btn-primary btn-sm" 
+                                                data-toggle="modal" data-target="#userNetworksModal"
+                                                v-on:click="getNetworks(customer)">View more details</button></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -60,7 +62,7 @@
                     <div class="modal-body">
                         <div class="form-group mt-4">                               
                             <label class="control-label">Code Number</label>                            
-                            <input type="text" class="form-control"" v-model="code_number">
+                            <input type="text" class="form-control" v-model="code_number">
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
@@ -81,6 +83,55 @@
                 </div>
             </div>
         </div>
+        <!--  -->
+
+        <!-- User Networks -->
+        <div class="modal" id="userNetworksModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" v-if="network_selected">{{ network_selected.member_name }}'s Referrals</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mt-5" v-if="networks.length == 0">
+                            <div class="col-sm-12">
+                                <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
+                            </div>
+                        </div>
+                        <div class="row" v-if="networks.length > 0">
+                            <div class="col-sm-12">
+                                
+                                <table class="table table-bordered table-hover table-striped table-responsive-sm">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Email</td>
+                                            <td>Phone</td>
+                                            <td>Date Approved</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="network in networks" v-bind:key="network.id">
+                                            <td>{{ network.name }}</td>
+                                            <td>{{ network.email }}</td>
+                                            <td>{{ network.phone }}</td>
+                                            <td>{{ network.created_at }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  -->
     </div>
 
 </template>
@@ -102,6 +153,8 @@
                 code_number : null,
                 customers: [],
                 is_loading : false,
+                networks : [],
+                network_selected : null,
             }
         },
         methods: {
@@ -141,6 +194,23 @@
                         $('.modal-backdrop').hide();
                         this.getCustomerNetworks();
                         this.code_number = null;
+                    }else{
+                        toastr.error(r.message);
+                    }                    
+                })
+                .catch(error => console.log(error))
+            },
+            getNetworks: function(data) {
+                this.network_selected = data;
+                this.networks = [];
+                axios
+                .post('api/customer_networks/get_user_networks', {
+                    user_id : data.member_id
+                })
+                .then(response => {
+                    let r = response.data;
+                    if (r.success) {
+                        this.networks = r.data;
                     }else{
                         toastr.error(r.message);
                     }                    
