@@ -16,6 +16,11 @@ class AuthAdmin
      */
     public function handle($request, Closure $next)
     {
+
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+
         if(Auth::check() && Auth::user()->user_type != 'admin'){
             return abort(403, 'Unauthorized action.');
         }

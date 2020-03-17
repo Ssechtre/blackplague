@@ -16,6 +16,10 @@ class AuthCustomer
      */
     public function handle($request, Closure $next)
     {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        
         if(Auth::check() && Auth::user()->user_type != 'customer'){
             return abort(403, 'Unauthorized action.');
         }
