@@ -13,7 +13,12 @@
                                 <button class="btn btn-info pull-right" data-toggle="modal" data-target="#networkModal">Create Network</button>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-5" v-if="is_loading == true">
+                            <div class="col-sm-12">
+                                <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
+                            </div>
+                        </div>
+                        <div class="row" v-if="customers.length > 0 && !is_loading">
                             <div class="col-sm-12">
                                 <table class="table table-bordered table-hover table-striped">
                                     <thead>
@@ -96,6 +101,7 @@
                 user_selected : null,
                 code_number : null,
                 customers: [],
+                is_loading : false,
             }
         },
         methods: {
@@ -111,11 +117,13 @@
                 .catch(error => console.log(error))
             },
             getCustomerNetworks: function() {
+                this.is_loading = true;
                 axios
                 .get('api/customer_networks/get_customer_networks')
                 .then(response => {
                     let r =response.data;
                     this.customers = r.data
+                    this.is_loading = false;
                 })
                 .catch(error => console.log(error))
             },

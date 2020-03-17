@@ -2182,6 +2182,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -2196,7 +2201,8 @@ __webpack_require__.r(__webpack_exports__);
       search_name: null,
       user_selected: null,
       code_number: null,
-      customers: []
+      customers: [],
+      is_loading: false
     };
   },
   methods: {
@@ -2215,9 +2221,11 @@ __webpack_require__.r(__webpack_exports__);
     getCustomerNetworks: function getCustomerNetworks() {
       var _this2 = this;
 
+      this.is_loading = true;
       axios.get('api/customer_networks/get_customer_networks').then(function (response) {
         var r = response.data;
         _this2.customers = r.data;
+        _this2.is_loading = false;
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -56619,40 +56627,59 @@ var render = function() {
           _c("div", { staticClass: "card-body" }, [
             _vm._m(1),
             _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm-12" }, [
-                _c(
-                  "table",
-                  {
-                    staticClass:
-                      "table table-bordered table-hover table-striped"
-                  },
-                  [
-                    _vm._m(2),
-                    _vm._v(" "),
+            _vm.is_loading == true
+              ? _c("div", { staticClass: "row mt-5" }, [
+                  _c(
+                    "div",
+                    { staticClass: "col-sm-12" },
+                    [
+                      _c("center", [
+                        _c("i", { staticClass: "fa fa-gear fa-spin fa-lg" }),
+                        _c("br"),
+                        _c("label", [_vm._v("Getting Data...")])
+                      ])
+                    ],
+                    1
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.customers.length > 0 && !_vm.is_loading
+              ? _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-sm-12" }, [
                     _c(
-                      "tbody",
-                      _vm._l(_vm.customers, function(customer) {
-                        return _c("tr", { key: customer.id }, [
-                          _c("td", [_vm._v(_vm._s(customer.member_name))]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(customer.email))]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(customer.phone))]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _vm._v(_vm._s(customer.connected_customers))
-                          ]),
-                          _vm._v(" "),
-                          _vm._m(3, true)
-                        ])
-                      }),
-                      0
+                      "table",
+                      {
+                        staticClass:
+                          "table table-bordered table-hover table-striped"
+                      },
+                      [
+                        _vm._m(2),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.customers, function(customer) {
+                            return _c("tr", { key: customer.id }, [
+                              _c("td", [_vm._v(_vm._s(customer.member_name))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(customer.email))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(customer.phone))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(_vm._s(customer.connected_customers))
+                              ]),
+                              _vm._v(" "),
+                              _vm._m(3, true)
+                            ])
+                          }),
+                          0
+                        )
+                      ]
                     )
-                  ]
-                )
-              ])
-            ])
+                  ])
+                ])
+              : _vm._e()
           ])
         ])
       ])
