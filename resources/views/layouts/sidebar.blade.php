@@ -59,20 +59,14 @@
 			@endif
 
 			@if(Auth::check() && Auth::user()->user_type == 'staff')
-				<li class="nav-item {{ Request::is('home') ? 'active' : null }}">
-					<a class="nav-link" href="{{ route('home') }}">
-					  <i class="material-icons">dashboard</i>
-					  <p>Dashboard</p>
-					</a>
-				</li>
 				<li class="nav-item {{ (Request::is('customer_networks') || Request::is('customer_networks/*')) ? 'active' : null }}">
-					<a class="nav-link" href="{{ route('customer_networks.index') }}">
+					<a class="nav-link" href="{{ route('customer_networks.staff') }}">
 					  <i class="material-icons">supervisor_account</i>
 					  <p>Customer Networks</p>
 					</a>
 				</li>
-				<li class="nav-item {{ (Request::is('pos') || Request::is('pos/*')) ? 'active' : null }}">
-					<a class="nav-link" href="{{ route('point_of_sales.app') }}">
+				<li class="nav-item {{ (Request::is('staff_pos') || Request::is('staff_pos/*')) ? 'active' : null }}">
+					<a class="nav-link" href="{{ route('point_of_sales.staff') }}">
 					  <i class="material-icons">apps</i>
 					  <p>Point of Sale</p>
 					</a>
