@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\CustomerNetwork;
 use App\User;
+use App\Commission;
 use DB;
 use DateTime;
 
@@ -140,6 +141,10 @@ class ReportController extends Controller
 
         $user = User::find($user_id);
 
+        if (!$user) {
+            return response()->json($this->_response(false, "User not found"));
+        }
+
         $referrals = DB::table('users')
         ->join('customer_networks', 'customer_networks.user_cid', '=', 'users.id')        
         ->select(DB::raw('users.id, users.name, users.created_at'))
@@ -157,22 +162,39 @@ class ReportController extends Controller
         $orders = [];
         $total_commission = 0;
 
-        if ($user->is_member) {
+        $orders = DB::table('orders')
+        ->join('users', 'orders.user_cid', '=', 'users.id')
+        ->select([DB::raw("users.name AS customer_name"), DB::raw('orders.*')])
+        ->whereMonth('orders.created_at', $month)
+        ->whereYear('orders.created_at', $year)
+        ->whereIn('orders.user_cid', $referral_ids)
+        ->orderBy('orders.created_at', 'ASC')
+        ->get();
 
-            $orders = DB::table('orders')
-            ->join('users', 'orders.user_cid', '=', 'users.id')
-            ->select([DB::raw("users.name AS customer_name"), DB::raw('orders.*')])
-            ->whereYear('orders.created_at', $year)
-            ->whereIn('orders.user_cid', $referral_ids)
-            ->orderBy('orders.created_at', 'ASC')
-            ->get();
+        foreach ($orders as $key => $value) {
+            $commission = ($value->total_price*0.10);
+            $orders[$key]->commission = $commission;
+            $total_commission += $commission;
+        }
 
-            foreach ($orders as $key => $value) {
-                $commission = ($value->total_price*0.10);
-                $orders[$key]->commission = $commission;
-                $total_commission += $commission;
-            }
 
+        $commission_status = DB::table('commissions')
+        ->join('users', 'users.id', '=', 'commissions.user_id')
+        ->where('commissions.user_cid', $user_id)
+        ->where('commissions.month', $month)
+        ->where('commissions.year', $year)
+        ->first(
+            ['commissions.user_id', 'commissions.transaction_number', 'commissions.remarks', '.commissions.status', 'users.name AS approved_by']
+        );
+
+        if (!$commission_status) {
+            $commission_status = [
+                'user_id' => null,
+                'transaction_number' => null,
+                'remarks' => null,
+                'status' => null,
+                'approved_by' => null,
+            ];
         }
 
         $data = [
@@ -184,7 +206,9 @@ class ReportController extends Controller
                 'data' => $orders,
                 'total' => $total_commission
             ],
-            'date' => $month."-".$year
+            'user' => $user,
+            'date' => $month."-".$year,
+            'commission_status' => $commission_status
         ]; 
 
         return response()->json($this->_response(true, "Data received", $data));

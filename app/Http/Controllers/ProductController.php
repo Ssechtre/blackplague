@@ -12,7 +12,7 @@ class ProductController extends Controller
 
 		$data = Product::all();
 
-		return response()->json($this->_response(true, '',$data));
+		return response()->json($this->_response(true, '', $data));
 
 	}
 }

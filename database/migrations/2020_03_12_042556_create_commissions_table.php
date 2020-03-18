@@ -24,7 +24,7 @@ class CreateCommissionsTable extends Migration
             $table->string('year')->length(50);
             $table->float('referral_amount');
             $table->float('commission_amount');
-            $table->text('remarks');
+            $table->text('remarks')->nullable();;
             $table->string('status')->length(50);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));

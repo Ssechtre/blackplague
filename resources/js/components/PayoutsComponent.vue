@@ -20,9 +20,11 @@
                         <div class="row mt-5" v-if="is_loading == true">
                             <div class="col-sm-12">
                                 <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
-                            </div>
-                            <div class="col-sm-12" v-if="payouts.length == 0 && !is_loading">
-                                <p>No payouts found</p>
+                            </div>                            
+                        </div>
+                        <div class="row mt-3" v-if="payouts.length == 0 && !is_loading">
+                            <div class="col-sm-12">
+                                <center><p class="text-primary">No payouts found</p></center>
                             </div>
                         </div>
                         <div class="row mt-3" v-if="payouts.length > 0 && !is_loading">
@@ -36,6 +38,7 @@
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Referrals</th>
+                                            <th>Bonus</th>
                                             <th>Payment status</th>
                                             <th>Options</th>
                                         </tr>
@@ -46,6 +49,7 @@
                                             <td>{{ payout.email }}</td>
                                             <td>{{ payout.phone }}</td>
                                             <td>{{ payout.connected_customers }}</td>
+                                            <td>{{ payout.connected_customers * 500 | currency }}</td>
                                             <td>{{ (!payout.status) ? 'Pending' : payout.status }}</td>
                                             <td><button class="btn btn-primary btn-sm" 
                                                 data-toggle="modal" data-target="#payoutModal"
@@ -79,7 +83,7 @@
                         <div class="row" v-if="!is_loading">
                             <div class="col-md-12 col-sm-12">
                                 <h4>Direct Referrals</h4>
-                                <p v-if="referrals.users.length == 0">No referrals found</p>
+                                <p v-if="referrals.users.length == 0" class="text-primary">No referrals found</p>
                                 <div class="alert alert-warning pb-1" v-if="referrals.users.length > 0">
                                     <span>Referral Bonus</span> 
                                     <h2>{{ referrals.amount | currency }}</h2>
@@ -106,7 +110,7 @@
                             <div class="col-md-12 col-sm-12">
                                 <hr>
                                 <h4>Incentives</h4>
-                                <p v-if="commissions.data.length == 0">No incentives found</p>
+                                <p v-if="commissions.data.length == 0" class="text-primary">No incentives found</p>
                                 <div class="alert alert-success pb-1" v-if="commissions.data.length > 0">
                                     <span>Profit Sharing Total</span> <h2>{{ commissions.total | currency }}</h2>
                                 </div>
@@ -128,11 +132,29 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <div class="col-md-12 col-sm-12 mt-3">
+                                <hr>
+                                <h4>Payout Date : {{ payout_date }}</h4>
+                                <div class="form-group mt-4">                                                                   
+                                    <label class="control-label">Transaction Number</label>
+                                    <input type="text" class="form-control" placeholder="Ex. Cebuana, Palawan Reference Number(Required)" 
+                                    v-model="commission_status.transaction_number" 
+                                    :disabled="commission_status.status == 'Paid'">
+                                </div>
+                                <div class="form-group mt-4">                                                                   
+                                    <label class="control-label">Remarks</label>
+                                    <textarea class="form-control" placeholder="Write remarks here(Optional)" 
+                                    v-model="commission_status.remarks"
+                                    :disabled="commission_status.status == 'Paid'"></textarea>
+                                </div>
+                                <i v-if="commission_status.approved_by">Approved By: {{ commission_status.approved_by }}</i>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" v-on:click="approvePayment()">Make Payment</button>
+                        <button type="button" class="btn btn-primary" v-on:click="approvePayment()" v-if="!commission_status.status">Make Payment</button>
                     </div>
                 </div>
             </div>
@@ -178,6 +200,14 @@
                     data : [],
                     total : 0,
                 },
+                commission_status : {
+                    status : null,
+                    transaction_number : null,
+                    remarks: null,
+                    approved_by : null,
+
+                },
+                member : [],
             }
         },
         methods: {
@@ -212,17 +242,62 @@
                 })
                 .then(response => {
                     let r = response.data
+                    console.log(r.success);
+                    this.is_loading = false;
                     if (r.success) {
                         this.referrals = r.data.referrals;
                         this.commissions = r.data.commissions;
+                        this.member = r.data.user;
+                        this.commission_status = r.data.commission_status;
                     }else{
                         toastr.error(r.message);
-                    }
-                    this.is_loading = false;
+                    }                
                 })
                 .catch(error => console.log(error))
             },
             approvePayment() {
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!'
+                }).then((result) => {
+                    if (result.value) {
+                        toastr.info("Saving details...");
+                        axios
+                        .post('api/commission/save_commission', {
+                            date: this.dates.m,
+                            user_id : this.user_id,
+                            member : this.member,
+                            referrals : this.referrals,
+                            commissions : this.commissions,
+                            transaction_number : this.commission_status.transaction_number,
+                            remarks : this.commission_status.remarks
+                        })
+                        .then(response => {
+                            let r = response.data
+                            console.log(r);
+                            if (r.success) {
+                                $('#payoutModal').modal('hide');
+                                $('.modal-backdrop').hide();
+                                Swal.fire(
+                                    'Great Job!',
+                                    r.message,
+                                    'success'
+                                )
+                                this.getPayouts();
+                            }else{
+                                toastr.error(r.message);
+                            }
+                        })
+                        .catch(error => console.log(error))
+                    }
+                })
+
                 
             }
         }

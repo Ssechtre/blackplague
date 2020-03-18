@@ -23,6 +23,14 @@
                             </div>
                         </div>
                         <div class="row" v-if="!is_loading">
+                            <dir class="col-sm-12">
+                                <div class="alert alert-info pb-1" v-if="commission_status.status == 'Paid'">                                    
+                                    <h2><i class="material-icons text-white">check_circle_outline</i> Commission Received</h2>
+                                    <span>Approved By: {{ commission_status.approved_by }}</span>
+                                    <span>Transaction Number: {{ commission_status.transaction_number }}</span> 
+                                </div>
+                            </dir>
+
                             <div class="col-md-6 col-sm-12">
                                 <h3>Direct Referrals</h3>
                                 <p v-if="referrals.users.length == 0">No referrals found</p>
@@ -119,6 +127,13 @@
                 user_selected : null,
                 customers : [],
                 is_loading: false,
+                commission_status : {
+                    status : null,
+                    transaction_number : null,
+                    remarks: null,
+                    approved_by : null,
+
+                },
             }
         },
         methods: {
@@ -136,6 +151,7 @@
                         if (r.success) {
                             this.referrals = r.data.referrals;
                             this.commissions = r.data.commissions;
+                            this.commission_status = r.data.commission_status;
                         }else{
                             toastr.error(r.message);
                         }

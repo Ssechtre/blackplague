@@ -2018,6 +2018,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['currentYear', 'currentMonth', 'userId', 'userType'],
   mounted: function mounted() {
@@ -2049,7 +2057,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }), _defineProperty(_ref, "commissions", {
       data: [],
       total: 0
-    }), _defineProperty(_ref, "user_selected", null), _defineProperty(_ref, "customers", []), _defineProperty(_ref, "is_loading", false), _ref;
+    }), _defineProperty(_ref, "user_selected", null), _defineProperty(_ref, "customers", []), _defineProperty(_ref, "is_loading", false), _defineProperty(_ref, "commission_status", {
+      status: null,
+      transaction_number: null,
+      remarks: null,
+      approved_by: null
+    }), _ref;
   },
   methods: {
     getCommissions: function getCommissions() {
@@ -2066,6 +2079,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           if (r.success) {
             _this.referrals = r.data.referrals;
             _this.commissions = r.data.commissions;
+            _this.commission_status = r.data.commission_status;
           } else {
             toastr.error(r.message);
           }
@@ -2853,6 +2867,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['currentYear', 'currentMonth', 'userId', 'userType'],
   mounted: function mounted() {
@@ -2887,7 +2923,14 @@ __webpack_require__.r(__webpack_exports__);
       commissions: {
         data: [],
         total: 0
-      }
+      },
+      commission_status: {
+        status: null,
+        transaction_number: null,
+        remarks: null,
+        approved_by: null
+      },
+      member: []
     };
   },
   methods: {
@@ -2923,20 +2966,62 @@ __webpack_require__.r(__webpack_exports__);
         user_id: data.member_id
       }).then(function (response) {
         var r = response.data;
+        console.log(r.success);
+        _this2.is_loading = false;
 
         if (r.success) {
           _this2.referrals = r.data.referrals;
           _this2.commissions = r.data.commissions;
+          _this2.member = r.data.user;
+          _this2.commission_status = r.data.commission_status;
         } else {
           toastr.error(r.message);
         }
-
-        _this2.is_loading = false;
       })["catch"](function (error) {
         return console.log(error);
       });
     },
-    approvePayment: function approvePayment() {}
+    approvePayment: function approvePayment() {
+      var _this3 = this;
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes!'
+      }).then(function (result) {
+        if (result.value) {
+          toastr.info("Saving details...");
+          axios.post('api/commission/save_commission', {
+            date: _this3.dates.m,
+            user_id: _this3.user_id,
+            member: _this3.member,
+            referrals: _this3.referrals,
+            commissions: _this3.commissions,
+            transaction_number: _this3.commission_status.transaction_number,
+            remarks: _this3.commission_status.remarks
+          }).then(function (response) {
+            var r = response.data;
+            console.log(r);
+
+            if (r.success) {
+              $('#payoutModal').modal('hide');
+              $('.modal-backdrop').hide();
+              Swal.fire('Great Job!', r.message, 'success');
+
+              _this3.getPayouts();
+            } else {
+              toastr.error(r.message);
+            }
+          })["catch"](function (error) {
+            return console.log(error);
+          });
+        }
+      });
+    }
   }
 });
 
@@ -56757,115 +56842,163 @@ var render = function() {
               : _vm._e(),
             _vm._v(" "),
             !_vm.is_loading
-              ? _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-md-6 col-sm-12" }, [
-                    _c("h3", [_vm._v("Direct Referrals")]),
-                    _vm._v(" "),
-                    _vm.referrals.users.length == 0
-                      ? _c("p", [_vm._v("No referrals found")])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.referrals.users.length > 0
-                      ? _c("div", { staticClass: "alert alert-warning pb-1" }, [
-                          _c("span", [_vm._v("Referral Bonus")]),
-                          _vm._v(" "),
-                          _c("h2", [
-                            _vm._v(
-                              _vm._s(_vm._f("currency")(_vm.referrals.amount))
-                            )
-                          ])
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.referrals.users.length > 0
-                      ? _c(
-                          "table",
-                          {
-                            staticClass:
-                              "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
-                          },
-                          [
-                            _vm._m(1),
+              ? _c(
+                  "div",
+                  { staticClass: "row" },
+                  [
+                    _c("dir", { staticClass: "col-sm-12" }, [
+                      _vm.commission_status.status == "Paid"
+                        ? _c("div", { staticClass: "alert alert-info pb-1" }, [
+                            _c("h2", [
+                              _c(
+                                "i",
+                                { staticClass: "material-icons text-white" },
+                                [_vm._v("check_circle_outline")]
+                              ),
+                              _vm._v(" Commission Received")
+                            ]),
                             _vm._v(" "),
-                            _c(
-                              "tbody",
-                              _vm._l(_vm.referrals.users, function(user) {
-                                return _c("tr", [
-                                  _c("td", [_vm._v(_vm._s(user.name))]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v(_vm._s(user.created_at))]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("P 500.00")])
-                                ])
-                              }),
-                              0
-                            )
-                          ]
-                        )
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-6 col-sm-12" }, [
-                    _c("h3", [_vm._v("Incentives")]),
-                    _vm._v(" "),
-                    _vm.commissions.data.length == 0
-                      ? _c("p", [_vm._v("No incentives found")])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.commissions.data.length > 0
-                      ? _c("div", { staticClass: "alert alert-success pb-1" }, [
-                          _c("span", [_vm._v("Profit Sharing Total")]),
-                          _vm._v(" "),
-                          _c("h2", [
-                            _vm._v(
-                              _vm._s(_vm._f("currency")(_vm.commissions.total))
-                            )
-                          ])
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.commissions.data.length > 0
-                      ? _c(
-                          "table",
-                          {
-                            staticClass:
-                              "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
-                          },
-                          [
-                            _vm._m(2),
+                            _c("span", [
+                              _vm._v(
+                                "Approved By: " +
+                                  _vm._s(_vm.commission_status.approved_by)
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c(
-                              "tbody",
-                              _vm._l(_vm.commissions.data, function(
-                                commission
-                              ) {
-                                return _c("tr", [
-                                  _c("td", [
-                                    _vm._v(_vm._s(commission.customer_name))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm._f("currency")(
-                                          commission.commission
+                            _c("span", [
+                              _vm._v(
+                                "Transaction Number: " +
+                                  _vm._s(
+                                    _vm.commission_status.transaction_number
+                                  )
+                              )
+                            ])
+                          ])
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+                      _c("h3", [_vm._v("Direct Referrals")]),
+                      _vm._v(" "),
+                      _vm.referrals.users.length == 0
+                        ? _c("p", [_vm._v("No referrals found")])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.referrals.users.length > 0
+                        ? _c(
+                            "div",
+                            { staticClass: "alert alert-warning pb-1" },
+                            [
+                              _c("span", [_vm._v("Referral Bonus")]),
+                              _vm._v(" "),
+                              _c("h2", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("currency")(_vm.referrals.amount)
+                                  )
+                                )
+                              ])
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.referrals.users.length > 0
+                        ? _c(
+                            "table",
+                            {
+                              staticClass:
+                                "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
+                            },
+                            [
+                              _vm._m(1),
+                              _vm._v(" "),
+                              _c(
+                                "tbody",
+                                _vm._l(_vm.referrals.users, function(user) {
+                                  return _c("tr", [
+                                    _c("td", [_vm._v(_vm._s(user.name))]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(user.created_at))]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v("P 500.00")])
+                                  ])
+                                }),
+                                0
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+                      _c("h3", [_vm._v("Incentives")]),
+                      _vm._v(" "),
+                      _vm.commissions.data.length == 0
+                        ? _c("p", [_vm._v("No incentives found")])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.commissions.data.length > 0
+                        ? _c(
+                            "div",
+                            { staticClass: "alert alert-success pb-1" },
+                            [
+                              _c("span", [_vm._v("Profit Sharing Total")]),
+                              _vm._v(" "),
+                              _c("h2", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("currency")(_vm.commissions.total)
+                                  )
+                                )
+                              ])
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.commissions.data.length > 0
+                        ? _c(
+                            "table",
+                            {
+                              staticClass:
+                                "table table-bordered table-striped table-sm mt-2 table-responsive-sm"
+                            },
+                            [
+                              _vm._m(2),
+                              _vm._v(" "),
+                              _c(
+                                "tbody",
+                                _vm._l(_vm.commissions.data, function(
+                                  commission
+                                ) {
+                                  return _c("tr", [
+                                    _c("td", [
+                                      _vm._v(_vm._s(commission.customer_name))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm._f("currency")(
+                                            commission.commission
+                                          )
                                         )
                                       )
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    _vm._v(_vm._s(commission.created_at))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(commission.created_at))
+                                    ])
                                   ])
-                                ])
-                              }),
-                              0
-                            )
-                          ]
-                        )
-                      : _vm._e()
-                  ])
-                ])
+                                }),
+                                0
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ])
+                  ],
+                  1
+                )
               : _vm._e()
           ])
         ])
@@ -57958,13 +58091,24 @@ var render = function() {
                       ])
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _vm.payouts.length == 0 && !_vm.is_loading
-                    ? _c("div", { staticClass: "col-sm-12" }, [
-                        _c("p", [_vm._v("No payouts found")])
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.payouts.length == 0 && !_vm.is_loading
+              ? _c("div", { staticClass: "row mt-3" }, [
+                  _c(
+                    "div",
+                    { staticClass: "col-sm-12" },
+                    [
+                      _c("center", [
+                        _c("p", { staticClass: "text-primary" }, [
+                          _vm._v("No payouts found")
+                        ])
                       ])
-                    : _vm._e()
+                    ],
+                    1
+                  )
                 ])
               : _vm._e(),
             _vm._v(" "),
@@ -58000,6 +58144,16 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("td", [
                                   _vm._v(_vm._s(payout.connected_customers))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("currency")(
+                                        payout.connected_customers * 500
+                                      )
+                                    )
+                                  )
                                 ]),
                                 _vm._v(" "),
                                 _c("td", [
@@ -58089,7 +58243,9 @@ var render = function() {
                         _c("h4", [_vm._v("Direct Referrals")]),
                         _vm._v(" "),
                         _vm.referrals.users.length == 0
-                          ? _c("p", [_vm._v("No referrals found")])
+                          ? _c("p", { staticClass: "text-primary" }, [
+                              _vm._v("No referrals found")
+                            ])
                           : _vm._e(),
                         _vm._v(" "),
                         _vm.referrals.users.length > 0
@@ -58146,7 +58302,9 @@ var render = function() {
                         _c("h4", [_vm._v("Incentives")]),
                         _vm._v(" "),
                         _vm.commissions.data.length == 0
-                          ? _c("p", [_vm._v("No incentives found")])
+                          ? _c("p", { staticClass: "text-primary" }, [
+                              _vm._v("No incentives found")
+                            ])
                           : _vm._e(),
                         _vm._v(" "),
                         _vm.commissions.data.length > 0
@@ -58207,6 +58365,98 @@ var render = function() {
                               ]
                             )
                           : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-12 col-sm-12 mt-3" }, [
+                        _c("hr"),
+                        _vm._v(" "),
+                        _c("h4", [
+                          _vm._v("Payout Date : " + _vm._s(_vm.payout_date))
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group mt-4" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Transaction Number")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.commission_status.transaction_number,
+                                expression:
+                                  "commission_status.transaction_number"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "text",
+                              placeholder:
+                                "Ex. Cebuana, Palawan Reference Number(Required)",
+                              disabled: _vm.commission_status.status == "Paid"
+                            },
+                            domProps: {
+                              value: _vm.commission_status.transaction_number
+                            },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.commission_status,
+                                  "transaction_number",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group mt-4" }, [
+                          _c("label", { staticClass: "control-label" }, [
+                            _vm._v("Remarks")
+                          ]),
+                          _vm._v(" "),
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.commission_status.remarks,
+                                expression: "commission_status.remarks"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              placeholder: "Write remarks here(Optional)",
+                              disabled: _vm.commission_status.status == "Paid"
+                            },
+                            domProps: { value: _vm.commission_status.remarks },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.commission_status,
+                                  "remarks",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _vm.commission_status.approved_by
+                          ? _c("i", [
+                              _vm._v(
+                                "Approved By: " +
+                                  _vm._s(_vm.commission_status.approved_by)
+                              )
+                            ])
+                          : _vm._e()
                       ])
                     ])
                   : _vm._e()
@@ -58222,19 +58472,21 @@ var render = function() {
                   [_vm._v("Close")]
                 ),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        return _vm.approvePayment()
-                      }
-                    }
-                  },
-                  [_vm._v("Make Payment")]
-                )
+                !_vm.commission_status.status
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.approvePayment()
+                          }
+                        }
+                      },
+                      [_vm._v("Make Payment")]
+                    )
+                  : _vm._e()
               ])
             ])
           ]
@@ -58269,6 +58521,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Phone")]),
         _vm._v(" "),
         _c("th", [_vm._v("Referrals")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Bonus")]),
         _vm._v(" "),
         _c("th", [_vm._v("Payment status")]),
         _vm._v(" "),

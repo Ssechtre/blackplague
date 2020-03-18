@@ -35,3 +35,7 @@ Route::prefix('reports')->group(function () {
 	Route::post('get_customer_commissions', 'ReportController@getCustomerCommissions');
 	Route::post('get_payouts', 'ReportController@getPayouts');
 });
+
+Route::prefix('commission')->group(function () {
+	Route::post('save_commission', 'CommissionController@saveCommission');
+});
