@@ -6,8 +6,8 @@
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <h4 class="card-title ">Control Panel</h4>
-                    <p class="card-category">Welcome back, mortal</p>
+                    <h4 class="card-title ">Health Patrol Lifestyle</h4>
+                    <p class="card-category">Control Panel</p>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
