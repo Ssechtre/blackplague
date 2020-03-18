@@ -132,7 +132,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" v-on:click="approvePayment">Make Payment</button>
+                        <button type="button" class="btn btn-primary" v-on:click="approvePayment()">Make Payment</button>
                     </div>
                 </div>
             </div>
@@ -221,6 +221,9 @@
                     this.is_loading = false;
                 })
                 .catch(error => console.log(error))
+            },
+            approvePayment() {
+                
             }
         }
     }

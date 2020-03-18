@@ -11,9 +11,9 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <date-picker v-model="dates.m.month" valueType="format" type="month" 
-                                @change="getCommissions()" placeholder="Select Month"></date-picker> 
-                                <date-picker v-model="dates.m.year" valueType="date" type="year"
-                                @change="getCommissions()" placeholder="Select Year"></date-picker> 
+                                @change="getCommissions()" placeholder="Select Month" value="current_month"></date-picker> 
+                                <date-picker v-model="dates.m.year" valueType="format" type="year"
+                                @change="getCommissions()" placeholder="Select Year" value="current_year" class='mt-3'></date-picker> 
                             </div>
                         </div>
 
@@ -84,18 +84,22 @@
 
 <script>
     export default {
-        props: ['currentYear', 'userId', 'userType'],
+        props: ['currentYear', 'currentMonth', 'userId', 'userType'],
         mounted() {
             console.log('Component mounted.')            
         },
         created() {
             this.getUsers();
+            this.dates.m.month = this.currentMonth;
+            this.dates.m.year = this.currentYear;
+            this.getCommissions();
         },
         data : function(){
             return {
                 user_type : this.userType,
                 user_id : this.userId,
                 current_year : this.currentYear,
+                current_year : this.currentMonth,
                 dates : {
                     daily : null,
                     m : {

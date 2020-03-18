@@ -1932,6 +1932,8 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2017,38 +2019,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['currentYear', 'userId', 'userType'],
+  props: ['currentYear', 'currentMonth', 'userId', 'userType'],
   mounted: function mounted() {
     console.log('Component mounted.');
   },
   created: function created() {
     this.getUsers();
+    this.dates.m.month = this.currentMonth;
+    this.dates.m.year = this.currentYear;
+    this.getCommissions();
   },
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       user_type: this.userType,
       user_id: this.userId,
-      current_year: this.currentYear,
-      dates: {
-        daily: null,
-        m: {
-          month: null,
-          year: null
-        },
+      current_year: this.currentYear
+    }, _defineProperty(_ref, "current_year", this.currentMonth), _defineProperty(_ref, "dates", {
+      daily: null,
+      m: {
+        month: null,
         year: null
       },
-      referrals: {
-        users: [],
-        amount: 0
-      },
-      commissions: {
-        data: [],
-        total: 0
-      },
-      user_selected: null,
-      customers: [],
-      is_loading: false
-    };
+      year: null
+    }), _defineProperty(_ref, "referrals", {
+      users: [],
+      amount: 0
+    }), _defineProperty(_ref, "commissions", {
+      data: [],
+      total: 0
+    }), _defineProperty(_ref, "user_selected", null), _defineProperty(_ref, "customers", []), _defineProperty(_ref, "is_loading", false), _ref;
   },
   methods: {
     getCommissions: function getCommissions() {
@@ -2934,7 +2935,8 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         return console.log(error);
       });
-    }
+    },
+    approvePayment: function approvePayment() {}
   }
 });
 
@@ -56694,7 +56696,8 @@ var render = function() {
                     attrs: {
                       valueType: "format",
                       type: "month",
-                      placeholder: "Select Month"
+                      placeholder: "Select Month",
+                      value: "current_month"
                     },
                     on: {
                       change: function($event) {
@@ -56711,10 +56714,12 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c("date-picker", {
+                    staticClass: "mt-3",
                     attrs: {
-                      valueType: "date",
+                      valueType: "format",
                       type: "year",
-                      placeholder: "Select Year"
+                      placeholder: "Select Year",
+                      value: "current_year"
                     },
                     on: {
                       change: function($event) {
@@ -58222,7 +58227,11 @@ var render = function() {
                   {
                     staticClass: "btn btn-primary",
                     attrs: { type: "button" },
-                    on: { click: _vm.approvePayment }
+                    on: {
+                      click: function($event) {
+                        return _vm.approvePayment()
+                      }
+                    }
                   },
                   [_vm._v("Make Payment")]
                 )
