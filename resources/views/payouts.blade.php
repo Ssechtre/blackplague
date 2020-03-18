@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Commissions' )
+@section('title', 'Payouts' )
 
 @section('content')
-	<commission-component 
+	<payouts-component 
 	user-id="{{ Auth::user()->id }}" 
 	current-year="{{ date('Y', time()) }}"
 	current-month="{{ date('Y-m-d', time()) }}"
 	user-type="{{ Auth::user()->user_type }}">
-	</commission-component>
+	</payouts-component>
 @endsection
 
 

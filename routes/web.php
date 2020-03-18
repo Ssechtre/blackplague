@@ -32,6 +32,7 @@ Route::group(['middleware' => 'admin'], function(){
     Route::get('customer_networks', 'CustomerNetworkController@index')->name('customer_networks.index');
     Route::get('point_of_sales', 'HomeController@pos')->name('point_of_sales.app');
     Route::get('reports', 'HomeController@reports')->name('reports.app');
+    Route::get('payouts', 'HomeController@payouts')->name('payouts');
 });
 
 Route::group(['middleware' => 'customer'], function(){

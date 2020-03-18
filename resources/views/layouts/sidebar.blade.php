@@ -43,6 +43,12 @@
 					  <p>Referral Management</p>
 					</a>
 				</li>
+				<li class="nav-item {{ (Request::is('payouts') || Request::is('payouts/*')) ? 'active' : null }}">
+					<a class="nav-link" href="{{ route('payouts') }}">
+					  <i class="material-icons">monetization_on</i>
+					  <p>Monthly Payouts</p>
+					</a>
+				</li>
 				<li class="nav-item {{ (Request::is('reports') || Request::is('reports/*')) ? 'active' : null }}">
 					<a class="nav-link" href="{{ route('reports.app') }}">
 					  <i class="material-icons">timeline</i>

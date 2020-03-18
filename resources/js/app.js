@@ -63,6 +63,7 @@ Vue.component('customer-network-component', require('./components/CustomerNetwor
 Vue.component('pos-component', require('./components/POSComponent.vue').default);
 Vue.component('report-component', require('./components/ReportComponent.vue').default);
 Vue.component('commission-component', require('./components/CommissionComponent.vue').default);
+Vue.component('payouts-component', require('./components/PayoutsComponent.vue').default);
 Vue.component('v-select', VueSelect)
 
 

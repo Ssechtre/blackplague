@@ -20,13 +20,13 @@
                         </div>
                         <div class="row" v-if="customers.length > 0 && !is_loading">
                             <div class="col-sm-12">
-                                <table class="table table-bordered table-hover table-striped table-responsive-sm">
+                                <table class="table table-bordered table-hover table-striped table-sm table-responsive-sm">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
-                                            <th>Connections</th>
+                                            <th>Referrals</th>
                                             <th>Options</th>
                                         </tr>
                                     </thead>

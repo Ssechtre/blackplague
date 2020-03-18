@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'About' )
+@section('title', 'Referrals Management' )
 
 @section('content')
     <customer-network-component></customer-network-component>

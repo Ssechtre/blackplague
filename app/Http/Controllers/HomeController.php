@@ -83,4 +83,9 @@ class HomeController extends Controller
     {
         return view('commissions');
     }
+
+    public function payouts() 
+    {
+        return view('payouts');
+    }
 }

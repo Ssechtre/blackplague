@@ -11,9 +11,9 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <date-picker v-model="dates.m.month" valueType="format" type="month" 
-                                @change="getCommissions()" placeholder="Select Month"></date-picker> 
-                                <date-picker v-model="dates.m.year" valueType="date" type="year"
-                                @change="getCommissions()" placeholder="Select Year"></date-picker> 
+                                @change="getPayouts()" placeholder="Select Month" value="current_month"></date-picker> 
+                                <date-picker v-model="dates.m.year" valueType="format" type="year"
+                                @change="getPayouts()" placeholder="Select Year" value="current_year" class='mt-3'></date-picker> 
                             </div>
                         </div>
 
@@ -21,10 +21,64 @@
                             <div class="col-sm-12">
                                 <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
                             </div>
+                            <div class="col-sm-12" v-if="payouts.length == 0 && !is_loading">
+                                <p>No payouts found</p>
+                            </div>
+                        </div>
+                        <div class="row mt-3" v-if="payouts.length > 0 && !is_loading">
+                            <div class="col-md-12 col-sm-12">
+                                <h4>Payouts : {{ payout_date }}</h4>
+                                
+                                <table class="table table-bordered table-hover table-striped table-responsive-sm table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Referrals</th>
+                                            <th>Payment status</th>
+                                            <th>Options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="payout in payouts"  v-bind:key="payout.id" v-bind:class="(!payout.status) ? 'table-danger' : ''">
+                                            <td>{{ payout.member_name }}</td>
+                                            <td>{{ payout.email }}</td>
+                                            <td>{{ payout.phone }}</td>
+                                            <td>{{ payout.connected_customers }}</td>
+                                            <td>{{ (!payout.status) ? 'Pending' : payout.status }}</td>
+                                            <td><button class="btn btn-primary btn-sm" 
+                                                data-toggle="modal" data-target="#payoutModal"
+                                                v-on:click="getPayoutDetails(payout)">View more details</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payout Modal -->
+        <div class="modal" id="payoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Payout Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mt-5" v-if="is_loading == true">
+                            <div class="col-sm-12">
+                                <center><i class="fa fa-gear fa-spin fa-lg"></i><br><label>Getting Data...</label></center>
+                            </div>
                         </div>
                         <div class="row" v-if="!is_loading">
-                            <div class="col-md-6 col-sm-12">
-                                <h3>Direct Referrals</h3>
+                            <div class="col-md-12 col-sm-12">
+                                <h4>Direct Referrals</h4>
                                 <p v-if="referrals.users.length == 0">No referrals found</p>
                                 <div class="alert alert-warning pb-1" v-if="referrals.users.length > 0">
                                     <span>Referral Bonus</span> 
@@ -49,8 +103,9 @@
                                 </table>
                             </div>
 
-                            <div class="col-md-6 col-sm-12">
-                                <h3>Incentives</h3>
+                            <div class="col-md-12 col-sm-12">
+                                <hr>
+                                <h4>Incentives</h4>
                                 <p v-if="commissions.data.length == 0">No incentives found</p>
                                 <div class="alert alert-success pb-1" v-if="commissions.data.length > 0">
                                     <span>Profit Sharing Total</span> <h2>{{ commissions.total | currency }}</h2>
@@ -75,27 +130,35 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" v-on:click="approvePayment">Make Payment</button>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- End Payout Modal -->
     </div>
 
 </template>
 
 <script>
     export default {
-        props: ['currentYear', 'userId', 'userType'],
+        props: ['currentYear', 'currentMonth', 'userId', 'userType'],
         mounted() {
             console.log('Component mounted.')            
         },
         created() {
-            this.getUsers();
+            this.dates.m.month = this.current_month;
+            this.dates.m.year = this.current_year;
+            this.getPayouts();
         },
         data : function(){
             return {
                 user_type : this.userType,
                 user_id : this.userId,
                 current_year : this.currentYear,
+                current_month : this.currentMonth,
                 dates : {
                     daily : null,
                     m : {
@@ -104,6 +167,9 @@
                     },
                     year : null
                 },
+                payouts : [],
+                is_loading: false,
+                payout_date : null,
                 referrals : {
                     users : [],
                     amount : 0,
@@ -112,26 +178,22 @@
                     data : [],
                     total : 0,
                 },
-                user_selected : null,
-                customers : [],
-                is_loading: false,
             }
         },
         methods: {
-            getCommissions() {
+            getPayouts() {
                 
                 if (this.dates.m.year && this.dates.m.month) {
                     this.is_loading = true;
                     axios
-                    .post('api/reports/get_customer_commissions', {
+                    .post('api/reports/get_payouts', {
                         date: this.dates.m,
-                        user_id : this.user_id
                     })
                     .then(response => {
                         let r = response.data
                         if (r.success) {
-                            this.referrals = r.data.referrals;
-                            this.commissions = r.data.commissions;
+                            this.payouts = r.data.payouts;
+                            this.payout_date = r.data.payout_date;
                         }else{
                             toastr.error(r.message);
                         }
@@ -141,17 +203,25 @@
                 }
 
             },
-            getUsers: function() {
+            getPayoutDetails(data) {
+                this.is_loading = true;
                 axios
-                .post('api/customer_networks/get_users', {
-                    user_type: 'customer',
+                .post('api/reports/get_customer_commissions', {
+                    date: this.dates.m,
+                    user_id : data.member_id
                 })
                 .then(response => {
-                    this.customers = response.data;
+                    let r = response.data
+                    if (r.success) {
+                        this.referrals = r.data.referrals;
+                        this.commissions = r.data.commissions;
+                    }else{
+                        toastr.error(r.message);
+                    }
+                    this.is_loading = false;
                 })
                 .catch(error => console.log(error))
-
-            },
+            }
         }
     }
 </script>

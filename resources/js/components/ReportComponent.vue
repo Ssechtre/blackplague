@@ -51,7 +51,7 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-sm-12 mb-3">
                                             <date-picker v-model="dates.daily" valueType="format" 
-                                            @change="getDailySales()" placeholder="Select Date"></date-picker> 
+                                            @change="getDailySales()" placeholder="Select Date" class="mt-3"></date-picker> 
                                         </div>
                                         <div class="col-lg-3 offset-lg-3 col-sm-12" v-show="daily_data.orders.length > 0">
                                             <div class="alert alert-success pb-1">
@@ -61,7 +61,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-sm-12" v-show="daily_data.orders.length == 0 && !is_loading">
+                                        <div class="col-sm-12 mt-3" v-show="daily_data.orders.length == 0 && !is_loading">
                                             <center><p>No records available</p></center>
                                         </div>
                                         <div class="col-sm-12" v-if="is_loading == true">
@@ -105,17 +105,17 @@
                                         placeholder="Select Month">
                                         </date-picker>  
                                         <date-picker v-model="dates.m.year" valueType="date" type="year" @change="getMonthlySales()"
-                                         placeholder="Select Year">
+                                         placeholder="Select Year" class="mt-3">
                                          </date-picker>    
                                     </div>
-                                    <div class="col-lg-3 offset-lg-3 col-sm-12" v-show="monthly_data.orders.length > 0">
+                                    <div class="col-lg-3 offset-lg-3 col-sm-12 mt-3" v-show="monthly_data.orders.length > 0">
                                         <div class="alert alert-success pb-1">
                                             <span>Grand Total</span> <h2>{{ monthly_data.total_revenue | currency }}</h2>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-12" v-show="monthly_data.orders.length == 0 && !is_loading">
+                                    <div class="col-sm-12 mt-3" v-show="monthly_data.orders.length == 0 && !is_loading">
                                         <center><p>No records available</p></center>
                                     </div>
                                     <div class="col-sm-12" v-if="is_loading == true">
@@ -151,16 +151,16 @@
                                     <div class="col-md-6 col-sm-12">
                                         <date-picker v-model="dates.year" valueType="date" type="year" 
                                         @change="getAnnualSales()"  
-                                        placeholder="Select Year"></date-picker>  
+                                        placeholder="Select Year" class="mt-3"></date-picker>  
                                     </div>
-                                    <div class="col-lg-3 offset-lg-3 col-sm-12" v-show="annual_data.orders.length > 0">
+                                    <div class="col-lg-3 offset-lg-3 col-sm-12 mt-3" v-show="annual_data.orders.length > 0">
                                         <div class="alert alert-success pb-1">
                                             <span>Annual Revenue</span> <h2>{{ annual_data.total_revenue | currency }}</h2>
                                         </div>
                                     </div>
                                 </div> 
                                 <div class="row">
-                                    <div class="col-sm-12" v-show="annual_data.orders.length == 0 && !is_loading">
+                                    <div class="col-sm-12 mt-3" v-show="annual_data.orders.length == 0 && !is_loading">
                                         <center><p>No records available</p></center>
                                     </div>
                          

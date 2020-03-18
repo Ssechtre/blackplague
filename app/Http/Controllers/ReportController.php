@@ -130,7 +130,7 @@ class ReportController extends Controller
         $req = $request->all();
 
         $month = date('m', strtotime($req['date']['month']));
-        $year = date('Y', strtotime($req['date']['year']))+1;
+        $year = $req['date']['year'];
 
         $user_id = $req['user_id'];
 
@@ -183,10 +183,43 @@ class ReportController extends Controller
             'commissions' => [
                 'data' => $orders,
                 'total' => $total_commission
-            ]
+            ],
+            'date' => $month."-".$year
         ]; 
 
         return response()->json($this->_response(true, "Data received", $data));
+
+    }
+
+    public function getPayouts(Request $request) {
+
+        $req = $request->all();
+
+        $month = date('m', strtotime($req['date']['month']));
+        $year = $req['date']['year'];
+
+        $month_beautified = date('F', strtotime($req['date']['month']));
+
+        $payouts = DB::table('users')
+        ->join('customer_networks', 'customer_networks.user_pid', '=', 'users.id')
+        ->leftJoin('commissions', 'commissions.user_cid', '=', 'users.id')        
+        ->select(DB::raw('COUNT(customer_networks.id) as connected_customers, 
+            users.name as member_name, 
+            users.phone, 
+            users.email, 
+            users.id AS member_id,
+            commissions.status'))
+        ->groupBy('users.id')
+        ->whereMonth('customer_networks.created_at', $month)
+        ->whereYear('customer_networks.created_at', $year)
+        ->get();
+
+        $data = [
+            'payouts' => $payouts,
+            'payout_date' => $month_beautified."-".$year
+        ];
+
+        return response()->json($this->_response(true, "Data retrieved", $data));
 
     }
 
