@@ -27,14 +27,6 @@
                                     <input type="text" class="form-control" name="email" value="{{$user->email}}">					
                                 </div>
                                 <div class="form-group mt-4">								
-                                    <label class="control-label">User Type</label>
-                                    <select name="user_type" class="form-control">
-                                        <option value="admin">Admin</option>
-                                        <option value="staff">Staff</option>
-                                        <option value="customer">Member</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mt-4">								
                                     <label class="control-label">Branch</label>
                                     <input type="text" class="form-control" name="branch" value="{{$user->branch}}">					
                                 </div>
