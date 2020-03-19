@@ -39,11 +39,62 @@ class UserController extends Controller
     }
 
     public function edit($id) {
+        $user = User::where('id', $id)->first();
+        
+        if(!$user){
+            return back();
+        }
+        // dd($user);
+        return view('user.edit', compact('user'));
+    }
 
-        $this->fields['excludes']  = ['password', 'code_id', 'user_type'];
-        $this->view_path = 'user/edit';
+    public function update(Request $request, $id)
+    {
+        if(isset($request['password'])){
+            $validate = Validator::make($request->all(),[
+                'password' => 'required|min:4|confirmed',
+            ]);
 
-        return parent::edit($id);
+            if($validate->fails()){
+                return back()->withErrors($validate);
+            }
+
+            $user_update_password = User::where('id', $id)->update([
+                'password' => Hash::make($request->password)
+            ]);
+
+            if(!isset($user_update_password)){
+                return back()
+                ->with($this->_response(false, "Error 500. Please call the administrator")); 
+            }
+
+            return redirect('users/'.$id.'/edit')->with($this->_response(true, "Password changed successfully."));
+        }
+
+        $validate = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required|email',
+        ]);
+
+        if($validate->fails()){
+            return back()->withErrors($validate);
+        }
+
+        $user = User::where('id', $id)->first();
+
+        if($request->email == $user->email){
+            unset($request['email']);
+        }
+        
+        $user_update_all = $user->update($request->all());
+
+        if(!isset($user_update_all)){
+            return back()
+                ->with($this->_response(false, "Error 500. Please call the administrator")); 
+        }
+
+        return redirect('users/'.$id.'/edit')->with($this->_response(true, "Changes saved successfully."));
+
     }
 
     public function create()
