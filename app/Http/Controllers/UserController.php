@@ -50,50 +50,25 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        if(isset($request['password'])){
-            $validate = Validator::make($request->all(),[
-                'password' => 'required|min:4|confirmed',
-            ]);
+        $data = $request->all();
 
-            if($validate->fails()){
-                return back()->withErrors($validate);
+        if(isset($data['password'])){
+            $this->rules = ['password' => 'required|min:4|confirmed'];
+        }
+
+        $this->rules = ['name' => 'required', 'email' => 'required|email'];
+
+        if (isset($request['email'])) {
+
+            $user = User::where('id', $id)->first();
+            
+            if($data['email'] == $user->email){
+                unset($this->rules['email']);
+                unset($request['email']);
             }
-
-            $user_update_password = User::where('id', $id)->update([
-                'password' => Hash::make($request->password)
-            ]);
-
-            if(!isset($user_update_password)){
-                return back()
-                ->with($this->_response(false, "Error 500. Please call the administrator")); 
-            }
-
-            return redirect('users/'.$id.'/edit')->with($this->_response(true, "Password changed successfully."));
         }
 
-        $validate = Validator::make($request->all(),[
-            'name' => 'required',
-            'email' => 'required|email',
-        ]);
-
-        if($validate->fails()){
-            return back()->withErrors($validate);
-        }
-
-        $user = User::where('id', $id)->first();
-
-        if($request->email == $user->email){
-            unset($request['email']);
-        }
-        
-        $user_update_all = $user->update($request->all());
-
-        if(!isset($user_update_all)){
-            return back()
-                ->with($this->_response(false, "Error 500. Please call the administrator")); 
-        }
-
-        return redirect('users/'.$id.'/edit')->with($this->_response(true, "Changes saved successfully."));
+        return parent::update($request, $id);
 
     }
 

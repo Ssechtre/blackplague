@@ -79,6 +79,8 @@ class Controller extends BaseController
 
 	public $view_path = null;
 
+	public $rules = [];
+
 	public function getController() {
 		$regex = preg_match('/([a-z\_]+)\./', \Request::route()->getName(), $matches);
 
@@ -247,22 +249,24 @@ class Controller extends BaseController
 
 		$data = $request->all();
 
-		if (isset($data['password'])) {
-			$data['password'] = Hash::make($data['password']);
-			$rules['username'] = 'required|min:5|unique:users,username,'.$id;
-		}
-
-		$this->query->fill($data);
-
 		if ($this->query) {
 
-			$rules = $namespace_model::$rules;
+			if (!$this->rules) {
+				$this->rules = $namespace_model::$rules;
+			}
 
-			$validate = Validator::make($data, $rules);
+			$validate = Validator::make($data, $this->rules);
 
 			if ($validate->fails()) {
 				return back()->withErrors($validate)->withInput($request->all);
 			}else{
+				
+				if (isset($data['password'])) {
+					$data['password'] = Hash::make($data['password']);
+				}
+
+				$this->query->fill($data);
+
 				if ($this->query->save()) {
 					return back()->with($this->_response(true, str_replace('App\\', '', $namespace_model)." updated successfully"));
 				}
