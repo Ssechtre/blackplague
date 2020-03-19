@@ -71,7 +71,8 @@
                                 </div>
                                 <div class="form-group mt-4">								
                                     <label class="control-label">Confirm Password</label>
-                                    <input type="password" class="form-control" name="password_confirmation">					
+                                    <input type="password" class="form-control" name="password_confirmation">
+                                    <input type="hidden" class="form-control" name="change_password" value="1">  					
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-success pull-right"><i class="fa fa-save"></i> Save</button>

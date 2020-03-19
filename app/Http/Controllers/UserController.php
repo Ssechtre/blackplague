@@ -52,6 +52,10 @@ class UserController extends Controller
     {
         $data = $request->all();
 
+        if (isset($data['change_password']) && (strlen($data['password']) == 0 || strlen($data['password_confirmation']) == 0)) {
+            return back()->with($this->_response(false, "Passwords cannot be empty.")); 
+        }
+
         if(isset($data['password'])){
             $this->rules = ['password' => 'required|min:4|confirmed'];
         }else{
