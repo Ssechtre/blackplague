@@ -54,9 +54,9 @@ class UserController extends Controller
 
         if(isset($data['password'])){
             $this->rules = ['password' => 'required|min:4|confirmed'];
+        }else{
+            $this->rules = ['name' => 'required', 'email' => 'required|email'];
         }
-
-        $this->rules = ['name' => 'required', 'email' => 'required|email'];
 
         if (isset($request['email'])) {
 
