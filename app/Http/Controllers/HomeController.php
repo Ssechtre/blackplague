@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\CustomerNetwork;
-
+use Validator;
+use Illuminate\Support\Facades\Hash;
 class HomeController extends Controller
 {
     /**
@@ -14,6 +15,8 @@ class HomeController extends Controller
      *
      * @return void
      */
+
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -27,6 +30,42 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function profile()
+    {
+        $user = User::findorfail(Auth::user()->id);
+        
+        return view('user.profile', compact('user'));
+    }
+
+    public function changePassword(Request $request, User $user)
+    {
+        $data = $request->all();
+
+        $confirm_old_password = Hash::check($data['old_password'], $user->password);
+
+        if(!$confirm_old_password){
+            return back()->with($this->_response(false, "Old password is incorrect")); 
+        }
+
+        $rules = ['password' => 'required|min:4'];
+
+        $validate = Validator::make($data, $rules, $this->error_messages);
+
+        if($validate->fails()){
+            return back()->withErrors($validate);
+        }
+        
+        $data['password'] = Hash::make($data['password']);
+        
+        $update = $user->update($data);
+
+        if(!$update){
+            return back()->with($this->_response(false, "Error 500. Please call the administrator")); 
+        }
+
+        return redirect('profile/'.$user->id.'/edit')->with($this->_response(true, "Change password successfully."));
     }
 
     public function privileges(CustomerNetwork $cn)
