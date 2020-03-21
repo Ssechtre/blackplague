@@ -32,40 +32,11 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function profile()
+    public function change_password()
     {
         $user = User::findorfail(Auth::user()->id);
         
-        return view('user.profile', compact('user'));
-    }
-
-    public function changePassword(Request $request, User $user)
-    {
-        $data = $request->all();
-
-        $confirm_old_password = Hash::check($data['old_password'], $user->password);
-
-        if(!$confirm_old_password){
-            return back()->with($this->_response(false, "Old password is incorrect")); 
-        }
-
-        $rules = ['password' => 'required|min:4'];
-
-        $validate = Validator::make($data, $rules, $this->error_messages);
-
-        if($validate->fails()){
-            return back()->withErrors($validate);
-        }
-        
-        $data['password'] = Hash::make($data['password']);
-        
-        $update = $user->update($data);
-
-        if(!$update){
-            return back()->with($this->_response(false, "Error 500. Please call the administrator")); 
-        }
-
-        return redirect('profile/'.$user->id.'/edit')->with($this->_response(true, "Change password successfully."));
+        return view('user.change-password', compact('user'));
     }
 
     public function privileges(CustomerNetwork $cn)

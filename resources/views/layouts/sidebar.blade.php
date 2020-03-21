@@ -102,7 +102,7 @@
 
 				<li class="nav-item {{ (Request::is('profile') || Request::is('profile/*')) ? 'active' : null }}">
 					<a class="nav-link" href="{{ route('user.profile', Auth::user()->id) }}">
-					  <i class="material-icons">person</i>
+					  <i class="material-icons">vpn_key</i>
 					  <p>Change Password</p>
 					</a>
 				</li>

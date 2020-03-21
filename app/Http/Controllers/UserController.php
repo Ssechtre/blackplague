@@ -195,6 +195,40 @@ class UserController extends Controller
 
     }
 
+    public function changePassword(Request $request, User $user)
+    {
+        $data = $request->all();
+
+        $confirm_old_password = Hash::check($data['old_password'], $user->password);
+
+        if(!$confirm_old_password){
+            return back()->with($this->_response(false, "Old password is incorrect")); 
+        }
+
+        if ($data['password'] != $data['password_confirmation']) {
+            return back()->with($this->_response(false, "New passwords don't match")); 
+        }
+
+        $rules = ['password' => 'required|min:4'];
+
+        $validate = Validator::make($data, $rules, $this->error_messages);
+
+        if($validate->fails()){
+            return back()->withErrors($validate);
+        }
+        
+        $data['password'] = Hash::make($data['password']);
+        
+        $update = $user->update($data);
+
+        if(!$update){
+            return back()->with($this->_response(false, "An error occured")); 
+        }
+
+        return back()->with($this->_response(true, "Change password successfully."));
+    }
+
+
     public function createAccount() {
 
         $data = [

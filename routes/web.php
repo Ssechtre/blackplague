@@ -40,8 +40,8 @@ Route::group(['middleware' => 'customer'], function(){
     Route::get('my_networks', 'HomeController@networks')->name('user.networks');
     Route::get('pos', 'HomeController@pos')->name('pos.app');
     Route::get('commissions', 'HomeController@commissions')->name('user.commissions');
-    Route::get('profile/{id}/edit', 'HomeController@profile')->name('user.profile');
-    Route::put('profile/{user}', 'HomeController@changePassword')->name('user.change_password');
+    Route::get('change_password', 'HomeController@change_password')->name('user.profile');
+    Route::put('change_password/{user}', 'UserController@changePassword')->name('user.change_password');
 });
 
 Route::group(['middleware' => 'staff'], function(){
