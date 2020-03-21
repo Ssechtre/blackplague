@@ -43,7 +43,11 @@
 								<?php elseif(in_array($value, $fields['excludes'])): ?>
 									{{-- do nothing --}}
 								<?php else: ?>
-									<input type="text" class="form-control" name="{{ $value }}" value="{{ old($value) }}">
+									@if($value == 'password')
+										<input type="password" class="form-control" name="{{ $value }}" value="{{ old($value) }}">
+									@else
+										<input type="text" class="form-control" name="{{ $value }}" value="{{ old($value) }}">
+									@endif
 								<?php endif; ?>
 								
 							</div>

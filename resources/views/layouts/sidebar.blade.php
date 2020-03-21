@@ -99,6 +99,13 @@
 					  <p>Point of Sale</p>
 					</a>
 				</li>
+
+				<li class="nav-item {{ (Request::is('profile') || Request::is('profile/*')) ? 'active' : null }}">
+					<a class="nav-link" href="{{ route('user.profile', Auth::user()->id) }}">
+					  <i class="material-icons">person</i>
+					  <p>Change Password</p>
+					</a>
+				</li>
 			@endif
 
 			
