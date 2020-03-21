@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
 use DateTime;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
@@ -51,61 +50,31 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        if(isset($request['password'])){
-            $validate = Validator::make($request->all(),[
-                'password' => 'required|min:4|confirmed',
-            ]);
-            
-            $request->password = Hash::make($request->password);
+        $data = $request->all();
+
+        if (isset($data['change_password']) && (strlen($data['password']) == 0 || strlen($data['password_confirmation']) == 0)) {
+            return back()->with($this->_response(false, "Passwords cannot be empty.")); 
+        }
+
+        if(isset($data['password'])){
+            $this->rules = ['password' => 'required|min:4|confirmed'];
         }else{
-            $validate = Validator::make($request->all(),[
-                'name' => 'required',
-                'email' => 'required|email',
-            ]);
+            $this->rules = ['name' => 'required', 'email' => 'required|email'];
         }
 
-        if($validate->fails()){
-            return back()->withErrors($validate);
-        }
+        if (isset($request['email'])) {
 
-        $user = User::findorfail($id);
-
-        if(isset($request['email']) && $user->email == $request->email){
-            unset($request['email']);
-        }
-        
-        $user = $user->update($request->all());
-
-        if(!$user){
-            return back()->with($this->_response(false, "Error 500. Please call the administrator")); 
-        }
-
-        return redirect('users/'.$id.'/edit')->with($this->_response(true, "Changes saved successfully."));
-    }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $data = $request->all();
-
-    //     if(isset($data['password'])){
-    //         $this->rules = ['password' => 'required|min:4|confirmed'];
-    //     }else{
-    //         $this->rules = ['name' => 'required', 'email' => 'required|email'];
-    //     }
-
-    //     if (isset($request['email'])) {
-
-    //         $user = User::where('id', $id)->first();
+            $user = User::where('id', $id)->first();
             
-    //         if($data['email'] == $user->email){
-    //             unset($this->rules['email']);
-    //             unset($request['email']);
-    //         }
-    //     }
+            if($data['email'] == $user->email){
+                unset($this->rules['email']);
+                unset($request['email']);
+            }
+        }
 
-    //     return parent::update($request, $id);
+        return parent::update($request, $id);
 
-    // }
+    }
 
     public function create()
     {   
@@ -244,45 +213,5 @@ class UserController extends Controller
             dd($save);
         }
         dd('error');
-    }
-
-    public function profileIndex(){
-        $user = User::findorfail(Auth::user()->id);
-        
-        return view('user.profile', compact('user'));
-    }
-
-    public function profileUpdate(Request $request, $id){
-        // dd($id);
-        if(isset($request['password'])){
-            $validate = Validator::make($request->all(),[
-                'password' => 'required|min:4|confirmed',
-            ]);
-            
-            $request->password = Hash::make($request->password);
-        }else{
-            $validate = Validator::make($request->all(),[
-                'name' => 'required',
-                'email' => 'required|email',
-            ]);
-        }
-
-        if($validate->fails()){
-            return back()->withErrors($validate);
-        }
-
-        $user = User::findorfail($id);
-
-        if(isset($request['email']) && $user->email == $request->email){
-            unset($request['email']);
-        }
-        
-        $user = $user->update($request->all());
-
-        if(!$user){
-            return back()->with($this->_response(false, "Error 500. Please call the administrator")); 
-        }
-
-        return redirect('users/'.$id.'/edit')->with($this->_response(true, "Changes saved successfully."));
     }
 }

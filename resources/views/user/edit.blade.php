@@ -27,14 +27,6 @@
                                     <input type="text" class="form-control" name="email" value="{{$user->email}}">					
                                 </div>
                                 <div class="form-group mt-4">								
-                                    <label class="control-label">User Type</label>
-                                    <select name="user_type" class="form-control">
-                                        <option value="admin">Admin</option>
-                                        <option value="staff">Staff</option>
-                                        <option value="customer">Member</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mt-4">								
                                     <label class="control-label">Branch</label>
                                     <input type="text" class="form-control" name="branch" value="{{$user->branch}}">					
                                 </div>
@@ -71,7 +63,8 @@
                                 </div>
                                 <div class="form-group mt-4">								
                                     <label class="control-label">Confirm Password</label>
-                                    <input type="password" class="form-control" name="password_confirmation">					
+                                    <input type="password" class="form-control" name="password_confirmation">
+                                    <input type="hidden" class="form-control" name="change_password" value="1">  					
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-success pull-right"><i class="fa fa-save"></i> Save</button>
